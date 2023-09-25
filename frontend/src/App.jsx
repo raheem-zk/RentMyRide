@@ -1,7 +1,6 @@
-import Test from "./component/test";
-import UserLogin from "./component/userLogin";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import Login from "./user/page/login";
+import Login from "./page/user/login";
+import SignUp from "./page/user/signUp";
 
 function App() {
   const AppLayout = ()=>{
@@ -18,12 +17,12 @@ function App() {
       errorElement: <h1>Error</h1>,
       children: [
         {
-          path: "/",
+          path: "/login",
           element: <Login/>,
         },
         {
-          path:'/test',
-          element: <Test/>
+          path:'/signup',
+          element: <SignUp/>
         }
       ],
     },

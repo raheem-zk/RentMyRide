@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Google from "./googleLogin";
-import LoginPageLeftImage from "./loginPageLeftImage";
 import { Link } from "react-router-dom";
 
 function UserLogin() {
@@ -11,6 +10,9 @@ function UserLogin() {
     e.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
+    if(password.length >6){
+      
+    }
   };
 
   return (
@@ -64,7 +66,7 @@ function UserLogin() {
               >
                 Sign in
               </button>
-              <div className="text-sm md:flex md:justify-between">
+              <div className="text-sm md:flex md:justify-between mt-2">
                 <Link to='/forgot-password'
                   className="font-medium text-indigo-600 hover:text-indigo-500 flex justify-center"
                 >
