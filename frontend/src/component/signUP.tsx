@@ -4,19 +4,17 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SignupPage = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const SignupPage: React.FC = () => {
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [age, setAge] = useState<number | string>('');
+  const [phoneNumber, setPhoneNumber] = useState<number| string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  console.log(backendUrl);
-  const error = (message)=>{
+  
+  const error = (message: string): void => {
     toast.error(message, {
       position: "top-center",
       autoClose: 5000,
@@ -26,27 +24,29 @@ const SignupPage = () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
-    console.log(message)
-  }
-  const handleSubmit = (e) => {
+    });
+    console.log(message);
+  };
+
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    
-    if(firstName.trim()=='' || lastName.trim()=='' || age.trim()=='' || phoneNumber.trim()=='' || email.trim()=='' || password.trim()==''){
-      return error('Please fill in all the required fields.')
-    }
-    
-    if(age>80 || 18>age){
-      return error('Age must be between 18 and 80.')
+
+    if (
+      firstName.trim() === "" ||
+      lastName.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === ""
+    ) {
+      return error("Please fill in all the required fields.");
     }
 
-    if(phoneNumber.length!=10){
-      return error('Phone number must have exactly 10 digits.')
+    if (phoneNumber !== null && phoneNumber.toString().length !== 10) {
+      return error("Phone number must have exactly 10 digits.");
     }
-    
-    if(password.length <7){
-      return error('Password must be at least 7 characters long.');
-    } 
+
+    if (password.length < 7) {
+      return error("Password must be at least 7 characters long.");
+    }
 
     const userData = {
       firstName,
@@ -58,15 +58,15 @@ const SignupPage = () => {
     };
 
     try {
-      axios.post(`${backendUrl}/signup`,userData)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log(error);
+      await axios.post(`${backendUrl}/signup`, userData)
+      .then((res)=>{
+        console.log(res.data);
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+    } catch (err) {
+      console.error(err);
     }
   };
 
