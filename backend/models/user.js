@@ -34,31 +34,31 @@ const userSchema = new mongoose.Schema({
   place: {
     type: String,
     trim: true,
-    required: true,
+    require: true,
     maxlength: 32,
   },
   age: {
     type: Number,
     trim: true,
     required: true,
-    max: 99,
+    max: 80,
   },
   address: {
     type: String,
     trim: true,
-    required: true,
+    require: true,
   },
   license: {
     type: String,
     trim: true,
-    required: true,
+    require: true,
   },
   profilePicture: {
     type: String,
   },
   gender: {
     type: String,
-    required: true,
+    require: true,
   },
   status: {
     type: Boolean,
