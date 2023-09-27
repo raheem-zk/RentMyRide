@@ -9,6 +9,8 @@ import persistStore from "redux-persist/es/persistStore";
 
 // admin page
 import AdminLogin from '../src/page/admin/login';
+import Dashboard from "./page/admin/dashboard";
+import UserList from "./page/admin/usersList";
 
 const persistor = persistStore(store);
 
@@ -55,6 +57,14 @@ function App() {
         {
           path:'login',
           element: <AdminLogin/>
+        },
+        {
+          path:'dashboard',
+          element: <Dashboard/>
+        },
+        {
+          path:'users',
+          element:<UserList/>
         }
       ]
     }
