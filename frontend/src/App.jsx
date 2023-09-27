@@ -1,38 +1,71 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Login from "./page/user/login";
 import SignUp from "./page/user/signUp";
-import Test from "./component/test";
+import Home from "./page/user/home";
+import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import persistStore from "redux-persist/es/persistStore";
+
+// admin page
+import AdminLogin from '../src/page/admin/login';
+
+const persistor = persistStore(store);
 
 function App() {
-  const AppLayout = ()=>{
-    return(
-        <>
-         <Outlet/>  
-        </>
+  const UserAppLayout = () => {
+    return (
+      <>
+        <Outlet />
+      </>
+    );
+  };
+  const AdminAppLayout =()=>{
+    return (
+      <>
+        <Outlet />
+      </>
     )
-}
+  }
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AppLayout />,
+      element: <UserAppLayout />,
       errorElement: <h1>Error</h1>,
       children: [
         {
-          path: "/login",
-          element: <Login/>,
+          path: "login",
+          element: <Login />,
         },
         {
-          path:'/signup',
-          element: <SignUp/>
+          path: "signup",
+          element: <SignUp />,
         },
         {
-          path:'/test',
-          element: <Test/>
-        }
+          path: "/",
+          element: <Home />,
+        },
       ],
     },
+    {
+      path:'/admin',
+      element:<AdminAppLayout/>,
+      errorElement: <h1>Error</h1>,
+      children:[
+        {
+          path:'login',
+          element: <AdminLogin/>
+        }
+      ]
+    }
   ]);
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
+    </Provider>
+  );
 }
 
 export default App;

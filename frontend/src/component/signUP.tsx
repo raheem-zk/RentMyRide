@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,7 @@ const SignupPage: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<number| string>('');
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   
   const error = (message: string): void => {
@@ -60,13 +60,16 @@ const SignupPage: React.FC = () => {
     try {
       await axios.post(`${backendUrl}/signup`, userData)
       .then((res)=>{
-        console.log(res.data);
+        if(res.data.error){
+          return error(res.data.message);
+        }
+        return navigate('/login');
       })
       .catch((err)=>{
-        console.log(err);
+        return error(err.response.data.message)
       })
     } catch (err) {
-      console.error(err);
+      console.log(err)
     }
   };
 

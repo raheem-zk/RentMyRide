@@ -1,7 +1,8 @@
 import "dotenv/config";
 import express, { json } from 'express';
 import dbConnect from './config/config.js';
-import router from "./routes/userRoutes.js";
+import userRouter from "./routes/userRoutes.js";
+import adminRouter from './routes/adminRoutes.js';
 import cors from 'cors'
 const app = express();
 
@@ -17,7 +18,8 @@ app.use(cors({
     methods:'GET,POST,PUT,DELETE',
     credentials:true
 }))
-app.use('/',router)
+app.use('/',userRouter)
+app.use('/admin',adminRouter);
 
 const PORT = process.env.PORT ?? 4000;
 app.listen(PORT ,()=>{

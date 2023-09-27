@@ -1,5 +1,6 @@
 import userModel from "../../models/user.js";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 
 export const login = async (req, res) => {
   try {
@@ -18,10 +19,11 @@ export const login = async (req, res) => {
     if (!isPasswordVerified) {
       return res.status(400).json({ message: "Invalid Password", error: true });
     }
-
-    return res.json({ message: "success" });
+    const token = jwt.sign({ user:email, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' })
+    return res.json({ message: "success" , token, userData});
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error", error: true });
   }
 };
 
@@ -34,10 +36,11 @@ export const signup = async (req, res) => {
     if (alreadyExistUser) {
       return res.json({
         message: "Added user existence check by email and phone number",
+        error:true
       });
     }
+
     const saltRounds = parseInt(process.env.SALTROUNDS);
-    console.log( typeof saltRounds);
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userSchema = new userModel({
       firstName,
@@ -47,10 +50,11 @@ export const signup = async (req, res) => {
       phoneNumber,
       password: hashedPassword,
     });
-    console.log(hashedPassword, saltRounds);
+
     await userSchema.save();
     return res.json({ message: "success" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error", error: true });
   }
 };

@@ -1,16 +1,12 @@
-import React, { useState, SyntheticEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Google from "./googleLogin";
-import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
-import { useDispatch } from 'react-redux'
-import { userLoggedIn } from "../redux/user/authSlice";
+import axios from 'axios';
+import React, { useState , SyntheticEvent} from 'react'
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
-function UserLogin() {
+function AdminLoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const error = (message: string): void => {
     toast.error(message, {
@@ -30,29 +26,26 @@ function UserLogin() {
     console.log("Email:", email);
     console.log("Password:", password);
     if (password.length < 7) {
-      return error("Password must be at least 7 characters long.");
+      return error('Password must be at least 7 characters long.')
     }
 
-    console.log(`${import.meta.env.VITE_BACKEND_URL}/login`);
     try {
-      await axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/login`, { email, password })
-        .then((res) => {
-          if (res.data.error) {
-            return error(res.data.message);
-          }
-          localStorage.setItem("userToken", res.data.token);
+      await axios.post(`${import.meta.env.VITE_BACKEND_ADMIN_API_URL}/login`,{email, password})
+      .then((res)=>{
+        if(res.data.error){
+          return error(res.data.message);
+        }
+        localStorage.setItem("adminToken", res.data.token);
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.token}`;
-          console.log(res.data.userData);
-          dispatch(userLoggedIn(res.data.userData));
-          navigate("/");
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-          return error(err.response.data.message);
-        });
+
+        navigate('/admin/dashboard');
+      })
+      .catch((err)=>{
+        console.log(err);
+        return error(err.response.data.message)
+      })
     } catch (error) {
       console.log(error);
     }
@@ -110,23 +103,8 @@ function UserLogin() {
             >
               Sign in
             </button>
-            <div className="text-sm md:flex md:justify-between mt-2">
-              <Link
-                to="/forgot-password"
-                className="font-medium text-indigo-600 hover:text-indigo-500 flex justify-center"
-              >
-                Forgot your password?
-              </Link>
-              <Link
-                to="/signup"
-                className="btn font-medium text-black-600 hover:text-black-900 flex justify-center"
-              >
-                Create your RentMyRide account
-              </Link>
-            </div>
           </div>
           <div className="flex justify-center">
-            <Google />
           </div>
         </form>
       </div>
@@ -134,4 +112,4 @@ function UserLogin() {
   );
 }
 
-export default UserLogin;
+export default AdminLoginForm
