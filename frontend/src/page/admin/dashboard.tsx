@@ -2,7 +2,7 @@ import React from 'react'
 import AdminFrame from '../../component/adminComponent/adminFrame'
 
 function Dashboard() {
-  const data =()=><>hlo</>
+  const data =()=><>hlo its admin dashboard</>
   return (  
   <AdminFrame Body={data}/>
   )

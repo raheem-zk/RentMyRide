@@ -1,12 +1,15 @@
 import axios from 'axios';
 import React, { useState , SyntheticEvent} from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { adminLoggedIn } from '../redux/admin/authSlice';
 
 function AdminLoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const error = (message: string): void => {
     toast.error(message, {
@@ -39,7 +42,7 @@ function AdminLoginForm() {
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.token}`;
-
+        dispatch(adminLoggedIn(res.data.adminData))
         navigate('/admin/dashboard');
       })
       .catch((err)=>{
