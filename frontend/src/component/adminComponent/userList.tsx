@@ -24,7 +24,7 @@ function userListTable() {
   }
   const heading = 'Users'
   return (
-    <TabelFrame heading={heading} data={usersList}/>
+    <TabelFrame heading={heading} data={usersList} role="users"/>
   )
 }
 

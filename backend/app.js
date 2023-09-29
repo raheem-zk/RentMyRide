@@ -15,7 +15,7 @@ const CLIENT_URL = process.env.CLIENT_URL
 
 app.use(cors({
     origin: CLIENT_URL,
-    methods:'GET,POST,PUT,DELETE',
+    methods:'GET,POST,PUT,DELETE,PATCH',
     credentials:true
 }))
 app.use('/',userRouter)

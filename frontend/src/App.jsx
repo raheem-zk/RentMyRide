@@ -6,13 +6,15 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import persistStore from "redux-persist/es/persistStore";
+import UserLogout from "./page/user/logout";
 
 // admin page
 import AdminLogin from '../src/page/admin/login';
 import Dashboard from "./page/admin/dashboard";
 import UserList from "./page/admin/usersList";
 import AdminLogout from "./page/admin/logout";
-import UserLogout from "./page/user/logout";
+import Unblock from "./component/adminComponent/userAction/unblocking";
+import Block from "./component/adminComponent/userAction/blocking";
 
 const persistor = persistStore(store);
 
@@ -76,6 +78,14 @@ function App() {
         {
           path:'logout',
           element: <AdminLogout/>
+        },
+        {
+          path:'users/:id/unblock',
+          element: <Unblock/>
+        },
+        {
+          path: 'users/:id/block',
+          element: <Block/>
         }
       ]
     }

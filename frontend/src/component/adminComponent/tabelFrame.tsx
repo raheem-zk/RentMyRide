@@ -21,10 +21,11 @@ interface data {
 type tabelFrameProps = {
   heading: string | null;
   data: data[];
+  role: string;
 };
 FiSettings;
 
-function TabelFrame({ heading, data }: tabelFrameProps) {
+function TabelFrame({ heading, data, role }: tabelFrameProps) {
   console.log(data);
   return (
     <div className="h-fit mt-16 md:w-4/5 w-full">
@@ -82,21 +83,21 @@ function TabelFrame({ heading, data }: tabelFrameProps) {
                   <div className="flex items-center justify-center">
                     {item.status ? (
                       <Link
-                        to={`/admin/users/${item._id}/unblock`}
+                        to={`/admin/${role}/${item._id}/block`}
                         className="m-5"
                       >
                         <FiEye />
                       </Link>
                     ) : (
                       <Link
-                        to={`/admin/users/${item._id}/block`}
+                        to={`/admin/${role}/${item._id}/unblock`}
                         className="m-5"
                       >
                         <FiEyeOff />
                       </Link>
                     )}
                     <Link
-                      to={`/admin/users/${item._id}/settings`}
+                      to={`/admin/${role}/${item._id}/settings`}
                       className="m-5"
                     >
                       <FiSettings />
