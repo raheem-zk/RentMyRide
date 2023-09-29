@@ -2,7 +2,7 @@ import React from "react";
 import { FiEye, FiSettings, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-interface data {
+interface Data {
   _id: string;
   firstName: string | null;
   lastName: string | null;
@@ -18,22 +18,24 @@ interface data {
   createdAt: Date;
 }
 
-type tabelFrameProps = {
+type TabelFrameProps = {
   heading: string | null;
-  data: data[];
-  role: string;
+  data: Data[];
+  handleAction: (id: string, status: string) => void;
+  role: string ;
 };
-FiSettings;
+function TabelFrame({ heading, data, handleAction , role}: TabelFrameProps) {
+  const handleClick = (id: string, status: string) => {
+    handleAction(id, status);
+  }
 
-function TabelFrame({ heading, data, role }: tabelFrameProps) {
-  console.log(data);
   return (
     <div className="h-fit mt-16 md:w-4/5 w-full">
-      <div id="Header">{heading}</div>
-      <div className="m-4 p-3 shadow-md shadow-gray-500">
-        <div className="w-full h-12 shadow shadow-gray-500 flex items-center justify-between">
+      {/* <div id="Header">{heading}</div> */}
+      <div className="m-4 p-3 shadow-md shadow-gray-300">
+        <div className="w-full h-12 shadow shadow-gray-300 flex items-center justify-between">
           <h1 className="text-black md:text-2xl py-1 pl-3 font-bold">
-            User Management
+            {heading} Management
           </h1>
           <div className="flex items-center mr-3">
             <input
@@ -81,25 +83,16 @@ function TabelFrame({ heading, data, role }: tabelFrameProps) {
                 </td>
                 <td className="text-center">
                   <div className="flex items-center justify-center">
-                    {item.status ? (
-                      <Link
-                        to={`/admin/${role}/${item._id}/block`}
-                        className="m-5"
-                      >
+                  {item.status ? (
+                      <button onClick={() => handleClick(item._id, 'block')} className="m-5">
                         <FiEye />
-                      </Link>
+                      </button>
                     ) : (
-                      <Link
-                        to={`/admin/${role}/${item._id}/unblock`}
-                        className="m-5"
-                      >
+                      <button onClick={() => handleClick(item._id, 'unblock')} className="m-5">
                         <FiEyeOff />
-                      </Link>
+                      </button>
                     )}
-                    <Link
-                      to={`/admin/${role}/${item._id}/settings`}
-                      className="m-5"
-                    >
+                    <Link className="m-5" to={`/admin/${role}/${item._id}/more-details`}>
                       <FiSettings />
                     </Link>
                   </div>

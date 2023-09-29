@@ -4,28 +4,43 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUsers } from '../../redux/admin/usersSlice';
 
-function userListTable() {
-  const [usersList, setUserList ] = useState([]);
-  const dispath = useDispatch();
-  useEffect(()=>{
+function UserListTable() {
+  const [usersList, setUserList] = useState([]);
+  const [update, setUpdate] = useState('');
+  const dispatch = useDispatch(); 
+
+  useEffect(() => {
     getUserData();
-  },[])
-  
-  const getUserData = async ()=>{
-    await axios.get(`${import.meta.env.VITE_BACKEND_ADMIN_API_URL}/users`)
-    .then((res)=>{
-      console.log(res.data.userData)
-      setUserList(res.data.userData);
-      dispath(addUsers(res.data.userData));
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
+  }, [update]);
+
+  const getUserData = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_ADMIN_API_URL}/users`);
+      const userData = response.data.userData;
+      console.log(userData);
+      setUserList(userData);
+      setUpdate('');
+      dispatch(addUsers(userData)); 
+    } catch (err) {
+      console.error(err);
+    }
   }
-  const heading = 'Users'
+
+  const handleAction = async (id: string, action: string) => {
+    try {
+      await axios.patch(`${import.meta.env.VITE_BACKEND_ADMIN_API_URL}/users/${id}/${action}`);
+      console.log(`User ${id} ${action}ed`);
+      setUpdate('update');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const heading = 'Users';
+
   return (
-    <TabelFrame heading={heading} data={usersList} role="users"/>
+    <TabelFrame heading={heading} data={usersList} handleAction={handleAction} role="users" />
   )
 }
 
-export default userListTable;
+export default UserListTable;
