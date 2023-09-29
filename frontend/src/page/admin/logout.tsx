@@ -1,17 +1,20 @@
-import { useDispatch } from 'react-redux'
-import { logout } from '../../redux/admin/authSlice';
-import { useNavigate } from 'react-router-dom';
-import { useLayoutEffect } from 'react';
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/admin/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useLayoutEffect } from "react";
+import React from "react";
 
 function AdminLogout() {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
 
     dispatch(logout());
-    useLayoutEffect(()=>{
-        navigate('/admin/login');
-    },[])
-    return;
+    navigate("/admin/login");
+    
+  }, []);
+  return <div> </div>;
 }
 
-export default AdminLogout
+export default AdminLogout;
