@@ -58,3 +58,29 @@ export const signup = async (req, res) => {
     return res.status(500).json({ message: "Internal server error", error: true });
   }
 };
+
+
+export const googleSignin = async (req, res)=>{
+  try {
+    const { email, family_name, given_name}= req.body;
+    const result = await userModel.findOne({email: email})
+    if(result){
+      const token = jwt.sign({ user:email, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      return res.json({message:'success', token, userData:result});
+    }
+
+    console.log('no user')
+    const userSchema = new userModel({
+      email,
+      firstName: given_name,
+      lastName: family_name
+    })
+    await userSchema.save();
+    const userData = await userModel.findOne({ email });
+    const token = jwt.sign({ user:email, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' })
+
+    return res.json({message:'success', token, userData});
+  } catch (error) {
+    console.log(error);
+  }
+}

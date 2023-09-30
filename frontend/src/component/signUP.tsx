@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ErrorMessage } from "../utils/utils";
 
 const SignupPage: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -13,20 +14,6 @@ const SignupPage: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  
-  const error = (message: string): void => {
-    toast.error(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    console.log(message);
-  };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -37,15 +24,15 @@ const SignupPage: React.FC = () => {
       email.trim() === "" ||
       password.trim() === ""
     ) {
-      return error("Please fill in all the required fields.");
+      return ErrorMessage("Please fill in all the required fields.");
     }
 
     if (phoneNumber !== null && phoneNumber.toString().length !== 10) {
-      return error("Phone number must have exactly 10 digits.");
+      return ErrorMessage("Phone number must have exactly 10 digits.");
     }
 
     if (password.length < 7) {
-      return error("Password must be at least 7 characters long.");
+      return ErrorMessage("Password must be at least 7 characters long.");
     }
 
     const userData = {
@@ -61,12 +48,12 @@ const SignupPage: React.FC = () => {
       await axios.post(`${backendUrl}/signup`, userData)
       .then((res)=>{
         if(res.data.error){
-          return error(res.data.message);
+          return ErrorMessage(res.data.message);
         }
         return navigate('/login');
       })
       .catch((err)=>{
-        return error(err.response.data.message)
+        return ErrorMessage(err.response.data.message)
       })
     } catch (err) {
       console.log(err)

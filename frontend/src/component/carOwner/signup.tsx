@@ -41,38 +41,45 @@ function CarOwnerSignup() {
   };
 
   return (
-    <div>
-      <h2>Car Owner Signup</h2>
+    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Car Owner Signup</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <h3>Owner Details</h3>
-          <label>
+          <h3 className="text-xl font-semibold mb-2">Owner Details</h3>
+          <label className="block mb-2">
             First Name:
             <input
               type="text"
               name="firstName"
               value={ownerDetails.firstName}
               onChange={handleOwnerDetailsChange}
+              className="w-full border rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
             />
           </label>
           {/* Add other owner details inputs here */}
         </div>
 
-        <div>
-          <h3>Car Details</h3>
-          <label>
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold mb-2">Car Details</h3>
+          <label className="block mb-2">
             Car Make:
             <input
               type="text"
               name="carMake"
               value={carDetails.carMake}
               onChange={handleCarDetailsChange}
+              className="w-full border rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
             />
           </label>
           {/* Add other car details inputs here */}
         </div>
 
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          className="w-full mt-6 bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:bg-blue-600"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

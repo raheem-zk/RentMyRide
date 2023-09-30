@@ -1,36 +1,24 @@
 import React, { useState, SyntheticEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Google from "./googleLogin";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useDispatch } from 'react-redux'
 import { userLoggedIn } from "../redux/user/authSlice";
+import { ErrorMessage } from "../utils/utils";
 
 function UserLogin() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const error = (message: string): void => {
-    toast.error(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    console.log(message);
-  };
+  
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
     if (password.length < 7) {
-      return error("Password must be at least 7 characters long.");
+      return ErrorMessage("Password must be at least 7 characters long.");
     }
 
     console.log(`${import.meta.env.VITE_BACKEND_URL}/login`);
@@ -39,7 +27,7 @@ function UserLogin() {
         .post(`${import.meta.env.VITE_BACKEND_URL}/login`, { email, password })
         .then((res) => {
           if (res.data.error) {
-            return error(res.data.message);
+            return ErrorMessage(res.data.message);
           }
           localStorage.setItem("userToken", res.data.token);
           axios.defaults.headers.common[
@@ -51,7 +39,7 @@ function UserLogin() {
         })
         .catch((err) => {
           console.log(err.response.data);
-          return error(err.response.data.message);
+          return ErrorMessage(err.response.data.message);
         });
     } catch (error) {
       console.log(error);

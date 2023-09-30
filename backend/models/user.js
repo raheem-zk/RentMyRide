@@ -22,13 +22,13 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     trim: true,
-    required: true,
+    require: true,
     minlength: 7,
   },
   phoneNumber: {
     type: Number,
     trim: true,
-    required: true,
+    require: true,
     unique: true,
   },
   place: {
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number,
     trim: true,
-    required: true,
+    require: true,
     max: 80,
   },
   address: {

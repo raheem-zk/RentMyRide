@@ -8,8 +8,8 @@ interface UserState {
   interface UserData {
     firstName: string;
     lastName: string;
-    age: number;
-    phoneNumber: number;
+    age: number | undefined;
+    phoneNumber: number | undefined;
     email: string;
   }
 const INITTAL_STATE :UserState  = {
