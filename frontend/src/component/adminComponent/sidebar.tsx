@@ -1,7 +1,7 @@
 import React from "react";
-import SidebarIteam from "./sidebarIteam";
+// import SidebarIteam from "./sidebarIteam";
 
-function Sidebar() {
+function Sidebar({SidebarIteam}) {
   return (
     <div className="w-1/5 min-h-screen bg-gray-900 md:block hidden">
       {/* Logo */}

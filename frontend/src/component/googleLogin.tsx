@@ -18,7 +18,6 @@ function Google() {
       console.log('daa', data)
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/google-signin`,data)
       .then((res)=>{
-        console.log(res.data,'kkkkk');
   
         localStorage.setItem("userToken", res.data.token);
         axios.defaults.headers.common[

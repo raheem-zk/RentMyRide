@@ -1,13 +1,12 @@
-import React, { useState, SyntheticEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Google from "./googleLogin";
-import { ToastContainer } from "react-toastify";
 import axios from "axios";
-import { useDispatch } from 'react-redux'
-import { userLoggedIn } from "../redux/user/authSlice";
-import { ErrorMessage } from "../utils/utils";
+import React, { SyntheticEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { ErrorMessage } from "../../utils/utils";
+import { SetCarOwner } from "../../redux/carOwner/authSlice";
 
-function UserLogin() {
+const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
@@ -21,21 +20,21 @@ function UserLogin() {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
-    console.log(`${import.meta.env.VITE_BACKEND_URL}/login`);
+    console.log(`${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`);
     try {
       await axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/login`, { email, password })
+        .post(`${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`, { email, password })
         .then((res) => {
           if (res.data.error) {
             return ErrorMessage(res.data.message);
           }
-          localStorage.setItem("userToken", res.data.token);
+          localStorage.setItem("carOwner", res.data.token);
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.token}`;
           console.log(res.data.userData);
-          dispatch(userLoggedIn(res.data.userData));
-          navigate("/");
+          dispatch(SetCarOwner(res.data.userData));
+          navigate("/car-owner/dashboard");
         })
         .catch((err) => {
           console.log(err.response.data);
@@ -45,14 +44,13 @@ function UserLogin() {
       console.log(error);
     }
   };
-
   return (
     <div className="flex-1 flex items-center justify-center p-5">
       <ToastContainer />
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-4xl font-extrabold">Welcome Back!</h2>
-          <p className="mt-2">Sign in to your account</p>
+          <h2 className="text-4xl font-extrabold">Car Owner Login</h2>
+          <p className="mt-2">Access Your Account</p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -106,20 +104,17 @@ function UserLogin() {
                 Forgot your password?
               </Link>
               <Link
-                to="/signup"
+                to="/car-owner/signup"
                 className="btn font-medium text-black-600 hover:text-black-900 flex justify-center"
               >
-                Create your RentMyRide account
+                Join RentMyRide as a Car Owner Today!
               </Link>
             </div>
-          </div>
-          <div className="flex justify-center">
-            <Google />
           </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
-export default UserLogin;
+export default LoginForm;
