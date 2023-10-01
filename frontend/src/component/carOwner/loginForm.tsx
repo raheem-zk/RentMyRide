@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { ErrorMessage } from "../../utils/utils";
 import { SetCarOwner } from "../../redux/carOwner/authSlice";
 
-const LoginForm = () => {
+const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
@@ -22,28 +22,25 @@ const LoginForm = () => {
 
     console.log(`${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`);
     try {
-      await axios
-        .post(`${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`, { email, password })
-        .then((res) => {
-          if (res.data.error) {
-            return ErrorMessage(res.data.message);
-          }
-          localStorage.setItem("carOwner", res.data.token);
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.token}`;
-          console.log(res.data.userData);
-          dispatch(SetCarOwner(res.data.userData));
-          navigate("/car-owner/dashboard");
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-          return ErrorMessage(err.response.data.message);
-        });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`,
+        { email, password }
+      );
+      if (res.data.error) {
+        return ErrorMessage(res.data.message);
+      }
+      localStorage.setItem("carOwner", res.data.token);
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${res.data.token}`;
+      console.log(res.data.userData);
+      dispatch(SetCarOwner(res.data.userData));
+      navigate("/car-owner/dashboard");
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <div className="flex-1 flex items-center justify-center p-5">
       <ToastContainer />

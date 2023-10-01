@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { ErrorMessage } from "../../utils/utils";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signupAdd } from "../../redux/carOwner/signupSlice";
 import { ToastContainer } from "react-toastify";
+import { CarOwnerSignupForm } from "../../models/models";
 
-const SignupForm = ({page}) => {
-    const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
+const SignupForm: React.FC<{ page: () => void }> = ({ page }) => {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState<CarOwnerSignupForm>({
     firstName: "",
     lastName: "",
     age: "",
@@ -20,7 +21,7 @@ const SignupForm = ({page}) => {
     address: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -28,7 +29,7 @@ const SignupForm = ({page}) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (
       formData.firstName.trim() === "" ||
@@ -38,7 +39,7 @@ const SignupForm = ({page}) => {
       formData.pincode.trim() === "" ||
       formData.license.trim() === "" ||
       formData.place.trim() === "" ||
-      formData.address.trim() == ""
+      formData.address.trim() === ""
     ) {
       return ErrorMessage("Please fill in all the required fields.");
     }
@@ -56,14 +57,14 @@ const SignupForm = ({page}) => {
     if (formData.password.length < 7) {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
-    
+
     console.log("Form Data:", formData);
     dispatch(signupAdd(formData));
     page();
   };
   return (
     <div className="flex-1 flex items-center justify-center p-5">
-        <ToastContainer/>
+      <ToastContainer />
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="text-4xl font-extrabold">

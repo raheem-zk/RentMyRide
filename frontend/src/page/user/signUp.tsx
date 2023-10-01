@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from 'react'
 import LoginFrame from '../../component/loginFrame';
 import SignupPage from '../../component/signUP';
-import IsLoggedOut from '../../middleware/isLoggedOut';
+import IsLoggedOut from '../../middleware/user/isLoggedOut';
 
 function SignUp() {
   // useEffect(()=>{
