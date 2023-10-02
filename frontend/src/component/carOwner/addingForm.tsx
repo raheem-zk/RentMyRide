@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { AddingFunction } from "../../models/models";
 
-const AddBrand = ({ title , HandleSubmit}) => {
+const AddingForm: React.FC<AddingFunction> = ({ title, handleAdding, Reload }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [newValue, setNewValue] = useState('');
-  
+  const [newValue, setNewValue] = useState("");
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // You can handle form submission logic here
-    HandleSubmit(newValue)
-    // After handling the submission, you can close the modal
-    toggleModal();
-  };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const success = await handleAdding(newValue);
+    if (success) {
+      Reload();
+      toggleModal();
+    }
+  };
   return (
     <div>
       {isModalOpen && (
@@ -30,6 +31,7 @@ const AddBrand = ({ title , HandleSubmit}) => {
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Add New {title}
               </h3>
+
               <button
                 onClick={toggleModal}
                 type="button"
@@ -54,9 +56,12 @@ const AddBrand = ({ title , HandleSubmit}) => {
               </button>
             </div>
             <div className="p-6 space-y-6">
-              <form onSubmit={handleSubmit}>
+              <form>
                 <div className="mb-4">
-                  <label htmlFor="newValue" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="newValue"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     New {title}
                   </label>
                   <input
@@ -65,13 +70,13 @@ const AddBrand = ({ title , HandleSubmit}) => {
                     name="newValue"
                     value={newValue}
                     onChange={(e) => setNewValue(e.target.value)}
-                    placeholder={'Add New ' + title}
+                    placeholder={"Add New " + title}
                     className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:ring focus:ring-opacity-50"
                     required
                   />
                 </div>
                 <button
-                  type="submit"
+                  onClick={handleSubmit}
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Submit
@@ -85,4 +90,4 @@ const AddBrand = ({ title , HandleSubmit}) => {
   );
 };
 
-export default AddBrand;
+export default AddingForm;

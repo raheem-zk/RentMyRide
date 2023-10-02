@@ -2,23 +2,37 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import axiosInstance from "../../axios/axios";
 import Dropdown from "../dropdown";
-import AddBrand from "./addBrand";
+import AddingForm from "./addingForm";
+import { addBrand as AddBrandFunction, addCategory } from '../../utils/carIteams';
+import { ErrorMessage } from "../../utils/utils";
+
+interface Items {
+  name: string;
+  _id: string;
+}
 
 const AddCar = () => {
+  const [brand, setBrand] =useState<Items[]>([]);
+  const [category, setCategory] =useState<Items[]>([]);
+  const [reload, setReload ]=useState(false)
   useEffect(()=>{
     GetDropdownIteams();
-  },[]);
-  const [brand, setBrand] = useState(['bmw','oudi','maruthi']);
-  const [ category, setCategory] = useState([]);
-
+  },[reload]);
+  const handleReload = ()=>{
+    setReload(!reload)
+  }
   const GetDropdownIteams = async()=>{
-    axiosInstance('carOwner').get('/car-owner/add-car')
+    await axiosInstance('carOwner').get('/car-owner/add-car')
     .then((res)=>{
-      setBrand(res.data.brand);
-      setCategory(res.data.category);
+      if(res.data.error){
+        ErrorMessage(res.data.error);
+      }
+      setBrand(res?.data?.brand);
+
     })
     .catch((err)=>{
       console.log(err);
+      ErrorMessage(err.response?.data || 'An error occurred');
     })
   }
   const [carDetails, setCarDetails] = useState({
@@ -101,7 +115,10 @@ const AddCar = () => {
                 />
               </div>
               <div>
-                <Dropdown data={brand} title={'brand'} AddingForm={AddBrand} HandleForm={AddBrand}/>
+                <Dropdown Reload={handleReload} data={brand} title={'brand'} AddingForm={AddingForm} HandleForm={AddBrandFunction}/>
+              </div>
+              <div>
+                <Dropdown Reload={handleReload} data={category} title={'Category'} AddingForm={AddingForm} HandleForm={addCategory}/>
               </div>
             </div>
 
