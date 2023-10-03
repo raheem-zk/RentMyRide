@@ -21,7 +21,8 @@ export interface DropdownProps {
     title: string;
     AddingForm: any;
     HandleForm: (value: any) => void;
-    Reload:()=> void ;
+    Reload: ()=> void ;
+    handleCarDetailsChange: (e)=> void;
   }
 
 export interface AddingFunction  {
@@ -29,4 +30,21 @@ export interface AddingFunction  {
   handleAdding: (value: string) => boolean;
   Reload: ()=> void;
   action:any
+}
+
+export interface CarDetailsModel {
+  carName: string;
+  brand: string;
+  model: string;
+  year: string;
+  color: string;
+  licensePlate: string;
+  images: File[] | null;
+  transmission: string;
+  category: string;
+  perDayPrice: string;
+  description: string;
+  fuelType: string;
+  startDate: string;
+  endDate: string;
 }
