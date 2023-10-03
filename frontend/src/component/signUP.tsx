@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ErrorMessage } from "../utils/utils";
+import { userAxios } from "../axios/axios";
 
 const SignupPage: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -45,7 +46,7 @@ const SignupPage: React.FC = () => {
     };
 
     try {
-      await axios.post(`${backendUrl}/signup`, userData)
+      await userAxios.post(`/signup`, userData)
       .then((res)=>{
         if(res.data.error){
           return ErrorMessage(res.data.message);

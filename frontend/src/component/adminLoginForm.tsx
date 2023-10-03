@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { adminLoggedIn } from '../redux/admin/authSlice';
+import { adminAxios } from '../axios/axios';
 
 function AdminLoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -33,21 +34,14 @@ function AdminLoginForm() {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_ADMIN_API_URL}/login`,{email, password})
+      await adminAxios.post(`/login`,{email, password})
       .then((res)=>{
-        if(res.data.error){
-          return error(res.data.message);
-        }
         localStorage.setItem("adminToken", res.data.token);
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.token}`;
         dispatch(adminLoggedIn(res.data.adminData))
         navigate('/admin/dashboard');
-      })
-      .catch((err)=>{
-        console.log(err);
-        return error(err.response.data.message)
       })
     } catch (error) {
       console.log(error);

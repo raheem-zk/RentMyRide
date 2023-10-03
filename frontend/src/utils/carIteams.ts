@@ -1,9 +1,9 @@
-import axiosInstance from "../axios/axios"
+import { carOwnerAxios } from "../axios/axios"
 import { ErrorMessage } from "./utils"
 
 export const addBrand = async (data)=>{
     try {
-        const response = await axiosInstance('userToken').post('/car-owner/add-brand', {name: data});
+        const response = await carOwnerAxios.post('/car-owner/add-brand', {name: data});
         if (response.data.error) {
             ErrorMessage(response.data.error);
             return false;
@@ -19,7 +19,7 @@ export const addBrand = async (data)=>{
 export const addCategory = async (data)=>{
   try {
     console.log('data from the dropdown add brand:', data);
-    const response = await axiosInstance('userToken').post('/car-owner/add-category', {name: data});
+    const response = await carOwnerAxios.post('/car-owner/add-category', {name: data});
     if (response.data.error) {
         ErrorMessage(response.data.error);
         return false;

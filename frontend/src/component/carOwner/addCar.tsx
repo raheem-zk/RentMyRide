@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import axiosInstance from "../../axios/axios";
+import { carOwnerAxios } from "../../axios/axios";
 import Dropdown from "../dropdown";
 import AddingForm from "./addingForm";
 import { addBrand as AddBrandFunction, addCategory } from '../../utils/carIteams';
@@ -22,17 +22,13 @@ const AddCar = () => {
     setReload(!reload)
   }
   const GetDropdownIteams = async()=>{
-    await axiosInstance('carOwner').get('/car-owner/add-car')
+    await carOwnerAxios.get('/car-owner/add-car')
     .then((res)=>{
       if(res.data.error){
         ErrorMessage(res.data.error);
       }
       setBrand(res?.data?.brand);
 
-    })
-    .catch((err)=>{
-      console.log(err);
-      ErrorMessage(err.response?.data || 'An error occurred');
     })
   }
   const [carDetails, setCarDetails] = useState({

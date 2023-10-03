@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { ErrorMessage } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { userLoggedIn } from "../redux/user/authSlice";
+import { userAxios } from "../axios/axios";
 
 
 function Google() {
@@ -16,7 +17,7 @@ function Google() {
     try {
       const data : any = jwt_decode(token);
       console.log('daa', data)
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/google-signin`,data)
+      await userAxios.post(`/google-signin`,data)
       .then((res)=>{
   
         localStorage.setItem("userToken", res.data.token);

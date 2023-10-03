@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch } from 'react-redux'
 import { userLoggedIn } from "../redux/user/authSlice";
 import { ErrorMessage } from "../utils/utils";
+import { userAxios } from "../axios/axios";
 
 function UserLogin() {
   const [email, setEmail] = useState<string>("");
@@ -21,10 +22,9 @@ function UserLogin() {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
-    console.log(`${import.meta.env.VITE_BACKEND_URL}/login`);
     try {
-      await axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/login`, { email, password })
+      await userAxios
+        .post(`/login`, { email, password })
         .then((res) => {
           if (res.data.error) {
             return ErrorMessage(res.data.message);
@@ -37,10 +37,6 @@ function UserLogin() {
           dispatch(userLoggedIn(res.data.userData));
           navigate("/");
         })
-        .catch((err) => {
-          console.log(err.response.data);
-          return ErrorMessage(err.response.data.message);
-        });
     } catch (error) {
       console.log(error);
     }

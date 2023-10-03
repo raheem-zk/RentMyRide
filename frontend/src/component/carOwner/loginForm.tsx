@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ErrorMessage } from "../../utils/utils";
 import { SetCarOwner } from "../../redux/carOwner/authSlice";
+import { carOwnerAxios } from "../../axios/axios";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,13 +20,8 @@ const LoginForm: React.FC = () => {
     if (password.length < 7) {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
-
-    console.log(`${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`);
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_CAR_OWNER_API_URL}/login`,
-        { email, password }
-      );
+      const res = await carOwnerAxios.post(`/login`,{ email, password });
       if (res.data.error) {
         return ErrorMessage(res.data.message);
       }
