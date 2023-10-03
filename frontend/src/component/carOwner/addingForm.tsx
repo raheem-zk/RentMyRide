@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { AddingFunction } from "../../models/models";
 
-const AddingForm: React.FC<AddingFunction> = ({ title, handleAdding, Reload }) => {
+const AddingForm: React.FC<AddingFunction> = ({ title, handleAdding, Reload ,action}) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [newValue, setNewValue] = useState("");
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+    action();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

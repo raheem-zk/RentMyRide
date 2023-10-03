@@ -28,4 +28,5 @@ export interface AddingFunction  {
   title: string;
   handleAdding: (value: string) => boolean;
   Reload: ()=> void;
+  action:any
 }
