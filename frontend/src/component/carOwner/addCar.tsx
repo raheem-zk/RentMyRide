@@ -22,13 +22,13 @@ const AddCar = () => {
     setReload(!reload)
   }
   const GetDropdownIteams = async()=>{
-    await carOwnerAxios.get('/car-owner/add-car')
+    await carOwnerAxios.get('/add-car')
     .then((res)=>{
       if(res.data.error){
         ErrorMessage(res.data.error);
       }
       setBrand(res?.data?.brand);
-
+      setCategory(res?.data?.category);
     })
   }
   const [carDetails, setCarDetails] = useState({

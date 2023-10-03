@@ -4,7 +4,8 @@ import categorySchema  from '../../models/carOwner/category.js'
 export const addCar = async (req,res)=>{
     try {
         const brand = await brandSchema.find() ?? [];
-        res.json({message:'success', brand })
+        const category = await categorySchema.find() ?? [];
+        return res.json({message:'success', brand ,category})
     } catch (error) {
         console.log(error);
     }

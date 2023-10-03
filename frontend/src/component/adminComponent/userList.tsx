@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TabelFrame from './tabelFrame';
 import { useDispatch } from 'react-redux';
 import { addUsers } from '../../redux/admin/usersSlice';
-import axiosInstance, { adminAxios } from '../../axios/axios';
+import { adminAxios } from '../../axios/axios';
 
 function UserListTable() {
   const [usersList, setUserList] = useState([]);
@@ -15,8 +15,9 @@ function UserListTable() {
 
   const getUserData = async () => {
     try {
-      const response = await adminAxios.get(`/admin/users`);
+      const response = await adminAxios.get(`/users`);
       const userData = response?.data?.userData;
+      
       console.log(userData);
       setUserList(userData);
       setUpdate('');
@@ -28,7 +29,7 @@ function UserListTable() {
 
   const handleAction = async (id: string, action: string) => {
     try {
-      await adminAxios.patch(`/admin/users/${id}/${action}`);
+      await adminAxios.patch(`/users/${id}/${action}`);
       console.log(`User ${id} ${action}ed`);
       setUpdate('update');
     } catch (error) {
