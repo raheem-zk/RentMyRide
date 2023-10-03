@@ -8,7 +8,7 @@ const VerifyToken = (req, res, next)=>{
         if(!token){
             return res
             .status(401)
-            .json({message:'Authentication token is missing or invalid.'});
+            .json({message:'Unauthorized'});
         }
 
         const tokenWithoutBearer = token.replace('Bearer ', '');
