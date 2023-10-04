@@ -9,16 +9,19 @@ import {
   addFueltype,
   addModel,
   addTransmission,
+  sendCarDetails,
 } from "../../utils/carIteams";
-import { ErrorMessage } from "../../utils/utils";
+import { ErrorMessage, isDateValid } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
+import { useDispatch, useSelector } from 'react-redux';
+import { addCar } from "../../redux/carOwner/addCarSlice";
 
 interface Item {
   name: string;
   _id: string;
 }
 
-const AddCar = () => {
+const AddCar = ({next}) => {
   const [brand, setBrand] = useState<Item[]>([]);
   const [category, setCategory] = useState<Item[]>([]);
   const [model, setModel] = useState<Item[]>([]);
@@ -29,11 +32,12 @@ const AddCar = () => {
   useEffect(() => {
     getDropdownItems();
   }, [reload]);
+  const dispatch = useDispatch();
+  const currentYear = new Date().getFullYear();
 
   const handleReload = () => {
     setReload(!reload);
   };
-
   const onImageChange = (e: any) => {
     setImages([...e.target.files, ...images]);
   };
@@ -61,10 +65,10 @@ const AddCar = () => {
     year: "",
     color: "",
     licensePlate: "",
-    images: null,
+    images: [],
     transmission: "",
     category: "",
-    perDayPrice: "",
+    perDayPrice : '',
     description: "",
     fuelType: "",
     startDate: "",
@@ -78,11 +82,60 @@ const AddCar = () => {
       [name]: value,
     });
   };
-  console.log("show the user enterd data", carDetails);
-  console.log("images ", images);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Car Details:", carDetails);
+    console.log(carDetails)
+    
+  const {
+    carName,
+    brand,
+    model,
+    year,
+    licensePlate,
+    transmission,
+    category,
+    description,
+    fuelType,
+    startDate,
+    endDate,
+    perDayPrice,
+  } = carDetails;
+
+      if (
+    carName.trim() === '' ||
+    brand.trim() === '' ||
+    model.trim() === '' ||
+    year.trim() === '' ||
+    licensePlate.trim() === '' ||
+    transmission.trim() === '' ||
+    category === 'add' ||
+    description.trim() === '' ||
+    fuelType === 'add' ||
+    startDate.trim() === '' ||
+    endDate.trim() === ''
+  ) {
+    return ErrorMessage('Please fill in all fields');
+  }
+
+  if (year.length !== 4 || parseInt(year) > currentYear) {
+    return ErrorMessage('Car year is not correct. Please enter a valid 4-digit year before the current year.');
+  }
+  if (category === 'add' || brand === 'add' || model === 'add' || fuelType === 'add' || transmission === 'add') {
+    return ErrorMessage('Please select required data');
+  }
+  if (!isDateValid(startDate) || !isDateValid(endDate)) {
+    return ErrorMessage("Please enter valid start and end dates");
+  }
+  
+  if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
+    return ErrorMessage('The amount is not correct, please check');
+  }
+  dispatch(addCar(carDetails));
+  const result : any = sendCarDetails();
+  if(result){
+    next();
+  }
   };
 
   return (
@@ -121,7 +174,7 @@ const AddCar = () => {
                 <Dropdown
                   Reload={handleReload}
                   data={brand}
-                  title={"Brand"}
+                  title={"brand"}
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addBrand}
@@ -132,7 +185,7 @@ const AddCar = () => {
                 <Dropdown
                   Reload={handleReload}
                   data={model}
-                  title={"Model"}
+                  title={"model"}
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addModel}
@@ -143,7 +196,7 @@ const AddCar = () => {
                 <Dropdown
                   Reload={handleReload}
                   data={transmission}
-                  title={"Transmission"}
+                  title={"transmission"}
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addTransmission}
@@ -154,7 +207,7 @@ const AddCar = () => {
                 <Dropdown
                   Reload={handleReload}
                   data={category}
-                  title={"Category"}
+                  title={"category"}
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addCategory}
@@ -168,11 +221,30 @@ const AddCar = () => {
                   <Dropdown
                     Reload={handleReload}
                     data={fueltype}
-                    title={"Fuel Type"}
+                    title={"fuelType"}
                     AddingForm={AddingForm}
                     handleCarDetailsChange={handleCarDetailsChange}
                     HandleForm={addFueltype}
                   />
+                </div>
+                <div>
+                  <label
+                  htmlFor="endDate"
+                  className="block text-sm font-medium text-gray-700 mt-2"
+                >
+                  End Date
+                </label>
+                  <input
+                id="year"
+                name="year"
+                type="number"
+                autoComplete="year"
+                required
+                value={carDetails.year}
+                onChange={handleCarDetailsChange}
+                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="2023"
+              />
                 </div>
               </div>
             </div>

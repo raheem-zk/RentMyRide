@@ -22,7 +22,7 @@ const carSchema = new mongoose.Schema({
   transmission: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Transmission",
-},
+  },
   perDayPrice: {
     type: Number,
     required: true,
@@ -37,7 +37,7 @@ const carSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now, 
+    default: Date.now,
   },
   brand: {
     type: mongoose.Schema.Types.ObjectId,

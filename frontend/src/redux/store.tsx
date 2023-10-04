@@ -4,6 +4,9 @@ import adminSlice from './admin/authSlice';
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
+import carOwnerSlice from './carOwner/authSlice';
+import ownerSignupSlice from './carOwner/signupSlice';
+import addCarSlice from './carOwner/addCarSlice';
 
 const persistConfig = {
   key: "root",
@@ -14,6 +17,9 @@ const persistConfig = {
 const reducer = combineReducers({
   userAuth: authSlice,
   adminAuth : adminSlice,
+  carOwnerAuth: carOwnerSlice,
+  carOwnerSignup : ownerSignupSlice,
+  addCar : addCarSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

@@ -1,4 +1,5 @@
 export interface CarOwnerSignupForm {
+    _id: null | string,
     firstName: string;
     lastName: string;
     age: string;
@@ -42,7 +43,7 @@ export interface CarDetailsModel {
   images: File[] | null;
   transmission: string;
   category: string;
-  perDayPrice: string;
+  perDayPrice: any ;
   description: string;
   fuelType: string;
   startDate: string;

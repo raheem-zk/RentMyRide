@@ -1,5 +1,7 @@
+import { useSelector } from "react-redux";
 import { carOwnerAxios } from "../axios/axios"
 import { ErrorMessage } from "./utils"
+import { useNavigate } from "react-router-dom";
 
 const emptyErrorMessage = 'Invalid input. Please provide a valid value'
 export const addBrand = async (data)=>{
@@ -74,4 +76,18 @@ export const addFueltype = async (data)=>{
     console.log('error:', error);
     return false;
   }
+}
+
+export const sendCarDetails = async ()=>{
+   const { carOwnerSignup , addCar } = useSelector((state : any)=> state);
+  console.log(carOwnerSignup, addCar);
+  try {
+    await carOwnerAxios.post('/signup', {carOwnerSignup,addCar })
+    .then((res)=>{
+      return true;
+    })
+  } catch (error) {
+    return false;
+  }
+  return false;
 }

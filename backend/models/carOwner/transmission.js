@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const transmissionSchema = new mongoose.Schema({
-  type: {
+  name: {
     type: String,
     trim: true,
     required: true,

@@ -1,20 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-
-interface OwnerState {
-  firstName: string;
-  lastName: string;
-  age: string;
-  phoneNumber: string;
-  email: string;
-  password: string;
-  pincode: string;
-  license: string;
-  place: string;
-  address: string;
-}
+import { CarOwnerSignupForm } from '../../models/models';
 
 interface Initiol{
-    ownerData: null| OwnerState,
+    ownerData: null| CarOwnerSignupForm,
     success: boolean
 }
 const INITIAL_STATE : Initiol= {
@@ -22,19 +10,20 @@ const INITIAL_STATE : Initiol= {
   success: false,
 };
 
-const authSlice = createSlice({
+const ownerSignup = createSlice({
   name: 'ownerSignup',
   initialState: INITIAL_STATE,
   reducers: {
-    signupAdd: (state, action: PayloadAction<OwnerState>) => {
+    signupAdd: (state, action: PayloadAction<CarOwnerSignupForm>) => {
       state.ownerData = action.payload;
       state.success = true;
     },
     clearSignup: (state) => {
         state.ownerData = null;
+        state.success = false;
     },
   },
 });
 
-export const { signupAdd, clearSignup } = authSlice.actions;
-export default authSlice.reducer;
+export const { signupAdd, clearSignup } = ownerSignup.actions;
+export default ownerSignup.reducer;

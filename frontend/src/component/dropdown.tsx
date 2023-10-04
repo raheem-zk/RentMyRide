@@ -22,10 +22,10 @@ const Dropdown: React.FC<DropdownProps> = ({ data, title, AddingForm, HandleForm
           htmlFor="transmission"
           className="block text-sm font-medium text-gray-700"
         >
-          {title}
+          {title.toUpperCase()}
         </label>
         <select
-          id="transmission"
+          id={title}
           name={title}
           value={item}
           onChange={handleChenge}
