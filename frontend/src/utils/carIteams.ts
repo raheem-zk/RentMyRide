@@ -78,16 +78,48 @@ export const addFueltype = async (data)=>{
   }
 }
 
-export const sendCarDetails = async ()=>{
-   const { carOwnerSignup , addCar } = useSelector((state : any)=> state);
-  console.log(carOwnerSignup, addCar);
+interface verifiyOwnerSignupProps {
+  email: string,
+  phoneNumber: string,
+}
+export const verifiyOwnerSignup = async ({email, phoneNumber}: verifiyOwnerSignupProps): Promise<boolean> =>{
+  console.log( email, phoneNumber,'verifyOwnerSignup side' );
   try {
-    await carOwnerAxios.post('/signup', {carOwnerSignup,addCar })
-    .then((res)=>{
+    const response = await carOwnerAxios.post('/signup-verify', { email, phoneNumber });
+
+    if (response.status === 200) {
       return true;
-    })
+    } else {
+      return false;
+    }
   } catch (error) {
     return false;
   }
-  return false;
+}
+
+export const ownerSignup = async ({ownerData, carDetails}: any)=>{
+  console.log(ownerData, carDetails);
+  try {
+    const response = await carOwnerAxios.post('/signup', {ownerData,carDetails })
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+export const otpVerification = async ({otp})=>{
+  try {
+    const response = await carOwnerAxios.post('/otp-verification',otp)
+    if (response.status === 200 || response.data.message=='success') {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
 }

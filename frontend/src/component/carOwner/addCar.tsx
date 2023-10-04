@@ -3,13 +3,16 @@ import { ToastContainer } from "react-toastify";
 import { carOwnerAxios } from "../../axios/axios";
 import Dropdown from "../dropdown";
 import AddingForm from "./addingForm";
+import { MdArrowBack } from 'react-icons/md';
+
 import {
   addBrand,
   addCategory,
   addFueltype,
   addModel,
   addTransmission,
-  sendCarDetails,
+  ownerSignup,
+  verifiyOwnerSignup,
 } from "../../utils/carIteams";
 import { ErrorMessage, isDateValid } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
@@ -21,7 +24,7 @@ interface Item {
   _id: string;
 }
 
-const AddCar = ({next}) => {
+const AddCar = ({next, HandlePage}: any) => {
   const [brand, setBrand] = useState<Item[]>([]);
   const [category, setCategory] = useState<Item[]>([]);
   const [model, setModel] = useState<Item[]>([]);
@@ -29,6 +32,8 @@ const AddCar = ({next}) => {
   const [fueltype, setFuelType] = useState<Item[]>([]);
   const [reload, setReload] = useState(false);
   const [images, setImages] = useState<any>([]);
+  const { ownerData } = useSelector((state : any)=> state.carOwnerSignup);
+  console.log('car owenr data in add car page ', ownerData)
   useEffect(() => {
     getDropdownItems();
   }, [reload]);
@@ -40,6 +45,13 @@ const AddCar = ({next}) => {
   };
   const onImageChange = (e: any) => {
     setImages([...e.target.files, ...images]);
+  };
+
+  const addImageToCarDetails = (image) => {
+    setCarDetails({
+      ...carDetails,
+      images: image,
+    });
   };
 
   const getDropdownItems = async () => {
@@ -57,13 +69,12 @@ const AddCar = ({next}) => {
       console.error("Error fetching dropdown items:", error);
     }
   };
-
   const [carDetails, setCarDetails] = useState<CarDetailsModel>({
+    ownerId:"",
     carName: "",
     brand: "",
     model: "",
     year: "",
-    color: "",
     licensePlate: "",
     images: [],
     transmission: "",
@@ -74,6 +85,7 @@ const AddCar = ({next}) => {
     startDate: "",
     endDate: "",
   });
+  console.log(carDetails)
 
   const handleCarDetailsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -83,7 +95,7 @@ const AddCar = ({next}) => {
     });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log(carDetails)
     
@@ -131,8 +143,18 @@ const AddCar = ({next}) => {
   if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
     return ErrorMessage('The amount is not correct, please check');
   }
+  if (images.length < 4 || images.length > 5) {
+    return ErrorMessage('Image minimum is 4 and maximum is 5');
+  }
+  addImageToCarDetails(images)
+
   dispatch(addCar(carDetails));
-  const result : any = sendCarDetails();
+  // const result = await ownerSignup({ownerData,carDetails })
+  const result : boolean = await verifiyOwnerSignup({
+    email: ownerData.email,
+    phoneNumber: ownerData.phoneNumber,
+  });
+  console.log(result);
   if(result){
     next();
   }
@@ -410,20 +432,18 @@ const AddCar = ({next}) => {
               />
             </div>
           </div>
+          <div className="flex cursor-pointer" onClick={HandlePage}>
+          <span><MdArrowBack size={25}/></span>
+          <span className="">Back</span>
+          </div>
           <div>
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-400 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
             >
-              Next
+              Upload
             </button>
             <div className="text-sm md:flex md:justify-between mt-2">
-              {/* <Link
-                to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500 flex justify-center"
-              >
-                Already have an account? Sign in
-              </Link> */}
             </div>
           </div>
         </form>

@@ -34,11 +34,11 @@ export interface AddingFunction  {
 }
 
 export interface CarDetailsModel {
+  ownerId: any | undefined;
   carName: string;
   brand: string;
   model: string;
   year: string;
-  color: string;
   licensePlate: string;
   images: File[] | null;
   transmission: string;
