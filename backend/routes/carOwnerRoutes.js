@@ -2,10 +2,8 @@ import express from 'express'
 import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/AuthController.js';
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCar, addCategory, addFuelType, addModel, addTransmission } from '../controller/carOwner/carSpecController.js';
-import upload from '../middleware/multer.js';
-import cloudinary from '../utils/cloudinary.js';
 
-// import cloudinary from '../utils/cloudinary.js';
+
 const router = express();
 
 router.post('/login',login)

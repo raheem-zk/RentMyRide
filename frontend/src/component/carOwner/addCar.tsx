@@ -18,6 +18,7 @@ import { ErrorMessage, isDateValid } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import { useDispatch, useSelector } from 'react-redux';
 import { addCar } from "../../redux/carOwner/addCarSlice";
+import axios from "axios";
 
 interface Item {
   name: string;
@@ -47,10 +48,38 @@ const AddCar = ({next, HandlePage}: any) => {
     setImages([...e.target.files, ...images]);
   };
 
-  const addImageToCarDetails = (image) => {
+  const addImageToCarDetails = async (image: any) => {
+    if (!image) return;
+
+    const url: string[] = [];
+
+    const presetKey: string = import.meta.env.VITE_PRESETKEY;
+    const cloudName: string = import.meta.env.VITE_CLOUD_NAME;
+
+for (let i = 0; i < image.length; i++) {
+      const img: File = image[i];
+      const formData = new FormData();
+      formData.append('file', img);
+      formData.append('upload_preset', presetKey);
+      formData.append('cloud_name', cloudName);
+
+      try {
+        const response = await axios.post(
+          import.meta.env.VITE_CLOUDINERY_API ,
+          formData
+        );
+
+        console.log(response.data.url);
+        url.push(response.data.url);
+      } catch (err) {
+        console.error('Error uploading image:', err);
+        ErrorMessage('Error uploading image'); // You can replace this with your error handling logic
+      }
+    }
+
     setCarDetails({
       ...carDetails,
-      images: image,
+      images: url,
     });
   };
 

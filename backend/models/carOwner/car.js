@@ -11,8 +11,8 @@ const carSchema = new mongoose.Schema({
     required: true,
     maxlength: 32,
   },
-  image: {
-    type: String,
+  images: {
+    type: [String], // An array of image URLs
     required: true,
   },
   licensePlate: {

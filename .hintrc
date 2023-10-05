@@ -21,6 +21,7 @@
       {
         "duplicate-id-aria": "off"
       }
-    ]
+    ],
+    "button-type": "off"
   }
 }

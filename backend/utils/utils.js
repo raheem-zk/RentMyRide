@@ -8,15 +8,15 @@ export const generateOTP = ()=> {
       const randomIndex = Math.floor(Math.random() * characters.length);
       otp += characters.charAt(randomIndex);
     }
-    console.log(process.env.NODEMAILER_EMAIL, process.env.NODEMAILER_PASS)
     return otp;
   }
 
 export const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+  service: 'gmail',
     auth: {
         user: process.env.NODEMAILER_EMAIL,
         pass: process.env.NODEMAILER_PASS
+        // user: 'muhammedraheem144@gmail.com',
+        // pass: 'nlwgmqkmjxszkzxn',
     }
  });

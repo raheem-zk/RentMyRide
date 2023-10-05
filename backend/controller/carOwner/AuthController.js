@@ -1,7 +1,6 @@
 import ownerSchema from "../../models/carOwner/carOwner.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import { generateOTP, transporter } from "../../utils/utils.js";
 import { addCar } from "./CarController.js";
 let copyOtp;
@@ -9,11 +8,9 @@ let copyOtp;
 export const verifySignup = async (req, res) => {
   try {
     const { email, phoneNumber } = req.body;
-    console.log(req.body, email, phoneNumber);
     const result = await ownerSchema.findOne({
       $or: [{ email }, { phoneNumber }],
     });
-    console.log(result);
     if (result) {
       return res.status(404).json({
         message: "the owner is exsisted check your email or phone number",
@@ -40,7 +37,6 @@ export const verifySignup = async (req, res) => {
         return console.log(error);
       }
       console.log("Message sent: %s", info.messageId);
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
       return res.status(200).json({ message: "success" });
     });
 
@@ -89,8 +85,6 @@ export const signup = async (req, res) => {
     }
 
     const saltRounds = parseInt(process.env.SALTROUNDS);
-    console.log(req.body);
-    console.log(typeof saltRounds, password);
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     console.log(hashedPassword);
@@ -108,25 +102,15 @@ export const signup = async (req, res) => {
     });
     await ownerModel.save();
     const owner = await ownerSchema.findOne({ email: email });
-    console.log(req.body);
     const carDetails = req.body.carDetails;
-    console.log(carDetails,'car details');
     carDetails.ownerId = owner._id;
-    console.log('-----req.body fi------')
 
-    console.log(typeof carDetails.images);
-    console.log('------images-----')
-    // console.log(carDetails.images[0]);
-    const uploadedImages = req.files.images;
-
-    // Now you can use the uploaded images in your code
-    console.log(uploadedImages); // Array of image data
-    console.log('-----image------')
-    console.log(req?.file)
-    console.log('-----image[0]------')
-
-    // addCar(carDetails);
-    // return res.json({ message: "success" });
+    const lastResult = await addCar(carDetails);
+    console.log(lastResult);
+    if(lastResult){
+      return res.json({ message: "success" });
+    }
+    return res.status(500).json({ message: 'Internal Server Error' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal Server Error' });

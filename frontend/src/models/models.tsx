@@ -40,7 +40,7 @@ export interface CarDetailsModel {
   model: string;
   year: string;
   licensePlate: string;
-  images: File[] | null;
+  images: string[] | null;
   transmission: string;
   category: string;
   perDayPrice: any ;
