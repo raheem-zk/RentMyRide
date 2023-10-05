@@ -17,30 +17,7 @@ router.post('/add-transmission',addTransmission)
 
 router.post('/signup-verify', verifySignup);
 router.post('/otp-verification',verifyOtp)
-router.post('/signup',upload.array('images', 5),signup);
+router.post('/signup',signup);
 router.get('/add-car',addCar);
-
-
-router.get('/test', (req, res) => {
-  const htmlForm = `
-  <form id="fileUploadForm" enctype="multipart/form-data" method="post" action="/car-owner/test">
-  <input type="file" multiple name="image" id="fileInput">
-  <button type="submit">Upload</button>
-</form>
-  `;
-
-  res.send(htmlForm);
-});
-
-router.post('/test',upload.single('image'), async (req, res) => {
-  try {
-
-    res.status(200).json({ message: "Images uploaded successfully" });
-  } catch (error) {
-    console.error("Error uploading images:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
 
 export default router;
