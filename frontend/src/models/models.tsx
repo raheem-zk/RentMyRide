@@ -1,5 +1,4 @@
 export interface CarOwnerSignupForm {
-    _id: null | string,
     firstName: string;
     lastName: string;
     age: string;

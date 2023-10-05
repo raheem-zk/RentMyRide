@@ -25,5 +25,5 @@ const ownerCar = createSlice({
   },
 });
 
-export const { addCar } = ownerCar.actions;
+export const { addCar, clearCarData } = ownerCar.actions;
 export default ownerCar.reducer;

@@ -3,13 +3,16 @@ import SignupForm from "./signupForm";
 import AddCar from "./addCar";
 import OtpComponent from "../otpForm";
 import { otpVerification, ownerSignup } from "../../utils/carIteams";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { clearSignup } from "../../redux/carOwner/signupSlice";
+import { clearCarData } from "../../redux/carOwner/addCarSlice";
 
 function Signup() {
-  const [page, setPage] = useState(false);
+  const [page, setPage] = useState(true);
   const [optComponent, setOtpComponent] = useState(false);
   const { carOwnerSignup, addCar } = useSelector((state: any) => state);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const HandlePage = () => {
     setPage(!page);
@@ -23,6 +26,8 @@ function Signup() {
       carDetails: addCar.carData,
     });
     if (result) {
+      dispatch(clearSignup());
+      dispatch(clearCarData());
       navigate("/car-owner/login");
     }
   };

@@ -290,7 +290,7 @@ const SignupForm: React.FC<{ page: () => void }> = ({ page }) => {
             </button>
             <div className="text-sm md:flex md:justify-between mt-2">
               <Link
-                to="/login"
+                to="/car-owner/login"
                 className="font-medium text-indigo-600 hover:text-indigo-500 flex justify-center"
               >
                 Already have an account? Sign in
