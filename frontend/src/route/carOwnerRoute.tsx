@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom"
 import CarOwnerSignup from "../page/carOwner/signup";
 import Login from '../page/carOwner/login';
 import Dashboard from '../page/carOwner/dashboard';
+import ImageUpload from '../component/test';
 
 const CarAppLayout = ()=>{
     return (
@@ -27,6 +28,10 @@ const CarAppLayout = ()=>{
         path:'dashboard',
         element: <Dashboard/>
       },
+      {
+        path:'test',
+        element:<ImageUpload/>
+      }
     ]
   }
 
