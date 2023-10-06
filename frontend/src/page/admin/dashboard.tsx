@@ -7,7 +7,9 @@ import SidebarIteam from '../../component/adminComponent/sidebarIteam';
 function Dashboard() {
   const data =()=><>hlo its admin dashboard</>
   return (  
-  <AdminFrame Body={data} Sidebar={Sidebar} SidebarIteam={SidebarIteam} Header={Header}/>
+    <h1>hlo admin Dash Board</h1>
+
+  // <AdminFrame Body={data}  SidebarIteam={SidebarIteam} Header={Header}/>
   )
 }
 

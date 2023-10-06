@@ -1,19 +1,15 @@
 import React from 'react'
-// import Sidebar from './sidebar'
-// import Header from './header'
+import Sidebar from './sidebar';
+import SidebarIteam from './sidebarIteam';
+import Header from './header';
+import { Outlet } from 'react-router-dom';
 
-type AdminFrameProps = {
-  Body: React.ComponentType; 
-  Sidebar: any
-  Header: React.ComponentType;
-  SidebarIteam : React.ComponentType;
-}
-function AdminFrame({Body, Sidebar, Header, SidebarIteam}: AdminFrameProps ) {
+function AdminFrame() {
   return (
     <div className='w-[100%] h-full flex'>
       <Sidebar SidebarIteam={SidebarIteam}/>
       <Header />
-      <Body/>
+      <Outlet /> 
     </div>
   )
 }
