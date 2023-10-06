@@ -57,7 +57,7 @@ function TabelFrame({ heading, data, handleAction, role }: any) {
           </thead>
 
           <tbody>
-            {data.map((item, index) => (
+            {data.map((item: any, index: number) => (
               <tr className="hover:bg-gray-100" key={index}>
                 <td className="text-center">{index + 1}</td>
                 <td className="px-4 py-2 text-center">

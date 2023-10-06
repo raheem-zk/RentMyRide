@@ -58,7 +58,7 @@ function SidebarIteam() {
         </li>
         <li>
           <Link
-            to="/products"
+            to="/admin/car-owners"
             className="flex items-center px-4 py-2 text-white hover:bg-gray-800"
           >
             <svg
@@ -70,7 +70,7 @@ function SidebarIteam() {
             >
               {/* Insert your SVG icon here */}
             </svg>
-            Vehicle Owners
+            Car Owners
           </Link>
         </li>
         <li>

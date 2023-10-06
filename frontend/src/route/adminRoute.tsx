@@ -6,6 +6,7 @@ import UserList from "../page/admin/usersList";
 import AdminLogout from "../page/admin/logout";
 import AdminFrame from "../component/adminComponent/adminFrame";
 import VehicleList from "../page/admin/carsList";
+import CarOwnersList from "../page/admin/carownersList";
 
 const AdminAppLayout = () => {
   return (
@@ -47,6 +48,10 @@ const AdminRoute = {
         {
           path:'cars',
           element:<VehicleList/>
+        },
+        {
+          path:'car-owners',
+          element:<CarOwnersList/>
         }
       ],
     },
