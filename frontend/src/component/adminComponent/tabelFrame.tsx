@@ -14,20 +14,20 @@ interface Data {
   license: string | null;
   profilePicture: string | null;
   gender: string | null;
-  status: boolean;
+  status: boolean | string;
   createdAt: Date;
 }
 
 type TabelFrameProps = {
   heading: string | null;
-  data: Data[];
+  data: Data[] | null;
   handleAction: (id: string, status: string) => void;
-  role: string ;
+  role: string;
 };
-function TabelFrame({ heading, data, handleAction , role}: TabelFrameProps) {
+function TabelFrame({ heading, data, handleAction, role }: any) {
   const handleClick = (id: string, status: string) => {
     handleAction(id, status);
-  }
+  };
 
   return (
     <div className="h-fit mt-16 md:w-4/5 w-full">
@@ -64,17 +64,14 @@ function TabelFrame({ heading, data, handleAction , role}: TabelFrameProps) {
                   <div className="flex items-center space-x-2 justify-center">
                     <div className="w-10 h-10 flex">
                       <img
-                        src={
-                          item.profilePicture
-                            ? item.profilePicture
-                            : "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                        src={item.profilePicture? item.profilePicture:(item.images) ? item.images[0] : "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
                         }
                         alt="profile pic"
                         className="w-full h-full rounded-full"
                       />
                     </div>
                     <p className="font-semibold">
-                      {item.firstName} {item.lastName}
+                      {item?.firstName} {item?.lastName} {item?.carName}
                     </p>
                   </div>
                 </td>
@@ -83,16 +80,30 @@ function TabelFrame({ heading, data, handleAction , role}: TabelFrameProps) {
                 </td>
                 <td className="text-center">
                   <div className="flex items-center justify-center">
-                  {item.status ? (
-                      <button onClick={() => handleClick(item._id, 'block')} className="m-5">
+                    {item?.status === true ? (
+                      <button
+                        onClick={() => handleClick(item._id, "block")}
+                        className="m-5"
+                      >
                         <FiEye />
                       </button>
                     ) : (
-                      <button onClick={() => handleClick(item._id, 'unblock')} className="m-5">
+                      <button
+                        onClick={() => handleClick(item._id, "unblock")}
+                        className="m-5"
+                      >
                         <FiEyeOff />
                       </button>
                     )}
-                    <Link className="m-5" to={`/admin/${role}/${item._id}/more-details`}>
+                    {item?.status === "Pending" ? (
+                      <h1>Pending, Approve ...</h1>
+                    ) : (
+                      item?.status === "Reject" && <h1>Reject</h1>
+                    )}
+                    <Link
+                      className="m-5"
+                      to={`/admin/${role}/${item._id}/more-details`}
+                    >
                       <FiSettings />
                     </Link>
                   </div>

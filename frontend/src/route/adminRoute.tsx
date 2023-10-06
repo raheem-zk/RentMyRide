@@ -5,6 +5,7 @@ import Dashboard from "../page/admin/dashboard";
 import UserList from "../page/admin/usersList";
 import AdminLogout from "../page/admin/logout";
 import AdminFrame from "../component/adminComponent/adminFrame";
+import VehicleList from "../page/admin/carsList";
 
 const AdminAppLayout = () => {
   return (
@@ -43,6 +44,10 @@ const AdminRoute = {
           path: "users",
           element: <UserList />,
         },
+        {
+          path:'cars',
+          element:<VehicleList/>
+        }
       ],
     },
     {
