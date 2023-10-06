@@ -4,8 +4,17 @@ import AdminLoginForm from "../page/admin/login";
 import Dashboard from "../page/admin/dashboard";
 import UserList from "../page/admin/usersList";
 import AdminLogout from "../page/admin/logout";
+import AdminFrame from "../component/adminComponent/adminFrame";
 
 const AdminAppLayout = () => {
+  return (
+    <>
+      <AdminFrame />
+    </>
+  );
+};
+
+const AdminLoginLayout = () => {
   return (
     <>
       <Outlet />
@@ -15,7 +24,7 @@ const AdminAppLayout = () => {
 
 const AdminRoute = {
   path: "/admin",
-  element: <AdminAppLayout />,
+  element: <AdminLoginLayout />,
   errorElement: <h1>Error</h1>,
   children: [
     {
@@ -23,12 +32,18 @@ const AdminRoute = {
       element: <AdminLoginForm />,
     },
     {
-      path: "dashboard",
-      element: <Dashboard />,
-    },
-    {
-      path: "users",
-      element: <UserList />,
+      path: "/admin",
+      element: <AdminAppLayout />,
+      children: [
+        {
+          path: "dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "users",
+          element: <UserList />,
+        },
+      ],
     },
     {
       path: "logout",
@@ -36,4 +51,5 @@ const AdminRoute = {
     },
   ],
 };
+
 export default AdminRoute;
