@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiEye, FiSettings, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
@@ -24,9 +24,31 @@ type TabelFrameProps = {
   handleAction: (id: string, status: string) => void;
   role: string;
 };
+
 function TabelFrame({ heading, data, handleAction, role }: any) {
-  const handleClick = (id: string, status: string) => {
+  const [modal, setModal] = useState(true);
+  const [message, setMessage] = useState("");
+  const [id, setId] = useState("");
+  const [status, setStatus] = useState("");
+  const handleClick = (id: string, status: string, message: any) => {
     handleAction(id, status);
+  };
+
+  const handleModal = () => {
+    setModal(!modal);
+  };
+  const handleStatus = (id, status) => {
+    if (status == "Reject") {
+      setId(id);
+      setStatus(status);
+      handleModal();
+    } else {
+      handleClick(id, status, message);
+    }
+  };
+
+  const submitMessage = () => {
+    handleClick(id, status, message);
   };
 
   return (
@@ -64,7 +86,12 @@ function TabelFrame({ heading, data, handleAction, role }: any) {
                   <div className="flex items-center space-x-2 justify-center">
                     <div className="w-10 h-10 flex">
                       <img
-                        src={item.profilePicture? item.profilePicture:(item.images) ? item.images[0] : "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                        src={
+                          item.profilePicture
+                            ? item.profilePicture
+                            : item.images
+                            ? item.images[0]
+                            : "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
                         }
                         alt="profile pic"
                         className="w-full h-full rounded-full"
@@ -82,24 +109,44 @@ function TabelFrame({ heading, data, handleAction, role }: any) {
                   <div className="flex items-center justify-center">
                     {item?.status === true ? (
                       <button
-                        onClick={() => handleClick(item._id, "block")}
+                        onClick={() => handleClick(item._id, "block", "")}
                         className="m-5"
                       >
                         <FiEye />
                       </button>
                     ) : (
                       <button
-                        onClick={() => handleClick(item._id, "unblock")}
+                        onClick={() => handleClick(item._id, "unblock", "")}
                         className="m-5"
                       >
                         <FiEyeOff />
                       </button>
                     )}
                     {item?.status === "Pending" ? (
-                      <h1>Pending, Approve ...</h1>
+                      <select
+                        id="carStatus"
+                        value={item?.status}
+                        onChange={(e) => handleStatus(item._id, e.target.value)}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Approve">Approve</option>
+                        <option value="Reject">Reject</option>
+                      </select>
                     ) : (
-                      item?.status === "Reject" && <h1>Reject</h1>
+                      item?.status === "Approve" && (
+                        <select
+                          id="carStatus"
+                          value={item?.status}
+                          onChange={(e) =>
+                            handleStatus(item._id, e.target.value)
+                          }
+                        >
+                          <option value="Approve">Approve</option>
+                          <option value="Reject">Reject</option>
+                        </select>
+                      )
                     )}
+
                     <Link
                       className="m-5"
                       to={`/admin/${role}/${item._id}/more-details`}
@@ -110,6 +157,39 @@ function TabelFrame({ heading, data, handleAction, role }: any) {
                 </td>
               </tr>
             ))}
+            {modal && (
+              <>
+                <div className="fixed inset-0 z-50 overflow-x-hidden overflow-y-auto flex justify-center items-center">
+                  <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
+                    <h3 className="text-2xl font-semibold mb-4">
+                      Car Rejection Notification
+                    </h3>
+                    <input
+                      type="text"
+                      placeholder="eg:-wrong details entered"
+                      className="w-full border rounded-lg px-3 py-2 mb-4"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <div className="flex justify-end">
+                      <button
+                        className="text-red-500 font-semibold mr-4"
+                        onClick={handleModal}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg"
+                        onClick={submitMessage}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
+              </>
+            )}
           </tbody>
         </table>
       </div>

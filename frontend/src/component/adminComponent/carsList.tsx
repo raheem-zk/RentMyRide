@@ -3,23 +3,27 @@ import TabelFrame from './tabelFrame'
 import { adminAxios } from '../../axios/axios'
 
 const Cars = ()=> {
-  const [carsData, setCarsData] = useState([])
+  const [carsData, setCarsData] = useState([]);
+  const [update, setUpdate] = useState('');
   useEffect(()=>{
     getCarDatas();
-  },[])
+  },[update])
   const getCarDatas = async ()=>{
     try {
       const response  = await adminAxios.get('/cars')
       console.log(response.data);
       setCarsData(response.data.carsData);
+      setUpdate('')
     } catch (error) {
       console.log(error);
     }
   } 
   console.log(carsData)
 
-  const handleAction = ()=>{
-
+  const handleAction = async (id: string, action: string, message:any)=>{
+    await adminAxios.patch(`/cars/${id}/${action}/${message}`);
+    console.log(`User ${id} ${action}, ${message}`);
+    setUpdate('update');
   }
 
   return (
