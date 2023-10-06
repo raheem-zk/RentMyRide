@@ -32,7 +32,8 @@ const carSchema = new mongoose.Schema({
     require: true,
   },
   status: {
-    type: Boolean,
+    type: String,
+    default:'Pending',
     default: true,
   },
   createdAt: {
