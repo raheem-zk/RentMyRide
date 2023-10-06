@@ -1,0 +1,45 @@
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from "react-router-dom";
+
+const Navbar =()=> {
+  const { success } = useSelector((state: any)=>state.userAuth);
+  return (
+ <div className="my-6  bg-white p-3  top-0 sticky z-50 shadow shadow-gray-200"> 
+  <div className="container mx-auto my-3 flex items-center justify-between">
+      <div id="logo" className="text-gray-950 text-2xl font-bold">
+        RMR
+      </div>
+
+      <nav id="nav-items" className="space-x-4">
+        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
+          HOME
+        </Link>
+        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
+          CARS
+        </Link>
+        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
+          PAGES
+        </Link>
+        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
+          CATEGORY
+        </Link>
+      </nav>
+    <div className="flex items-center">
+
+      {success ? 
+      <Link className="text-gray-950 hover:text-yellow-500" to={'/logout'}>Logout</Link>: 
+      <Link className="text-gray-950 hover:text-yellow-500" to={'/login'}>Login / Register</Link>
+      }
+
+    </div>
+  </div>
+</div>
+
+  )
+}
+
+export default Navbar
+
+
+
