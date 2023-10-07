@@ -48,7 +48,7 @@ const AddCar = ({next, HandlePage}: any) => {
   const onImageChange = (e: any) => {
     setImages([...e.target.files, ...images]);
   };
-
+  console.log('images ...',images);
   const addImageToCarDetails = async (image: any) => {
     if (!image) return;
 
@@ -58,28 +58,31 @@ const AddCar = ({next, HandlePage}: any) => {
     const cloudName: string = import.meta.env.VITE_CLOUD_NAME;
 
 for (let i = 0; i < image.length; i++) {
-      const img: File = image[i];
+      const img = image[i];
       const formData = new FormData();
       formData.append('file', img);
       formData.append('upload_preset', presetKey);
       formData.append('cloud_name', cloudName);
 
+      console.log('image uploding ', formData);
       try {
         const response = await axios.post(
           import.meta.env.VITE_CLOUDINERY_API ,
           formData
         );
+        console.log('image uploading res',response);
         url.push(response.data.url);
       } catch (err) {
         console.error('Error uploading image:', err);
-        ErrorMessage('Error uploading image'); // You can replace this with your error handling logic
+        ErrorMessage('Error uploading image'); 
       }
     }
 
     setCarDetails({
       ...carDetails,
-      images: url,
+      [images]: url,
     });
+    console.log(carDetails,'its updated vertion', url ,'its url')
   };
 
   const getDropdownItems = async () => {
@@ -433,8 +436,8 @@ for (let i = 0; i < image.length; i++) {
             </div>
 
             {images &&
-              images.map((image) => (
-                <img
+              images.map((image,index) => (
+                <img key={index}
                   className="w-auto py-2"
                   src={URL.createObjectURL(image)}
                   alt="posts"
