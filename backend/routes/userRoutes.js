@@ -8,5 +8,5 @@ const router = express();
 router.post('/login',login);
 router.post('/signup',signup)
 router.post('/google-signin',googleSignin)
-router.get('/',VerifyToken,home);
+router.get('/',home);
 export default router;
