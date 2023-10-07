@@ -37,6 +37,7 @@ export const carRejected = async (req, res) => {
   try {
     const id = req.params.id;
     const message = req.params.message;
+    console.log(message,  req.params);
     const result = await carSchema.updateOne(
       { _id: id },
       { $set: { status: "Rejected" } }

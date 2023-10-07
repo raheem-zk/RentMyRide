@@ -15,8 +15,8 @@ router.patch('/users/:id/block',VerifyToken,userBlock)
 
 // cars
 router.get('/cars',carList)
-router.patch('/cars/:id/approve',carApproved)
-router.patch('/cars/:id/rejected/:message',carRejected)
+router.patch('/cars/:id/approve/',carApproved)
+router.patch('/cars/:id/reject/:message',carRejected)
 
 // car owners
 router.get('/car-owners',carOwnersList)
