@@ -27,7 +27,7 @@ function UserListTable() {
     }
   }
 
-  const handleAction = async (id: string, action: string) => {
+  const handleAction = async (id: string, action: string, message:any) => {
     try {
       await adminAxios.patch(`/users/${id}/${action}`);
       console.log(`User ${id} ${action}ed`);

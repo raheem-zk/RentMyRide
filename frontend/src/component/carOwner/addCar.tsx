@@ -11,7 +11,6 @@ import {
   addFueltype,
   addModel,
   addTransmission,
-  ownerSignup,
   verifiyOwnerSignup,
 } from "../../utils/carIteams";
 import { ErrorMessage, isDateValid } from "../../utils/utils";
@@ -26,24 +25,26 @@ interface Item {
 }
 
 const AddCar = ({next, HandlePage}: any) => {
+
   const [brand, setBrand] = useState<Item[]>([]);
   const [category, setCategory] = useState<Item[]>([]);
   const [model, setModel] = useState<Item[]>([]);
   const [transmission, setTransmission] = useState<Item[]>([]);
   const [fueltype, setFuelType] = useState<Item[]>([]);
-  const [reload, setReload] = useState(false);
   const [images, setImages] = useState<any>([]);
   const { ownerData } = useSelector((state : any)=> state.carOwnerSignup);
-  console.log('car owenr data in add car page ', ownerData)
+
   useEffect(() => {
     getDropdownItems();
-  }, [reload]);
+  }, []);
+
   const dispatch = useDispatch();
   const currentYear = new Date().getFullYear();
 
   const handleReload = () => {
-    setReload(!reload);
+    getDropdownItems();
   };
+
   const onImageChange = (e: any) => {
     setImages([...e.target.files, ...images]);
   };
@@ -68,8 +69,6 @@ for (let i = 0; i < image.length; i++) {
           import.meta.env.VITE_CLOUDINERY_API ,
           formData
         );
-
-        console.log(response.data.url);
         url.push(response.data.url);
       } catch (err) {
         console.error('Error uploading image:', err);
@@ -86,6 +85,7 @@ for (let i = 0; i < image.length; i++) {
   const getDropdownItems = async () => {
     try {
       const res = await carOwnerAxios.get("/add-car");
+      console.log(res.data, 'the drop down items ..')
       if (res.data.error) {
         ErrorMessage(res.data.error);
       }
@@ -114,7 +114,6 @@ for (let i = 0; i < image.length; i++) {
     startDate: "",
     endDate: "",
   });
-  console.log(carDetails)
 
   const handleCarDetailsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -178,8 +177,7 @@ for (let i = 0; i < image.length; i++) {
   addImageToCarDetails(images)
 
   dispatch(addCar(carDetails));
-  // const result = await ownerSignup({ownerData,carDetails })
-  const result : boolean = await verifiyOwnerSignup({
+  const result  = await verifiyOwnerSignup({
     email: ownerData.email,
     phoneNumber: ownerData.phoneNumber,
   });
@@ -283,7 +281,7 @@ for (let i = 0; i < image.length; i++) {
                   htmlFor="endDate"
                   className="block text-sm font-medium text-gray-700 mt-2"
                 >
-                  End Date
+                  Year
                 </label>
                   <input
                 id="year"

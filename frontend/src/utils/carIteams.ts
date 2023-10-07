@@ -78,17 +78,19 @@ export const addFueltype = async (data)=>{
   }
 }
 
-interface verifiyOwnerSignupProps {
+interface VerifiyOwnerSignupProps {
   email: string,
   phoneNumber: string,
 }
-export const verifiyOwnerSignup = async ({email, phoneNumber}: verifiyOwnerSignupProps): Promise<boolean> =>{
+export const verifiyOwnerSignup = async ({email, phoneNumber}:VerifiyOwnerSignupProps): Promise<boolean| undefined>=>{
   console.log( email, phoneNumber,'verifyOwnerSignup side' );
   try {
     const response = await carOwnerAxios.post('/signup-verify', { email, phoneNumber });
 
     if (response.status === 200) {
-      return true;
+      if(response){
+        return true;
+      }
     } else {
       return false;
     }
@@ -102,7 +104,9 @@ export const ownerSignup = async ({ownerData, carDetails}: any)=>{
   try {
     const response = await carOwnerAxios.post('/signup', {ownerData,carDetails })
     if (response.status === 200) {
-      return true;
+      if(response){
+        return true;
+      }
     } else {
       return false;
     }
@@ -115,7 +119,9 @@ export const otpVerification = async ({otp})=>{
   try {
     const response = await carOwnerAxios.post('/otp-verification',otp)
     if (response.status === 200 || response.data.message=='success') {
-      return true;
+      if(response){
+        return true;
+      }
     } else {
       return false;
     }
