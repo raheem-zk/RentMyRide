@@ -33,7 +33,7 @@ const carSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default:'Pending',
+    default: "Pending",
   },
   createdAt: {
     type: Date,
@@ -54,6 +54,10 @@ const carSchema = new mongoose.Schema({
   fuelType: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "FuelType",
+  },
+  availability: {
+    type: String,
+    default: 'Available',
   },
 });
 
