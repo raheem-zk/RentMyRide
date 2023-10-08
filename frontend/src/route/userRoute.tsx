@@ -5,6 +5,7 @@ import SignUp from '../page/user/signUp';
 import UserLogout from '../page/user/logout';
 import Home from '../page/user/home';
 import Navbar from '../component/navbar';
+import CarDetails from '../page/user/carMoreDetails';
 
 const UserAppLayout = () => {
   return (
@@ -44,6 +45,10 @@ const UserRoute = {
         {
           path:'/',
           element:<Home/>
+        },
+        {
+          path:'cars/more-details/:carId',
+          element:<CarDetails/>
         },
         {
           path:'car',

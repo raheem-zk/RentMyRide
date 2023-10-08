@@ -7,6 +7,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import carOwnerSlice from './carOwner/authSlice';
 import ownerSignupSlice from './carOwner/signupSlice';
 import addCarSlice from './carOwner/addCarSlice';
+import carsSlice from "./user/carsSlice";
 
 const persistConfig = {
   key: "root",
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   carOwnerAuth: carOwnerSlice,
   carOwnerSignup : ownerSignupSlice,
   addCar : addCarSlice,
+  carsDatas: carsSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
