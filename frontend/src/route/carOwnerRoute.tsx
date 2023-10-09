@@ -6,7 +6,7 @@ import Dashboard from "../page/carOwner/dashboard";
 import Logout from "../page/carOwner/logout";
 import CarOwnerFrame from "../component/carOwner/carOwnerFrame";
 import AddCarPage from "../page/carOwner/addCar";
-import TestImage from "../component/carOwner/imageTest";
+import AddCar from "../component/carOwner/imageTest";
 
 const CarAppLayout = () => {
   return (
@@ -50,7 +50,7 @@ const CarOwnerRoute = {
         },
         {
           path:"test-add",
-          element: <TestImage/>
+          element: <AddCar/>
         }
       ],
     },

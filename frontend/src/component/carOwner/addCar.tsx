@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import { carOwnerAxios } from "../../axios/axios";
 import Dropdown from "../dropdown";
 import AddingForm from "./addingForm";
-import { MdArrowBack } from 'react-icons/md';
+import { MdArrowBack } from "react-icons/md";
 
 import {
   addBrand,
@@ -15,8 +15,9 @@ import {
 } from "../../utils/carIteams";
 import { ErrorMessage, isDateValid } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { addCar } from "../../redux/carOwner/addCarSlice";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface Item {
@@ -24,15 +25,17 @@ interface Item {
   _id: string;
 }
 
-const AddCar = ({next, HandlePage}: any) => {
-
+const AddCar = ({ next, HandlePage }: any) => {
   const [brand, setBrand] = useState<Item[]>([]);
   const [category, setCategory] = useState<Item[]>([]);
   const [model, setModel] = useState<Item[]>([]);
   const [transmission, setTransmission] = useState<Item[]>([]);
   const [fueltype, setFuelType] = useState<Item[]>([]);
-  const [images, setImages] = useState<any>([]);
-  const { ownerData } = useSelector((state : any)=> state.carOwnerSignup);
+  const [uploadedImages, setUploadedImages] = useState<any[]>([]);
+  const { ownerData } = useSelector((state: any) => state.carOwnerSignup);
+  const { carOwner, success } = useSelector((state: any) => state.carOwnerAuth);
+  const [files, setFiles] = useState<any[] | any>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getDropdownItems();
@@ -46,49 +49,38 @@ const AddCar = ({next, HandlePage}: any) => {
   };
 
   const onImageChange = (e: any) => {
-    setImages([...e.target.files, ...images]);
+    setFiles([...files, ...e.target.files]);
   };
-  console.log('images ...',images);
-  const addImageToCarDetails = async (image: any) => {
-    if (!image) return;
+
+  const uploadImages = async (images: any) => {
+    if (!images || images.length === 0) return [];
 
     const url: string[] = [];
 
-    const presetKey: string = import.meta.env.VITE_PRESETKEY;
-    const cloudName: string = import.meta.env.VITE_CLOUD_NAME;
+    const presetKey = import.meta.env.VITE_PRESETKEY;
+    const cloudName = import.meta.env.VITE_CLOUD_NAME;
 
-for (let i = 0; i < image.length; i++) {
-      const img = image[i];
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
       const formData = new FormData();
-      formData.append('file', img);
-      formData.append('upload_preset', presetKey);
-      formData.append('cloud_name', cloudName);
+      formData.append("file", img);
+      formData.append("upload_preset", presetKey);
+      formData.append("cloud_name", cloudName);
 
-      console.log('image uploding ', formData);
-      try {
-        const response = await axios.post(
-          import.meta.env.VITE_CLOUDINERY_API ,
-          formData
-        );
-        console.log('image uploading res',response);
-        url.push(response.data.url);
-      } catch (err) {
-        console.error('Error uploading image:', err);
-        ErrorMessage('Error uploading image'); 
-      }
+      const response = await axios.post(
+        import.meta.env.VITE_CLOUDINERY_API,
+        formData
+      );
+      let urlData = response.data.url;
+      url.push(urlData);
     }
-
-    setCarDetails({
-      ...carDetails,
-      [images]: url,
-    });
-    console.log(carDetails,'its updated vertion', url ,'its url')
+    return url;
   };
 
   const getDropdownItems = async () => {
     try {
       const res = await carOwnerAxios.get("/add-car");
-      console.log(res.data, 'the drop down items ..')
+      console.log(res.data, "the drop down items ..");
       if (res.data.error) {
         ErrorMessage(res.data.error);
       }
@@ -101,17 +93,18 @@ for (let i = 0; i < image.length; i++) {
       console.error("Error fetching dropdown items:", error);
     }
   };
+
   const [carDetails, setCarDetails] = useState<CarDetailsModel>({
-    ownerId:"",
+    ownerId: success ? carOwner._id : "",
     carName: "",
+    images: "",
     brand: "",
     model: "",
     year: "",
     licensePlate: "",
-    images: [],
     transmission: "",
     category: "",
-    perDayPrice : '',
+    perDayPrice: "",
     description: "",
     fuelType: "",
     startDate: "",
@@ -126,68 +119,104 @@ for (let i = 0; i < image.length; i++) {
     });
   };
 
+  useEffect(() => {
+    if (uploadedImages.length > 0) {
+      // When uploadedImages state changes, update the details.images state
+      setCarDetails({
+        ...carDetails,
+        images: [...uploadedImages],
+      });
+      setUploadedImages([]);
+    }
+    console.log(uploadedImages, "useEffect log ", carDetails);
+  }, [uploadedImages, carDetails]);
+
+  const UplodCarDetails = async () => {
+    await carOwnerAxios.post("/add-car", carDetails);
+    navigate("/car-owner/dashboard");
+    return;
+  };
+
+  useEffect(() => {
+    if (carDetails.images.length !== 0 && success) {
+      UplodCarDetails();
+    }
+  }, [carDetails]);
+  
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(carDetails)
-    
-  const {
-    carName,
-    brand,
-    model,
-    year,
-    licensePlate,
-    transmission,
-    category,
-    description,
-    fuelType,
-    startDate,
-    endDate,
-    perDayPrice,
-  } = carDetails;
+    console.log(carDetails);
 
-      if (
-    carName.trim() === '' ||
-    brand.trim() === '' ||
-    model.trim() === '' ||
-    year.trim() === '' ||
-    licensePlate.trim() === '' ||
-    transmission.trim() === '' ||
-    category === 'add' ||
-    description.trim() === '' ||
-    fuelType === 'add' ||
-    startDate.trim() === '' ||
-    endDate.trim() === ''
-  ) {
-    return ErrorMessage('Please fill in all fields');
-  }
+    const {
+      carName,
+      brand,
+      model,
+      year,
+      licensePlate,
+      transmission,
+      category,
+      description,
+      fuelType,
+      startDate,
+      endDate,
+      perDayPrice,
+      images,
+    } = carDetails;
 
-  if (year.length !== 4 || parseInt(year) > currentYear) {
-    return ErrorMessage('Car year is not correct. Please enter a valid 4-digit year before the current year.');
-  }
-  if (category === 'add' || brand === 'add' || model === 'add' || fuelType === 'add' || transmission === 'add') {
-    return ErrorMessage('Please select required data');
-  }
-  if (!isDateValid(startDate) || !isDateValid(endDate)) {
-    return ErrorMessage("Please enter valid start and end dates");
-  }
-  
-  if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
-    return ErrorMessage('The amount is not correct, please check');
-  }
-  if (images.length < 4 || images.length > 5) {
-    return ErrorMessage('Image minimum is 4 and maximum is 5');
-  }
-  addImageToCarDetails(images)
+    if (
+      carName.trim() === "" ||
+      brand.trim() === "" ||
+      model.trim() === "" ||
+      year.trim() === "" ||
+      licensePlate.trim() === "" ||
+      transmission.trim() === "" ||
+      category === "add" ||
+      description.trim() === "" ||
+      fuelType === "add" ||
+      startDate.trim() === "" ||
+      endDate.trim() === ""
+    ) {
+      return ErrorMessage("Please fill in all fields");
+    }
 
-  dispatch(addCar(carDetails));
-  const result  = await verifiyOwnerSignup({
-    email: ownerData.email,
-    phoneNumber: ownerData.phoneNumber,
-  });
-  console.log(result);
-  if(result){
-    next();
-  }
+    if (year.length !== 4 || parseInt(year) > currentYear) {
+      return ErrorMessage(
+        "Car year is not correct. Please enter a valid 4-digit year before the current year."
+      );
+    }
+    if (
+      category === "add" ||
+      brand === "add" ||
+      model === "add" ||
+      fuelType === "add" ||
+      transmission === "add"
+    ) {
+      return ErrorMessage("Please select required data");
+    }
+    if (!isDateValid(startDate) || !isDateValid(endDate)) {
+      return ErrorMessage("Please enter valid start and end dates");
+    }
+
+    if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
+      return ErrorMessage("The amount is not correct, please check");
+    }
+    if (files.length < 4 || files.length > 5) {
+      return ErrorMessage("Image minimum is 4 and maximum is 5");
+    }
+    const uploadedUrls = await uploadImages(files);
+    console.log(uploadedUrls, "uplodimages");
+    setUploadedImages(uploadedUrls);
+
+    dispatch(addCar(carDetails));
+
+    const result = await verifiyOwnerSignup({
+      email: ownerData.email,
+      phoneNumber: ownerData.phoneNumber,
+    });
+    console.log(result);
+    if (result) {
+      next();
+    }
   };
 
   return (
@@ -196,9 +225,8 @@ for (let i = 0; i < image.length; i++) {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="text-4xl font-extrabold">Add Your Car Details</h2>
-          <p className="mt-2">Join RentMyRide today!</p>
         </div>
-
+        <button onClick={handleSubmit}>click</button>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <div>
@@ -281,22 +309,22 @@ for (let i = 0; i < image.length; i++) {
                 </div>
                 <div>
                   <label
-                  htmlFor="endDate"
-                  className="block text-sm font-medium text-gray-700 mt-2"
-                >
-                  Year
-                </label>
+                    htmlFor="endDate"
+                    className="block text-sm font-medium text-gray-700 mt-2"
+                  >
+                    Year
+                  </label>
                   <input
-                id="year"
-                name="year"
-                type="number"
-                autoComplete="year"
-                required
-                value={carDetails.year}
-                onChange={handleCarDetailsChange}
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="2023"
-              />
+                    id="year"
+                    name="year"
+                    type="number"
+                    autoComplete="year"
+                    required
+                    value={carDetails.year}
+                    onChange={handleCarDetailsChange}
+                    className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="2023"
+                  />
                 </div>
               </div>
             </div>
@@ -384,7 +412,7 @@ for (let i = 0; i < image.length; i++) {
                 htmlFor="image"
                 className="block text-sm font-medium text-gray-700 mt-2"
               >
-                Car Best Images (4-6 images)
+                Car Best Images (4-5 images)
               </label>
               <div className="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
@@ -435,9 +463,10 @@ for (let i = 0; i < image.length; i++) {
               </div>
             </div>
 
-            {images &&
-              images.map((image,index) => (
-                <img key={index}
+            {files &&
+              files.map((image, index) => (
+                <img
+                  key={index}
                   className="w-auto py-2"
                   src={URL.createObjectURL(image)}
                   alt="posts"
@@ -462,10 +491,15 @@ for (let i = 0; i < image.length; i++) {
               />
             </div>
           </div>
-          <div className="flex cursor-pointer" onClick={HandlePage}>
-          <span><MdArrowBack size={25}/></span>
-          <span className="">Back</span>
-          </div>
+          {HandlePage && (
+            <div className="flex cursor-pointer" onClick={HandlePage}>
+              <span>
+                <MdArrowBack size={25} />
+              </span>
+              <span className="">Back</span>
+            </div>
+          )}
+
           <div>
             <button
               type="submit"
@@ -473,8 +507,7 @@ for (let i = 0; i < image.length; i++) {
             >
               Upload
             </button>
-            <div className="text-sm md:flex md:justify-between mt-2">
-            </div>
+            <div className="text-sm md:flex md:justify-between mt-2"></div>
           </div>
         </form>
       </div>
