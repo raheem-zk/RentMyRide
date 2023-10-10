@@ -16,7 +16,7 @@ import {
 import { ErrorMessage, isDateValid } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import { useDispatch, useSelector } from "react-redux";
-import { addCar } from "../../redux/carOwner/addCarSlice";
+import { addCar, clearCarData } from "../../redux/carOwner/addCarSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -121,7 +121,6 @@ const AddCar = ({ next, HandlePage }: any) => {
 
   useEffect(() => {
     if (uploadedImages.length > 0) {
-      // When uploadedImages state changes, update the details.images state
       setCarDetails({
         ...carDetails,
         images: [...uploadedImages],
@@ -133,6 +132,7 @@ const AddCar = ({ next, HandlePage }: any) => {
 
   const UplodCarDetails = async () => {
     await carOwnerAxios.post("/add-car", carDetails);
+    dispatch(clearCarData());
     navigate("/car-owner/dashboard");
     return;
   };
@@ -142,7 +142,7 @@ const AddCar = ({ next, HandlePage }: any) => {
       UplodCarDetails();
     }
   }, [carDetails]);
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log(carDetails);
@@ -193,10 +193,9 @@ const AddCar = ({ next, HandlePage }: any) => {
     ) {
       return ErrorMessage("Please select required data");
     }
-    if (!isDateValid(startDate) || !isDateValid(endDate)) {
+    if (!isDateValid(startDate, endDate)) {
       return ErrorMessage("Please enter valid start and end dates");
     }
-
     if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
       return ErrorMessage("The amount is not correct, please check");
     }
@@ -204,18 +203,19 @@ const AddCar = ({ next, HandlePage }: any) => {
       return ErrorMessage("Image minimum is 4 and maximum is 5");
     }
     const uploadedUrls = await uploadImages(files);
-    console.log(uploadedUrls, "uplodimages");
     setUploadedImages(uploadedUrls);
 
     dispatch(addCar(carDetails));
 
-    const result = await verifiyOwnerSignup({
-      email: ownerData.email,
-      phoneNumber: ownerData.phoneNumber,
-    });
-    console.log(result);
-    if (result) {
-      next();
+    if (!success) {
+      const result = await verifiyOwnerSignup({
+        email: ownerData.email,
+        phoneNumber: ownerData.phoneNumber,
+      });
+      console.log(result);
+      if (result) {
+        next();
+      }
     }
   };
 
@@ -441,7 +441,7 @@ const AddCar = ({ next, HandlePage }: any) => {
                       htmlFor="file-upload"
                       className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                     >
-                      <span>Upload up to 6 files</span>
+                      <span>Upload up to 5 files</span>
                       <input
                         id="file-upload"
                         name="image"
@@ -451,7 +451,7 @@ const AddCar = ({ next, HandlePage }: any) => {
                         onChange={onImageChange}
                         multiple
                         min={4}
-                        max={6}
+                        max={5}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
