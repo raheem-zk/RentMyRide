@@ -21,6 +21,7 @@ export const addCar = async (data) => {
     const carModel = new carSchema(data);
     let result = await carModel.save();
     if(result){
+      console.log('resul of last', result,' end..');
       return true;
     }
     return false;

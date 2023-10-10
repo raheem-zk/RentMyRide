@@ -60,20 +60,26 @@ const AddCar = ({ next, HandlePage }: any) => {
     const presetKey = import.meta.env.VITE_PRESETKEY;
     const cloudName = import.meta.env.VITE_CLOUD_NAME;
 
-    for (let i = 0; i < images.length; i++) {
-      const img = images[i];
-      const formData = new FormData();
-      formData.append("file", img);
-      formData.append("upload_preset", presetKey);
-      formData.append("cloud_name", cloudName);
-
-      const response = await axios.post(
-        import.meta.env.VITE_CLOUDINERY_API,
-        formData
-      );
-      let urlData = response.data.url;
-      url.push(urlData);
+    try {
+      for (let i = 0; i < images.length; i++) {
+        const img = images[i];
+        const formData = new FormData();
+        formData.append("file", img);
+        formData.append("upload_preset", presetKey);
+        formData.append("cloud_name", cloudName);
+  
+        const response = await axios.post(
+          import.meta.env.VITE_CLOUDINERY_API,
+          formData
+        );
+        let urlData = response.data.url;
+        url.push(urlData);
+      }
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      ErrorMessage(error?.response?.data?.message || 'Image upload failed');
     }
+    
     return url;
   };
 
@@ -91,6 +97,7 @@ const AddCar = ({ next, HandlePage }: any) => {
       setFuelType(res?.data?.fueltype || []);
     } catch (error) {
       console.error("Error fetching dropdown items:", error);
+      ErrorMessage(error?.response?.data?.message || 'Error fetching dropdown items');
     }
   };
 
@@ -127,19 +134,34 @@ const AddCar = ({ next, HandlePage }: any) => {
       });
       setUploadedImages([]);
     }
-    console.log(uploadedImages, "useEffect log ", carDetails);
+    // console.log(uploadedImages, "useEffect log ", carDetails);
   }, [uploadedImages, carDetails]);
 
-  const UplodCarDetails = async () => {
+  const uploadCarDetails  = async () => {
     await carOwnerAxios.post("/add-car", carDetails);
     dispatch(clearCarData());
     navigate("/car-owner/dashboard");
     return;
   };
 
+  const uploadRegisterTime = async ()=>{
+    const result = await verifiyOwnerSignup({
+      email: ownerData.email,
+      phoneNumber: ownerData.phoneNumber,
+    });
+    console.log(result);
+    if (result) {
+      next();
+    }
+  }
+
   useEffect(() => {
     if (carDetails.images.length !== 0 && success) {
-      UplodCarDetails();
+      dispatch(addCar(carDetails));
+      uploadCarDetails();
+    } else if (carDetails.images.length !== 0 && !success){
+      dispatch(addCar(carDetails));
+      uploadRegisterTime()
     }
   }, [carDetails]);
 
@@ -204,19 +226,6 @@ const AddCar = ({ next, HandlePage }: any) => {
     }
     const uploadedUrls = await uploadImages(files);
     setUploadedImages(uploadedUrls);
-
-    dispatch(addCar(carDetails));
-
-    if (!success) {
-      const result = await verifiyOwnerSignup({
-        email: ownerData.email,
-        phoneNumber: ownerData.phoneNumber,
-      });
-      console.log(result);
-      if (result) {
-        next();
-      }
-    }
   };
 
   return (
@@ -226,7 +235,6 @@ const AddCar = ({ next, HandlePage }: any) => {
         <div className="text-center">
           <h2 className="text-4xl font-extrabold">Add Your Car Details</h2>
         </div>
-        <button onClick={handleSubmit}>click</button>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <div>
