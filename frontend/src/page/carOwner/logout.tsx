@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { logout } from "../../redux/user/authSlice";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/carOwner/authSlice";
 
-function UserLogout() {
+const Logout = () => {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
 
     dispatch(logout());
-    navigate("/login");
-    
-  }, []);
+    navigate("/car-owner/login");
 
+  });
+  
   return <></>;
-}
+};
 
-export default UserLogout;
+export default Logout;

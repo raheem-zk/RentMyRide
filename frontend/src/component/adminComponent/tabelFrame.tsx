@@ -23,7 +23,7 @@ interface Data {
 type TabelFrameProps = {
   heading: string | null;
   data: Data[] | null;
-  handleAction: (id: string, status: string, message: string | null | undefined) => void;
+  handleAction: (id: string, status: string, message: string ) => void;
   role: string;
 };
 
@@ -33,7 +33,7 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
 
-  const handleClick = (id: string, status: string, message: string | null | undefined) => {
+  const handleClick = (id: string, status: string, message: string ) => {
     handleAction(id, status, message);
   };
 

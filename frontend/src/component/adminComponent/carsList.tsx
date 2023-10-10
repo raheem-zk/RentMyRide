@@ -5,9 +5,11 @@ import { adminAxios } from '../../axios/axios'
 const Cars = ()=> {
   const [carsData, setCarsData] = useState([]);
   const [update, setUpdate] = useState('');
+
   useEffect(()=>{
     getCarDatas();
   },[update])
+
   const getCarDatas = async ()=>{
     try {
       const response  = await adminAxios.get('/cars')
@@ -20,7 +22,7 @@ const Cars = ()=> {
   } 
   console.log(carsData)
 
-  const handleAction = async (id: string, action: string, message:any)=>{
+  const handleAction = async (id: string, action: string, message:string)=>{
     await adminAxios.patch(`/cars/${id}/${action}/${message}`);
     console.log(`User ${id} ${action}, ${message}`);
     setUpdate('update');

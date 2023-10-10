@@ -13,7 +13,8 @@
       "default",
       {
         "autocomplete-valid": "off",
-        "select-name": "off"
+        "select-name": "off",
+        "label": "off"
       }
     ],
     "axe/parsing": [

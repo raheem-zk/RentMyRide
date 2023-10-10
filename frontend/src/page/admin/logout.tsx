@@ -14,7 +14,8 @@ function AdminLogout() {
     navigate("/admin/login");
     
   }, []);
-  return <div> </div>;
+  
+  return <></>;
 }
 
 export default AdminLogout;

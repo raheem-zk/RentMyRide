@@ -4,9 +4,10 @@ import CarOwnerSignup from "../page/carOwner/signup";
 import Login from "../page/carOwner/login";
 import Dashboard from "../page/carOwner/dashboard";
 import Logout from "../page/carOwner/logout";
-import CarOwnerFrame from "../component/carOwner/carOwnerFrame";
 import AddCarPage from "../page/carOwner/addCar";
-import AddCar from "../component/carOwner/imageTest";
+import CarOwnerFrame from "../component/carOwner/frame/carOwnerFrame";
+import IsLogout from "../middleware/carowner/isLogout";
+import IsLogged from "../middleware/carowner/isLogged";
 
 const CarAppLayout = () => {
   return (
@@ -16,9 +17,7 @@ const CarAppLayout = () => {
   );
 };
 const CarOwnerLayout = () => {
-  return (
-      <CarOwnerFrame />
-  );
+  return <CarOwnerFrame />;
 };
 const CarOwnerRoute = {
   path: "/car-owner",
@@ -26,15 +25,30 @@ const CarOwnerRoute = {
   children: [
     {
       path: "signup",
-      element: <CarOwnerSignup />,
+      element: (
+        <>
+          <IsLogout />
+          <CarOwnerSignup />
+        </>
+      ),
     },
     {
       path: "login",
-      element: <Login />,
+      element: (
+        <>
+          <IsLogout />
+          <Login />
+        </>
+      ),
     },
     {
       path: "logout",
-      element: <Logout />,
+      element: (
+        <>
+          <IsLogged />
+          <Logout />
+        </>
+      ),
     },
     {
       path: "/car-owner",
@@ -42,16 +56,22 @@ const CarOwnerRoute = {
       children: [
         {
           path: "dashboard",
-          element: <Dashboard />,
+          element: (
+            <>
+              <IsLogged />
+              <Dashboard />
+            </>
+          ),
         },
         {
           path: "add-car",
-          element: <AddCarPage/>,
+          element: (
+            <>
+              <IsLogged />
+              <AddCarPage />
+            </>
+          ),
         },
-        {
-          path:"test-add",
-          element: <AddCar/>
-        }
       ],
     },
   ],

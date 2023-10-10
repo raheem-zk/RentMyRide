@@ -1,12 +1,14 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AdminLoginForm from "../page/admin/login";
+import Login from "../page/admin/login";
 import Dashboard from "../page/admin/dashboard";
 import UserList from "../page/admin/usersList";
 import AdminLogout from "../page/admin/logout";
 import AdminFrame from "../component/adminComponent/adminFrame";
-import VehicleList from "../page/admin/carsList";
+import Cars from "../page/admin/carsList";
 import CarOwnersList from "../page/admin/carownersList";
+import IsLogout from "../middleware/admin/isLogout";
+import IsLogged from "../middleware/admin/isLogged";
 
 const AdminAppLayout = () => {
   return (
@@ -31,7 +33,12 @@ const AdminRoute = {
   children: [
     {
       path: "login",
-      element: <AdminLoginForm />,
+      element: (
+        <>
+          <IsLogout />
+          <Login />
+        </>
+      ),
     },
     {
       path: "/admin",
@@ -39,20 +46,40 @@ const AdminRoute = {
       children: [
         {
           path: "dashboard",
-          element: <Dashboard />,
+          element: (
+            <>
+              <IsLogged />
+              <Dashboard />
+            </>
+          ),
         },
         {
           path: "users",
-          element: <UserList />,
+          element: (
+            <>
+              <IsLogged />
+              <UserList />
+            </>
+          ),
         },
         {
-          path:'cars',
-          element:<VehicleList/>
+          path: "cars",
+          element: (
+            <>
+              <IsLogged />
+              <Cars />
+            </>
+          ),
         },
         {
-          path:'car-owners',
-          element:<CarOwnersList/>
-        }
+          path: "car-owners",
+          element: (
+            <>
+              <IsLogged />
+              <CarOwnersList />
+            </>
+          ),
+        },
       ],
     },
     {
