@@ -3,7 +3,14 @@ import carSchema from "../../models/carOwner/car.js";
 export const uploadCar = async (req, res) => {
   try {
     const data = req.body;
-    console.log(data, "  ...req.body");
+    const matched = await carSchema.findOne({licensePlate: data.licensePlate});
+    if(matched){
+      return res.status(404).json({
+        message: "Car with the provided license plate already exists.",
+        error: true,
+      });
+    }
+    
     const result = await addCar(data);
     if (result) {
       return res.json({ message: "success" });

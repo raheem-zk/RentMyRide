@@ -105,6 +105,14 @@ export const signup = async (req, res) => {
     const carDetails = req.body.carDetails;
     carDetails.ownerId = owner._id;
 
+    const matched = await carSchema.findOne({licensePlate: carDetails.licensePlate});
+    if(matched){
+      return res.status(404).json({
+        message: "Car with the provided license plate already exists.",
+        error: true,
+      });
+    }
+
     const lastResult = await addCar(carDetails);
     console.log(lastResult);
     if(lastResult){
