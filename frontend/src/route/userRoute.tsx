@@ -6,12 +6,14 @@ import UserLogout from '../page/user/logout';
 import Home from '../page/user/home';
 import Navbar from '../component/navbar';
 import CarDetails from '../page/user/carMoreDetails';
+import PhoneNav from '../component/phoneNav';
 
 const UserAppLayout = () => {
   return (
     <>
     <Navbar/>
-      <Outlet />
+    <Outlet />
+    <PhoneNav/>
     </>
   );
 };

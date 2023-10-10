@@ -11,7 +11,7 @@ const Navbar =()=> {
         RMR
       </div>
 
-      <nav id="nav-items" className="space-x-4">
+      <nav id="nav-items" className="space-x-4 md:block hidden">
         <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
           HOME
         </Link>
@@ -25,7 +25,7 @@ const Navbar =()=> {
           CATEGORY
         </Link>
       </nav>
-    <div className="flex items-center">
+    <div className="md:flex hidden items-center ">
 
       {success ? 
       <Link className="text-gray-950 hover:text-yellow-500" to={'/logout'}>Logout</Link>: 
