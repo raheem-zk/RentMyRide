@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const IsLoggedOut= ()=> {
+const IsLogout= ()=> {
   const { success } = useSelector((state: any) => state.userAuth);
   const navigate = useNavigate();
 
@@ -11,7 +11,7 @@ const IsLoggedOut= ()=> {
       navigate("/");
     }
   }, [success]);
-
+  return null;
 }
 
-export default IsLoggedOut;
+export default IsLogout;

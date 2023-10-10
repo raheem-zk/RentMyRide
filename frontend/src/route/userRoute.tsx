@@ -7,6 +7,8 @@ import Home from '../page/user/home';
 import Navbar from '../component/navbar';
 import CarDetails from '../page/user/carMoreDetails';
 import PhoneNav from '../component/phoneNav';
+import IsLogout from '../middleware/user/isLogout';
+import IsLogged from '../middleware/user/isLogged';
 
 const UserAppLayout = () => {
   return (
@@ -29,19 +31,30 @@ const UserRoute = {
   children: [
     {
       path: 'login',
-      element: <Login />,
+      element:
+      <>
+      <IsLogout/>
+      <Login />
+      </> ,
     },
     {
       path: 'signup',
-      element: <SignUp />,
+      element: 
+      <>
+      <IsLogout/>
+      <SignUp />
+      </>,
     },
     {
       path: 'logout',
-      element: <UserLogout />,
+      element: 
+      <>
+      <IsLogged/>
+      <UserLogout />
+      </>,
     },
     {
       path: '/',
-      // element: <Home />,
       element: <UserAppLayout/>,
       children:[
         {

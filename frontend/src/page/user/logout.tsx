@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/user/authSlice";
 import { useNavigate } from "react-router-dom";
