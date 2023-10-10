@@ -14,13 +14,22 @@ export  const ErrorMessage = (message: string): void => {
     console.log(message);
   };
 
+export const successMessage = (message: string): void=> {
+  toast.success(message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+    });
+}
   export const isDateValid = (start, end) => {
     const currentDate = new Date();
-  
     const currentDateStr = currentDate.toISOString().slice(0, 10);
-  
-    console.log('start data:', start, 'end Date:', end, 'current data:', currentDateStr);
-  
+    
     if (start > end) {
       return false;
     }
