@@ -2,7 +2,7 @@ import express from 'express'
 import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/AuthController.js';
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCar, addCategory, addFuelType, addModel, addTransmission } from '../controller/carOwner/carSpecController.js';
-import { uploadCar } from '../controller/carOwner/CarController.js';
+import { uploadCar } from '../controller/carOwner/carController.js';
 
 
 const router = express();

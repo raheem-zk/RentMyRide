@@ -14,10 +14,10 @@ router.patch('/users/:id/unblock',VerifyToken,userUnblock)
 router.patch('/users/:id/block',VerifyToken,userBlock)
 
 // cars
-router.get('/cars',carList)
-router.patch('/cars/:id/approve/',carApproved)
-router.patch('/cars/:id/reject/:message',carRejected)
+router.get('/cars',VerifyToken,carList)
+router.patch('/cars/:id/approve/',VerifyToken,carApproved)
+router.patch('/cars/:id/reject/:message',VerifyToken,carRejected)
 
 // car owners
-router.get('/car-owners',carOwnersList)
+router.get('/car-owners',VerifyToken,carOwnersList)
 export default router;

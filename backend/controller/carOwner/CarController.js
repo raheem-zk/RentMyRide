@@ -1,4 +1,5 @@
 import carSchema from "../../models/carOwner/car.js";
+import ownerSchema from '../../models/carOwner/carOwner.js';
 
 export const uploadCar = async (req, res) => {
   try {
@@ -24,11 +25,15 @@ export const uploadCar = async (req, res) => {
 
 export const addCar = async (data) => {
   try {
-    console.log(data);
     const carModel = new carSchema(data);
     let result = await carModel.save();
+    console.log(result, 'the uploded car result ');
     if(result){
-      console.log('resul of last', result,' end..');
+      const  results = await ownerSchema.updateOne(
+        { _id: data.ownerId }, 
+        { $push: { carId: result._id } }
+      );
+      console.log('result', result._id, results);
       return true;
     }
     return false;

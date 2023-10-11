@@ -60,6 +60,9 @@ const carOwnerSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  carId: {
+    type: [mongoose.Schema.Types.ObjectId], // An array of image URLs
+  },
   createdAt: {
     type: Date,
     default: Date.now, 
