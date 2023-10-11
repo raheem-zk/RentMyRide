@@ -11,7 +11,6 @@ export  const ErrorMessage = (message: string): void => {
       progress: undefined,
       theme: "light",
     });
-    console.log(message);
   };
 
 export const successMessage = (message: string): void=> {
