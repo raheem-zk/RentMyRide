@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const carSchema = new mongoose.Schema({
   ownerId: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CarOwner",
   },
   carName: {
     type: String,
