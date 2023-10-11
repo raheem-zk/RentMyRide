@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 
 function SidebarIteam() {
   return (
+    <>
+    <div className="mt-5 md:block hidden"> 
+      <img className="w-1/4 rounded-full max-h-40 mx-auto" src="https://static.vecteezy.com/system/resources/previews/009/129/287/original/rmr-logo-rmr-letter-rmr-letter-logo-design-initials-rmr-logo-linked-with-circle-and-uppercase-monogram-logo-rmr-typography-for-technology-business-and-real-estate-brand-vector.jpg" alt="" />
+    </div>
     <nav className="mt-6">
       <ul className="space-y-2">
         <li>
@@ -53,7 +57,7 @@ function SidebarIteam() {
             >
               {/* Insert your SVG icon here */}
             </svg>
-            Cars  
+            Cars
           </Link>
         </li>
         <li>
@@ -87,12 +91,12 @@ function SidebarIteam() {
             >
               {/* Insert your SVG icon here */}
             </svg>
-            Logout 
+            Logout
           </Link>
         </li>
         {/* Add more sidebar items as needed */}
       </ul>
-    </nav>
+    </nav></>
   );
 }
 

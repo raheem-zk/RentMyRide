@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
-import PhoneSidebar from './phoneSidebar';
 
-const Header: React.FC = () => {
+const Header = ({PhoneSidebar}) => {
   const [sideButton, setSideButton] = useState(false);
 
   return (

@@ -4,7 +4,6 @@ import { carOwnerAxios } from "../../axios/axios";
 import Dropdown from "../dropdown";
 import AddingForm from "./addingForm";
 import { MdArrowBack } from "react-icons/md";
-
 import {
   addBrand,
   addCategory,
@@ -13,7 +12,7 @@ import {
   addTransmission,
   verifiyOwnerSignup,
 } from "../../utils/carIteams";
-import { ErrorMessage, isDateValid } from "../../utils/utils";
+import { ErrorMessage, isDateValid, successMessage } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import { useDispatch, useSelector } from "react-redux";
 import { addCar, clearCarData } from "../../redux/carOwner/addCarSlice";
@@ -67,7 +66,7 @@ const AddCar = ({ next, HandlePage }: any) => {
         formData.append("file", img);
         formData.append("upload_preset", presetKey);
         formData.append("cloud_name", cloudName);
-  
+
         const response = await axios.post(
           import.meta.env.VITE_CLOUDINERY_API,
           formData
@@ -77,9 +76,9 @@ const AddCar = ({ next, HandlePage }: any) => {
       }
     } catch (error) {
       console.error("Image upload failed:", error);
-      ErrorMessage(error?.response?.data?.message || 'Image upload failed');
+      ErrorMessage(error?.response?.data?.message || "Image upload failed");
     }
-    
+
     return url;
   };
 
@@ -97,7 +96,9 @@ const AddCar = ({ next, HandlePage }: any) => {
       setFuelType(res?.data?.fueltype || []);
     } catch (error) {
       console.error("Error fetching dropdown items:", error);
-      ErrorMessage(error?.response?.data?.message || 'Error fetching dropdown items');
+      ErrorMessage(
+        error?.response?.data?.message || "Error fetching dropdown items"
+      );
     }
   };
 
@@ -137,31 +138,31 @@ const AddCar = ({ next, HandlePage }: any) => {
     // console.log(uploadedImages, "useEffect log ", carDetails);
   }, [uploadedImages, carDetails]);
 
-  const uploadCarDetails  = async () => {
+  const uploadCarDetails = async () => {
     await carOwnerAxios.post("/add-car", carDetails);
+    successMessage('Car Added successfully')
     dispatch(clearCarData());
     navigate("/car-owner/dashboard");
     return;
   };
 
-  const uploadRegisterTime = async ()=>{
+  const uploadRegisterTime = async () => {
     const result = await verifiyOwnerSignup({
       email: ownerData.email,
       phoneNumber: ownerData.phoneNumber,
     });
-    console.log(result);
     if (result) {
       next();
     }
-  }
+  };
 
   useEffect(() => {
     if (carDetails.images.length !== 0 && success) {
       dispatch(addCar(carDetails));
       uploadCarDetails();
-    } else if (carDetails.images.length !== 0 && !success){
+    } else if (carDetails.images.length !== 0 && !success) {
       dispatch(addCar(carDetails));
-      uploadRegisterTime()
+      uploadRegisterTime();
     }
   }, [carDetails]);
 

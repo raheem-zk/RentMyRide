@@ -5,20 +5,18 @@ import Login from "../page/carOwner/login";
 import Dashboard from "../page/carOwner/dashboard";
 import Logout from "../page/carOwner/logout";
 import AddCarPage from "../page/carOwner/addCar";
-import CarOwnerFrame from "../component/carOwner/frame/carOwnerFrame";
+import CarOwnerFrame from "../component/carOwner/carOwnerFrame";
 import IsLogout from "../middleware/carowner/isLogout";
 import IsLogged from "../middleware/carowner/isLogged";
 
 const CarAppLayout = () => {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 };
+
 const CarOwnerLayout = () => {
   return <CarOwnerFrame />;
 };
+
 const CarOwnerRoute = {
   path: "/car-owner",
   element: <CarAppLayout />,

@@ -11,19 +11,11 @@ import IsLogout from "../middleware/admin/isLogout";
 import IsLogged from "../middleware/admin/isLogged";
 
 const AdminAppLayout = () => {
-  return (
-    <>
-      <AdminFrame />
-    </>
-  );
+  return <AdminFrame />;
 };
 
 const AdminLoginLayout = () => {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 };
 
 const AdminRoute = {
