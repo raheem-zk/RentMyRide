@@ -56,10 +56,6 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
-  gender: {
-    type: String,
-    require: true,
-  },
   status: {
     type: Boolean,
     default: true,
