@@ -18,7 +18,6 @@ function UserListTable() {
       const response = await adminAxios.get(`/users`);
       const userData = response?.data?.userData;
       
-      console.log(userData);
       setUserList(userData);
       setUpdate('');
       dispatch(addUsers(userData)); 
@@ -30,7 +29,6 @@ function UserListTable() {
   const handleAction = async (id: string, action: string, message:string) => {
     try {
       await adminAxios.patch(`/users/${id}/${action}`);
-      console.log(`User ${id} ${action}ed`);
       setUpdate('update');
     } catch (error) {
       console.error(error);
