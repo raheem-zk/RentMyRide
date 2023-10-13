@@ -15,12 +15,12 @@ const carsListSlice = createSlice({
   name: 'carsList',
   initialState: INITIAL_STATE,
   reducers: {
-    addcars: (state, action: PayloadAction<carsData>) => {
-      state.cars = action.payload.cars;
-      state.filterData = action.payload.filterData;
+    addAllCars: (state, action: PayloadAction<CarDetailsModel[]>) => {
+      state.cars = action.payload;
+      state.filterData = action.payload; 
     },
   },
 });
 
-export const { addcars } = carsListSlice.actions;
+export const { addAllCars } = carsListSlice.actions;
 export default carsListSlice.reducer;
