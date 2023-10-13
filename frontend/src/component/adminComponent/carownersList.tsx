@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import TabelFrame from "./tabelFrame";
 import { adminAxios } from "../../axios/axios";
+import { useDispatch } from "react-redux";
+import { addOwners } from "../../redux/admin/carownersSlice";
 
 const OwnerList = () => {
   const [ownersData, setOwnersData] = useState([]);
   const [update, setUpdate] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getOwnersData();
@@ -12,6 +15,7 @@ const OwnerList = () => {
 
   const getOwnersData = async () => {
     const response = await adminAxios.get("/car-owners");
+    dispatch(addOwners(response.data.carownersData))
     setOwnersData(response.data.carownersData);
     setUpdate("");
   };

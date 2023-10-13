@@ -15,12 +15,12 @@ const ownerListSlice = createSlice({
   name: "ownerList",
   initialState: INITIAL_STATE,
   reducers: {
-    addowners: (state, action: PayloadAction<OwnerData>) => {
-      state.owner = action.payload.owner;
-      state.filterData = action.payload.filterData;
+    addOwners: (state, action: PayloadAction<carOwner[]>) => {
+      state.owner = action.payload;
+      state.filterData = action.payload; 
     },
   },
 });
 
-export const { addowners } = ownerListSlice.actions;
+export const { addOwners } = ownerListSlice.actions;
 export default ownerListSlice.reducer;
