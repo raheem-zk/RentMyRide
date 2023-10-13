@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import TabelFrame from './tabelFrame';
-import { useDispatch } from 'react-redux';
-import { addUsers } from '../../redux/admin/usersSlice';
-import { adminAxios } from '../../axios/axios';
+import React, { useEffect, useState } from "react";
+import TabelFrame from "./tabelFrame";
+import { useDispatch } from "react-redux";
+import { addUsers } from "../../redux/admin/usersSlice";
+import { adminAxios } from "../../axios/axios";
 
 function UserListTable() {
   const [usersList, setUserList] = useState([]);
-  const [update, setUpdate] = useState('');
-  const dispatch = useDispatch(); 
+  const [update, setUpdate] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getUserData();
@@ -17,29 +17,34 @@ function UserListTable() {
     try {
       const response = await adminAxios.get(`/users`);
       const userData = response?.data?.userData;
-      
+
       setUserList(userData);
-      setUpdate('');
-      dispatch(addUsers(userData)); 
+      setUpdate("");
+      dispatch(addUsers(userData));
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
-  const handleAction = async (id: string, action: string, message:string) => {
+  const handleAction = async (id: string, action: string, message: string) => {
     try {
       await adminAxios.patch(`/users/${id}/${action}`);
-      setUpdate('update');
+      setUpdate("update");
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  const heading = 'Users';
+  const heading = "Users";
 
   return (
-    <TabelFrame heading={heading} data={usersList} handleAction={handleAction} role="users" />
-  )
+    <TabelFrame
+      heading={heading}
+      data={usersList}
+      handleAction={handleAction}
+      role="users"
+    />
+  );
 }
 
 export default UserListTable;
