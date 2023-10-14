@@ -2,7 +2,7 @@ import carOwnerSchema from '../../models/carOwner/carOwner.js';
  
 export const carOwnersList = async (req, res)=>{
     try {
-        const carownersData = await carOwnerSchema.find() ?? [];
+        const carownersData = await carOwnerSchema.find().populate('carId') ?? [];
         res.json({message:'success',carownersData})
     } catch (error) {
         console.error(error);
