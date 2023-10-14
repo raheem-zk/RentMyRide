@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { carOwnerAxios } from "../axios/axios"
+import { adminAxios, carOwnerAxios } from "../axios/axios"
 import { ErrorMessage } from "./utils"
 import { useNavigate } from "react-router-dom";
 
@@ -129,3 +129,12 @@ export const otpVerification = async ({otp})=>{
     return false;
   }
 }
+
+export const handleAction = async (id: string, action: string, message: string) => {
+  try {
+    await adminAxios.patch(`/cars/${id}/${action}/${message}`);
+  } catch (error) {
+    console.error(error);
+    throw error; // You can handle errors as needed
+  }
+};

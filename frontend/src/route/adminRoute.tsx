@@ -9,6 +9,9 @@ import Cars from "../page/admin/carsList";
 import CarOwnersList from "../page/admin/carownersList";
 import IsLogout from "../middleware/admin/isLogout";
 import IsLogged from "../middleware/admin/isLogged";
+import CarMoreDetails from "../page/admin/carMoreDetails";
+import UserMoreDetails from "../page/admin/userMoreDetails";
+import OwnerMoreDetails from "../page/admin/ownerMoreDetails";
 
 const AdminAppLayout = () => {
   return <AdminFrame />;
@@ -60,6 +63,33 @@ const AdminRoute = {
             <>
               <IsLogged />
               <Cars />
+            </>
+          ),
+        },
+        {
+          path: "cars/:carId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <CarMoreDetails />
+            </>
+          ),
+        },
+        {
+          path: "users/:userId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <UserMoreDetails />
+            </>
+          ),
+        },
+        {
+          path: "car-owners/:ownerId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <OwnerMoreDetails />
             </>
           ),
         },

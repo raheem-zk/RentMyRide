@@ -1,9 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
-
-const NotUpdated =()=> <div className='text-red-800 bold'>Not Updated</div>;
+import { NotUpdated } from '../../utils/adminUtils';
 
 const UserMoreDetails = () => {
     const { userId } = useParams();
