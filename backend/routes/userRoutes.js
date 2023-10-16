@@ -13,6 +13,6 @@ router.post('/otp-verification',otpVerification)
 router.post('/google-signin',googleSignin)
 router.get('/',home);
 
-router.post('/rent-booking', rentBooking)
+router.post('/rent-booking',VerifyToken, rentBooking)
 
 export default router;

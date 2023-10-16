@@ -19,6 +19,10 @@ const carSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  year: {
+    type: String,
+    required: true,
+  },
   transmission: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Transmission",

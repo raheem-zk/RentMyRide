@@ -2,7 +2,7 @@ import express from 'express'
 import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/AuthController.js';
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCar, addCategory, addFuelType, addModel, addTransmission } from '../controller/carOwner/carSpecController.js';
-import { uploadCar } from '../controller/carOwner/carController.js';
+import { cars, uploadCar } from '../controller/carOwner/carController.js';
 
 
 const router = express();
@@ -20,5 +20,6 @@ router.post('/signup',signup);
 router.post('/login',login)
 
 router.post('/add-car',VerifyToken,uploadCar);
+router.get('/cars/:ownerId',VerifyToken,cars);
 
 export default router;

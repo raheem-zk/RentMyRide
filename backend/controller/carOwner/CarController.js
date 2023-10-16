@@ -42,3 +42,18 @@ export const addCar = async (data) => {
     return false;
   }
 };
+
+export const cars = async (req, res)=>{
+  try {
+    const { ownerId } = req.params;
+    const carsData = await carSchema.find({ownerId})
+    .populate("fuelType")
+    .populate("transmission")
+    .populate("brand")
+    .populate("model")
+    .populate("category");
+    return res.json({message:'success', carsData})
+  } catch (error) {
+    
+  }
+}
