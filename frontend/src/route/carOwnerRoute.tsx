@@ -8,13 +8,19 @@ import AddCarPage from "../page/carOwner/addCar";
 import CarOwnerFrame from "../component/carOwner/carOwnerFrame";
 import IsLogout from "../middleware/carowner/isLogout";
 import IsLogged from "../middleware/carowner/isLogged";
+import { ToastContainer } from "react-toastify";
 
 const CarAppLayout = () => {
   return <Outlet />;
 };
 
 const CarOwnerLayout = () => {
-  return <CarOwnerFrame />;
+  return (
+    <>
+      <CarOwnerFrame />
+      <ToastContainer />
+    </>
+  );
 };
 
 const CarOwnerRoute = {

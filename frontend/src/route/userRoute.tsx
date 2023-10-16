@@ -9,6 +9,7 @@ import CarDetails from '../page/user/carMoreDetails';
 import PhoneNav from '../component/phoneNav';
 import IsLogout from '../middleware/user/isLogout';
 import IsLogged from '../middleware/user/isLogged';
+import { ToastContainer } from 'react-toastify';
 
 const UserAppLayout = () => {
   return (
@@ -16,6 +17,7 @@ const UserAppLayout = () => {
     <Navbar/>
     <Outlet />
     <PhoneNav/>
+    <ToastContainer/>
     </>
   );
 };

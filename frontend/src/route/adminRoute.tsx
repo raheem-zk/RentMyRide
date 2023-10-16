@@ -12,9 +12,15 @@ import IsLogged from "../middleware/admin/isLogged";
 import CarMoreDetails from "../page/admin/carMoreDetails";
 import UserMoreDetails from "../page/admin/userMoreDetails";
 import OwnerMoreDetails from "../page/admin/ownerMoreDetails";
+import { ToastContainer } from "react-toastify";
 
 const AdminAppLayout = () => {
-  return <AdminFrame />;
+  return (
+    <>
+      <ToastContainer />
+      <AdminFrame />
+    </>
+  );
 };
 
 const AdminLoginLayout = () => {
