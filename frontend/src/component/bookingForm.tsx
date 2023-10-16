@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { userAxios } from "../axios/axios";
+import { ErrorMessage, successMessage } from "../utils/utils";
 
 const CarRentForm = ({ handleModal }) => {
   const navigate = useNavigate();
-  const { success } = useSelector((state: any) => state.userAuth);
+  const { success ,user } = useSelector((state: any) => state.userAuth);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,15 +19,44 @@ const CarRentForm = ({ handleModal }) => {
     pickupTime: "",
     dropoffDate: "",
     dropoffTime: "",
+    license: "",
+    userId: user?._id,
   });
 
+  const handleRentFormSubmition = async (e)=>{
+    e.preventDefault();
+
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.pickupLocation ||
+      !formData.pickupDate ||
+      !formData.pickupTime ||
+      !formData.dropoffDate ||
+      !formData.dropoffTime ||
+      !formData.license
+    ) {
+      return ErrorMessage("Please fill in all the required fields.");
+    }
+  
+    if (formData.license.length !== 16) {
+      return ErrorMessage("The license number is not correct.");
+    }
+    if (formData.phone.length !== 10) {
+      return ErrorMessage("The phone number must be 10 characters long.");
+    }
+    
+    try {
+      const response = await userAxios.post("/rent-booking", formData);
+      response?.data?.message=='success' && successMessage("Car booking is Success")
+      handleModal()
+    }catch (error){
+      console.log('error', error);
+    }
+  }
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
   };
 
   useEffect(() => {
@@ -37,18 +68,18 @@ const CarRentForm = ({ handleModal }) => {
   return (
     success && (
       <Modal
-        isOpen={handleModal}
-        onRequestClose={handleModal}
-        contentLabel="Booking Form"
-      >
-        <div className="mt-16 ">
-          <h2 className="text-xl font-bold mb-4">
-            Car Rental Reservation Form
-          </h2>
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          >
+      isOpen={handleModal}
+      onRequestClose={handleModal}
+      contentLabel="Booking Form"
+    >
+      <div className="mt-16">
+        <h2 className="text-xl font-bold mb-4">
+          Car Rental Reservation Form
+        </h2>
+        <form
+          onSubmit={handleRentFormSubmition}
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        >
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -96,6 +127,23 @@ const CarRentForm = ({ handleModal }) => {
                 type="text"
                 name="phone"
                 value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="phone"
+              >
+                Driver License Number
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="license"
+                type="text"
+                name="license"
+                value={formData.license}
                 onChange={handleChange}
                 required
               />
