@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCar, clearCarData } from "../../redux/carOwner/addCarSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BsFillTrashFill } from "react-icons/bs";
 
 interface Item {
   name: string;
@@ -51,6 +52,11 @@ const AddCar = ({ next, HandlePage }: any) => {
     setFiles([...files, ...e.target.files]);
   };
 
+  const deleteImage = (imageToDelete)=>{
+    const updatedFiles = files.filter((image) => image !== imageToDelete);
+    setFiles(updatedFiles);
+  }
+  
   const uploadImages = async (images: any) => {
     if (!images || images.length === 0) return [];
 
@@ -474,12 +480,19 @@ const AddCar = ({ next, HandlePage }: any) => {
 
             {files &&
               files.map((image, index) => (
-                <img
-                  key={index}
-                  className="w-auto py-2"
-                  src={URL.createObjectURL(image)}
-                  alt="posts"
-                />
+                <>
+                  <div className="image-container relative">
+                    <img
+                      key={index}
+                      className="w-auto py-2"
+                      src={URL.createObjectURL(image)}
+                      alt="posts"
+                    />
+                    <span onClick={(e)=>deleteImage(image)} className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full">
+                      <BsFillTrashFill />
+                    </span>
+                  </div>
+                </>
               ))}
             <div>
               <label
