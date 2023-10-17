@@ -11,6 +11,8 @@ import IsLogged from "../middleware/carowner/isLogged";
 import { ToastContainer } from "react-toastify";
 import Cars from "../page/carOwner/cars";
 import Orders from "../page/carOwner/orders";
+import EditCar from "../page/carOwner/editCar";
+import CarDetails from "../page/carOwner/carDetails";
 
 const CarAppLayout = () => {
   return <Outlet />;
@@ -93,6 +95,24 @@ const CarOwnerRoute = {
             <>
               <IsLogged />
               <Orders/>
+            </>
+          ),
+        },
+        {
+          path: "edit-car/:carId",
+          element: (
+            <>
+              <IsLogged />
+              <EditCar/>
+            </>
+          ),
+        },
+        {
+          path: "car-details/:carId",
+          element: (
+            <>
+              <IsLogged />
+              <CarDetails/>
             </>
           ),
         },
