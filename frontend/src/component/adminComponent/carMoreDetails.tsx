@@ -1,17 +1,9 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import React from "react";
 
-const CarMoreDetails = () => {
-  const { carId } = useParams();
-  const { cars } = useSelector((state: any) => state.carsList);
-  console.log(cars)
-
-  const car = cars.find((car) => car._id === carId);
-
+const CarMoreDetails = ({ car }) => {
   if (!car) {
     return (
-        <div className="text-center mt-4">
+      <div className="text-center mt-4">
         <div className="bg-red-500 text-white py-2 px-4 rounded-md inline-block opacity-0 transition-opacity duration-300 hover:opacity-100">
           Not fout
         </div>
@@ -20,7 +12,6 @@ const CarMoreDetails = () => {
   }
 
   return (
-
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Car Details</h1>
       <div className="bg-white rounded shadow p-4">
