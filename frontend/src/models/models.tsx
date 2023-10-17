@@ -77,3 +77,19 @@ export interface carOwner {
   status: boolean;
   carId: CarDetailsModel[] | string;
 }
+
+
+export interface ordersModel {
+  _id: string,
+  name: string, 
+  email: string,
+  phone: string,
+  pickupLocation: string,
+  dropoffLocation: string,
+  pickupDate: Date,
+  pickupTime: string,
+  dropoffDate: Date,
+  dropoffTime: string,
+  license: string,
+  status: string
+}
