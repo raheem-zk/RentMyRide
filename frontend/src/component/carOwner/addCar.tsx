@@ -25,7 +25,7 @@ interface Item {
   _id: string;
 }
 
-const AddCar = ({ next, HandlePage }: any) => {
+const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
   const [brand, setBrand] = useState<Item[]>([]);
   const [category, setCategory] = useState<Item[]>([]);
   const [model, setModel] = useState<Item[]>([]);
@@ -35,6 +35,7 @@ const AddCar = ({ next, HandlePage }: any) => {
   const { ownerData } = useSelector((state: any) => state.carOwnerSignup);
   const { carOwner, success } = useSelector((state: any) => state.carOwnerAuth);
   const [files, setFiles] = useState<any[] | any>([]);
+  const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +57,13 @@ const AddCar = ({ next, HandlePage }: any) => {
     const updatedFiles = files.filter((image) => image !== imageToDelete);
     setFiles(updatedFiles);
   }
-  
+  const deleteEditImage = (imageToDelete)=>{
+    const updatedFiles = carDetails.images.filter((image) => image !== imageToDelete);
+    setCarDetails({
+      ...carDetails,
+      images: [...updatedFiles]
+    })
+  }
   const uploadImages = async (images: any) => {
     if (!images || images.length === 0) return [];
 
@@ -84,14 +91,12 @@ const AddCar = ({ next, HandlePage }: any) => {
       console.error("Image upload failed:", error);
       ErrorMessage(error?.response?.data?.message || "Image upload failed");
     }
-
     return url;
   };
 
   const getDropdownItems = async () => {
     try {
       const res = await carOwnerAxios.get("/add-car");
-      console.log(res.data, "the drop down items ..");
       if (res.data.error) {
         ErrorMessage(res.data.error);
       }
@@ -132,23 +137,51 @@ const AddCar = ({ next, HandlePage }: any) => {
       [name]: value,
     });
   };
+  useEffect(()=>{
+    if(editCarData){
+      setCarDetails({
+        ...carDetails,
+        ownerId: success ? carOwner._id : "",
+        carName: editCarData.carName || "",
+        images: editCarData.images || "",
+        brand: editCarData.brand || "",
+        model: editCarData.model || "",
+        year: editCarData.year || "",
+        licensePlate: editCarData.licensePlate || "",
+        transmission: editCarData.transmission || "",
+        category: editCarData.category || "",
+        perDayPrice: editCarData.perDayPrice || "",
+        description: editCarData.description || "",
+        fuelType: editCarData.fuelType || "",
+        startDate: editCarData.startDate || "",
+        endDate: editCarData.endDate || "",
+      });
+    }
+  },[editCarData])
 
   useEffect(() => {
     if (uploadedImages.length > 0) {
       setCarDetails({
         ...carDetails,
-        images: [...uploadedImages],
+        images: [...carDetails.images,...uploadedImages],
       });
       setUploadedImages([]);
+      setSubmit(true);
     }
-    // console.log(uploadedImages, "useEffect log ", carDetails);
   }, [uploadedImages, carDetails]);
+
+  const updateCarDetails = async ()=>{
+    await carOwnerAxios.post(`/edit-car/${editCarData._id}`, carDetails);
+    successMessage('Car Updated successfully')
+    navigate("/car-owner/cars");
+    return;
+  }
 
   const uploadCarDetails = async () => {
     await carOwnerAxios.post("/add-car", carDetails);
     successMessage('Car Added successfully')
     dispatch(clearCarData());
-    navigate("/car-owner/dashboard");
+    navigate("/car-owner/cars");
     return;
   };
 
@@ -163,18 +196,20 @@ const AddCar = ({ next, HandlePage }: any) => {
   };
 
   useEffect(() => {
-    if (carDetails.images.length !== 0 && success) {
+    if (carDetails.images.length !== 0 && !editCarData && success && submit===true ) { // add car
       dispatch(addCar(carDetails));
       uploadCarDetails();
-    } else if (carDetails.images.length !== 0 && !success) {
+    } else if (carDetails.images.length !== 0 && !success && !editCarData && submit===true) { // register time add car 
       dispatch(addCar(carDetails));
       uploadRegisterTime();
+    } else if(carDetails.images.length !== 0 && header && editCarData && submit===true){ // edit car
+      updateCarDetails()
     }
-  }, [carDetails]);
+    setSubmit(false);
+  }, [carDetails, submit]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(carDetails);
 
     const {
       carName,
@@ -194,11 +229,8 @@ const AddCar = ({ next, HandlePage }: any) => {
 
     if (
       carName.trim() === "" ||
-      brand.trim() === "" ||
-      model.trim() === "" ||
       year.trim() === "" ||
       licensePlate.trim() === "" ||
-      transmission.trim() === "" ||
       category === "add" ||
       description.trim() === "" ||
       fuelType === "add" ||
@@ -228,11 +260,18 @@ const AddCar = ({ next, HandlePage }: any) => {
     if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
       return ErrorMessage("The amount is not correct, please check");
     }
-    if (files.length < 4 || files.length > 5) {
+    if ( images.length === 0 &&files.length < 4 || files.length > 5) {
+      return ErrorMessage("Image minimum is 4 and maximum is 5");
+    } else if (images.length !==0 && (files.length+ images.length) > 5 || (files.length+ images.length) < 4){
       return ErrorMessage("Image minimum is 4 and maximum is 5");
     }
-    const uploadedUrls = await uploadImages(files);
-    setUploadedImages(uploadedUrls);
+
+    const uploadedUrls = files.length !== 0 ? await uploadImages(files) : null;
+    if(uploadedUrls){
+      setUploadedImages(uploadedUrls);
+    }else{
+      setSubmit(true);
+    }
   };
 
   return (
@@ -240,7 +279,7 @@ const AddCar = ({ next, HandlePage }: any) => {
       <ToastContainer />
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-4xl font-extrabold">Add Your Car Details</h2>
+          <h2 className="text-4xl font-extrabold">{header ? header : 'Add Your Car Details'}</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -489,6 +528,22 @@ const AddCar = ({ next, HandlePage }: any) => {
                       alt="posts"
                     />
                     <span onClick={(e)=>deleteImage(image)} className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full">
+                      <BsFillTrashFill />
+                    </span>
+                  </div>
+                </>
+              ))}
+            {carDetails.images &&
+              carDetails.images.map((image, index) => (
+                <>
+                  <div className="image-container relative">
+                    <img
+                      key={index}
+                      className="w-auto py-2"
+                      src={image}
+                      alt="posts"
+                    />
+                    <span onClick={(e)=>deleteEditImage(image)} className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full">
                       <BsFillTrashFill />
                     </span>
                   </div>
