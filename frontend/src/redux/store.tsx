@@ -11,6 +11,7 @@ import carsSlice from "./user/carsSlice";
 import carsListSlice from "./admin/carsSlice";
 import userListSlice from "./admin/usersSlice";
 import ownerListSlice from "./admin/carownersSlice";
+import OwnerCars from "./carOwner/carsSlice";
 
 const persistConfig = {
   key: "root",
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   carsList: carsListSlice, // admin side
   usersList: userListSlice, // admin side
   carownersList: ownerListSlice, // admin side
+  ownerCars : OwnerCars , //owner side
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
