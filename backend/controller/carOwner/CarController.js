@@ -58,3 +58,15 @@ export const cars = async (req, res)=>{
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+export const editCar = async (req, res)=>{
+  try {
+    const { carId } = req.params;
+    const data = req.body;
+    const response = await carSchema.updateOne({_id: carId},{$set: data});
+    return res.json({message:'success'});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
