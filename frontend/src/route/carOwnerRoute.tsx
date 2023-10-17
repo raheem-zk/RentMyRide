@@ -10,6 +10,7 @@ import IsLogout from "../middleware/carowner/isLogout";
 import IsLogged from "../middleware/carowner/isLogged";
 import { ToastContainer } from "react-toastify";
 import Cars from "../page/carOwner/cars";
+import Orders from "../page/carOwner/orders";
 
 const CarAppLayout = () => {
   return <Outlet />;
@@ -83,6 +84,15 @@ const CarOwnerRoute = {
             <>
               <IsLogged />
               <Cars/>
+            </>
+          ),
+        },
+        {
+          path: "orders",
+          element: (
+            <>
+              <IsLogged />
+              <Orders/>
             </>
           ),
         },
