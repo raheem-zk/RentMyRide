@@ -63,6 +63,10 @@ const carSchema = new mongoose.Schema({
     type: String,
     default: 'Available',
   },
+  ownerStatus: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const Car = mongoose.model("Car", carSchema);
