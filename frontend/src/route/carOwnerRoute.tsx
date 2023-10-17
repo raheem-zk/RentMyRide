@@ -9,6 +9,7 @@ import CarOwnerFrame from "../component/carOwner/carOwnerFrame";
 import IsLogout from "../middleware/carowner/isLogout";
 import IsLogged from "../middleware/carowner/isLogged";
 import { ToastContainer } from "react-toastify";
+import Cars from "../page/carOwner/cars";
 
 const CarAppLayout = () => {
   return <Outlet />;
@@ -73,6 +74,15 @@ const CarOwnerRoute = {
             <>
               <IsLogged />
               <AddCarPage />
+            </>
+          ),
+        },
+        {
+          path: "cars",
+          element: (
+            <>
+              <IsLogged />
+              <Cars/>
             </>
           ),
         },
