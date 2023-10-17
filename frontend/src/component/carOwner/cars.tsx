@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { carOwnerAxios } from "../../axios/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineFundView } from "react-icons/ai";
+import { addOwnerCars } from "../../redux/carOwner/carsSlice";
 
 const OwnerCars = () => {
   const [cars, setCars] = useState<any[]>([]);
+  const dispatch = useDispatch();
   const { carOwner } = useSelector((state: any) => state.carOwnerAuth);
   useEffect(() => {
     getCars();
@@ -15,6 +17,7 @@ const OwnerCars = () => {
   const getCars = async () => {
     const ownerId: string = carOwner._id;
     const response = await carOwnerAxios.get(`/cars/${ownerId}`);
+    dispatch(addOwnerCars(response.data.carsData));
     setCars(response.data.carsData);
   };
 
@@ -38,10 +41,10 @@ const OwnerCars = () => {
               License Plate: {car?.licensePlate}
             </p>
             <div className="flex space-x-2">
-              <Link to={`/edit-car/${car?._id}`}>
+              <Link to={`/car-owner/edit-car/${car?._id}`}>
                 <FiEdit className="text-2xl text-green-600" />
               </Link>
-              <Link to={`/car-details/${car?._id}`}>
+              <Link to={`/car-owner/car-details/${car?._id}`}>
                 <AiOutlineFundView className="text-2xl text-blue-600" />
               </Link>
             </div>
