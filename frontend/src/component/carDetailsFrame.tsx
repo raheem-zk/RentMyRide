@@ -84,7 +84,7 @@ const CarDetailsFrame = () => {
           </button>
 
           {/* Booking Modal */}
-          {isModalOpen && <CarRentForm handleModal={handleModal}/>}
+          {isModalOpen && <CarRentForm carId={car?._id} handleModal={handleModal}/>}
         </div>
       </div>
     </div>

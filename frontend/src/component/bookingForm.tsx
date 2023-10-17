@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { userAxios } from "../axios/axios";
 import { ErrorMessage, successMessage } from "../utils/utils";
 
-const CarRentForm = ({ handleModal }) => {
+const CarRentForm = ({ handleModal , carId}) => {
   const navigate = useNavigate();
   const { success ,user } = useSelector((state: any) => state.userAuth);
 
   const [formData, setFormData] = useState({
+    carId:carId,
     name: "",
     email: "",
     phone: "",
@@ -27,6 +28,7 @@ const CarRentForm = ({ handleModal }) => {
     e.preventDefault();
 
     if (
+      !formData.carId ||
       !formData.name ||
       !formData.email ||
       !formData.phone ||
