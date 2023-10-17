@@ -54,6 +54,7 @@ export const cars = async (req, res)=>{
     .populate("category");
     return res.json({message:'success', carsData})
   } catch (error) {
-    
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }
