@@ -10,6 +10,8 @@ import PhoneNav from '../component/phoneNav';
 import IsLogout from '../middleware/user/isLogout';
 import IsLogged from '../middleware/user/isLogged';
 import { ToastContainer } from 'react-toastify';
+import UserProfile from '../page/user/profile';
+import CarRentalCheckout from '../component/user/checkout';
 
 const UserAppLayout = () => {
   return (
@@ -66,6 +68,14 @@ const UserRoute = {
         {
           path:'cars/more-details/:carId',
           element:<CarDetails/>
+        },
+        {
+          path:'checkout',
+          element:<CarRentalCheckout/>
+        },
+        {
+          path:'profile',
+          element:<UserProfile/>,
         },
         {
           path:'car',
