@@ -67,6 +67,14 @@ const carSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  startDate: {
+    type: Date,
+    default: Date.now,
+  },
+  endDate: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 const Car = mongoose.model("Car", carSchema);
