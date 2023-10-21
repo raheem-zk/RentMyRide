@@ -93,3 +93,22 @@ export interface ordersModel {
   license: string,
   status: string
 }
+
+export interface BookingData {
+  carId: string | undefined;
+  name: string;
+  email: string;
+  phone: string; 
+  pickupLocation: string;
+  dropoffLocation: string;
+  pickupDate: String;
+  pickupTime: string;
+  dropoffDate: string;
+  dropoffTime: string;
+  license: string;
+  address: string;
+  userId: string;
+  totalDays: number;
+  totalPrice: number;
+  perDayPrice: number | string;
+}
