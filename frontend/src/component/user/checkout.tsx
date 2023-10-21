@@ -1,63 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import dayjs from "dayjs";
+import { clearBooking, setBookingData } from "../../redux/user/bookingSlice";
+import { booking } from "../../api/userApi";
 
 const CarRentalCheckout = () => {
   const { carId } = useParams();
   const navigate = useNavigate();
-  const { success, user } = useSelector((state: any) => state.userAuth);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: any) => state.userAuth);
   const { cars } = useSelector((state: any) => state.carsDatas);
-  const [carDate, setCarData] = useState<CarDetailsModel | null>(null);
+  const [carData, setCarData] = useState<CarDetailsModel | null>(null);
 
-  const [pickupDate, setPickupDate] = useState(dayjs().add(1, 'day').format("YYYY-MM-DD")); // Set initial pickup date to tomorrow
-  const [returnDate, setReturnDate] = useState(dayjs().add(2, 'days').format("YYYY-MM-DD")); // Set initial return date to the day after tomorrow
-  const [endDate] = useState(carDate?.endDate || dayjs().add(30, "days").format("YYYY-MM-DD"));
-  console.log(pickupDate, returnDate);
-
-  const handlePickupDateChange = (e) => {
-    const selectedDate = e.target.value;
-    if (dayjs(selectedDate).isBefore(dayjs().add(1, 'day')) || dayjs(selectedDate).isAfter(endDate)) {
-      ErrorMessage("Invalid pickup date. It should be tomorrow or later and before the end date.");
-    } else {
-      setPickupDate(selectedDate);
-    }
-  };
-
-  const handleReturnDateChange = (e) => {
-    const selectedDate = e.target.value;
-    if (dayjs(selectedDate).isBefore(dayjs(pickupDate)) || dayjs(selectedDate).isAfter(endDate)) {
-      ErrorMessage("Invalid return date. It should be after the pickup date and before the end date.");
-    } else {
-      setReturnDate(selectedDate);
-    }
-  };
+  const endDate = dayjs(carData?.endDate).format("YYYY-MM-DD");
+  const startDate = dayjs(carData?.startDate).format("YYYY-MM-DD");
+  const currentDate = dayjs().format("YYYY-MM-DD");
 
   const [formData, setFormData] = useState({
     carId: carId,
-    name: "",
-    email: "",
-    phone: "",
+    name: user?.firstName ?? "",
+    email:user?.email ?? "",
+    phone: user?.phoneNumber ?? "",
     pickupLocation: "",
-    returnLocation: "",
+    dropoffLocation: "",
     pickupDate: "",
     pickupTime: "",
-    returnDate: "",
-    returnTime: "",
-    license: "",
-    address: "",
+    dropoffDate: "",
+    dropoffTime: "",
+    license: user?.license ?? "",
+    address: user?.address ?? "",
     userId: user?._id,
     totalDays: 2,
     totalPrice: 0,
+    perDayPrice: carData?.perDayPrice ?? "",
   });
 
   useEffect(() => {
     const car = cars.find((car) => car._id === carId);
     setCarData(car);
   }, []);
-  console.log(carDate);
+
+  useEffect(() => {
+    const totalDays = dayjs(formData.dropoffDate).diff(
+      dayjs(formData.pickupDate),
+      "day"
+    );
+    setFormData({
+      ...formData,
+      totalDays: totalDays,
+      totalPrice: parseInt(carData?.perDayPrice) * totalDays,
+    });
+  }, [formData.pickupDate, formData.dropoffDate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,15 +61,14 @@ const CarRentalCheckout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = {};
+    setFormData({ ...formData, perDayPrice: carData?.perDayPrice });
 
     if (
       !formData.pickupDate ||
-      !formData.returnDate ||
+      !formData.dropoffDate ||
       !formData.pickupLocation ||
-      !formData.returnLocation ||
+      !formData.dropoffLocation ||
       !formData.pickupTime ||
-      !formData.returnLocation ||
       !formData.name ||
       !formData.email ||
       !formData.phone ||
@@ -82,31 +77,50 @@ const CarRentalCheckout = () => {
       !formData.totalDays ||
       !formData.totalPrice
     ) {
-      return ErrorMessage("Pickup date is required");
+      return ErrorMessage("Please fill in all fields");
     }
 
     const pickupDate = new Date(formData.pickupDate);
-    const returnDate = new Date(formData.returnDate);
-    const currentDate = new Date();
+    const dropoffDate = new Date(formData.dropoffDate);
 
-    const minReturnDate = new Date(pickupDate);
-    minReturnDate.setDate(minReturnDate.getDate() + 2); // Minimum return date is 2 days after pickup
-    if (returnDate <= minReturnDate) {
-      return ErrorMessage("Return date must be at least 2 days after pickup");
+    if (pickupDate > dropoffDate) {
+      return ErrorMessage("The date is not correct");
     }
+    if (formData.phone.length !== 10) {
+      return ErrorMessage("The phone number should be 10 digits.");
+    }
+
+    if (formData.license.length !== 16) {
+      return ErrorMessage("The license number should be 16 characters.");
+    }
+    dispatch(setBookingData(formData));
+    const result = await booking(formData);
+    result ? dispatch(clearBooking()): "";
+    result ? navigate("/"): "";
   };
 
   return (
     <div className="w-full mx-auto">
-      {carDate && (
-        <h1>
-          {carDate?.startDate}  hhh  {carDate?.endDate}
-        </h1>
-      )}
       <form>
         <h1 className="p-3 text-center text-black text-2xl font-bold">
           Checkout page
         </h1>
+        <div className="flex justify-between md:ml-10 p-4">
+          <div className="flex">
+            <div className="w-40">
+              <img
+                src={carData ? carData?.images[0] :''}
+                alt="Car"
+                className="max-w-full h-auto"
+              />
+            </div>
+            <div className="ml-4">
+              <p className="text-2xl font-bold">{carData?.carName}</p>
+              <p className="text-lg">{carData?.category?.name}</p>
+              <p className="text-lg">{carData?.perDayPrice}</p>
+            </div>
+          </div>
+        </div>
         <div className="bg-white shadow-md rounded p-8 mb-4">
           <div className="p-5 rounded-md bg-gray-100">
             <div className="grid grid-cols-2 gap-4">
@@ -140,10 +154,14 @@ const CarRentalCheckout = () => {
                   type="date"
                   id="pickupDate"
                   name="pickupDate"
-                  min={dayjs().add(1, 'day').format("YYYY-MM-DD")}
-                  max={endDate}
-                  value={pickupDate}
-                  onChange={handlePickupDateChange}
+                  min={
+                    currentDate < startDate
+                      ? startDate
+                      : dayjs(currentDate).add(1, "day").format("YYYY-MM-DD")
+                  }
+                  max={dayjs(endDate).subtract(1, "day").format("YYYY-MM-DD")}
+                  value={formData?.pickupDate}
+                  onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -151,7 +169,7 @@ const CarRentalCheckout = () => {
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <label
-                  htmlFor="returnLocation"
+                  htmlFor="dropoffLocation"
                   className="block text-gray-700 font-bold mb-2"
                 >
                   Return Location
@@ -159,9 +177,9 @@ const CarRentalCheckout = () => {
                 <input
                   required
                   type="text"
-                  id="returnLocation"
-                  name="returnLocation"
-                  value={formData?.returnLocation}
+                  id="dropoffLocation"
+                  name="dropoffLocation"
+                  value={formData?.dropoffLocation}
                   placeholder="Enter Return Location"
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -169,7 +187,7 @@ const CarRentalCheckout = () => {
               </div>
               <div>
                 <label
-                  htmlFor="returnDate"
+                  htmlFor="dropoffDate"
                   className="block text-gray-700 font-bold mb-2"
                 >
                   Return Date
@@ -177,11 +195,15 @@ const CarRentalCheckout = () => {
                 <input
                   required
                   type="date"
-                  id="returnDate"
-                  name="returnDate"
-                  value={returnDate}
-                  onChange={handleReturnDateChange}
-                  min={pickupDate}
+                  id="dropoffDate"
+                  name="dropoffDate"
+                  value={formData.dropoffDate}
+                  onChange={handleChange}
+                  min={
+                    currentDate < startDate
+                      ? startDate
+                      : dayjs(currentDate).add(2, "day").format("YYYY-MM-DD")
+                  }
                   max={endDate}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
@@ -207,7 +229,7 @@ const CarRentalCheckout = () => {
               </div>
               <div>
                 <label
-                  htmlFor="returnTime"
+                  htmlFor="dropoffTime"
                   className="block text-gray-700 font-bold mb-2"
                 >
                   Return Time
@@ -215,9 +237,9 @@ const CarRentalCheckout = () => {
                 <input
                   required
                   type="time"
-                  id="returnTime"
-                  name="returnTime"
-                  value={formData?.returnTime}
+                  id="dropoffTime"
+                  name="dropoffTime"
+                  value={formData?.dropoffTime}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
@@ -293,7 +315,7 @@ const CarRentalCheckout = () => {
                   minLength={16}
                   maxLength={16}
                   type="text"
-                  id="driverLicence"
+                  id="license"
                   name="license"
                   value={formData?.license}
                   onChange={handleChange}
@@ -322,7 +344,7 @@ const CarRentalCheckout = () => {
 
           <div>
             <div>
-              <p className="text-xl font-bold mb-4">Payment</p>
+              <p className="text-xl font-bold mb-4">Price Details</p>
               <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="mb-4">
                   <div className="flex justify-between">
@@ -335,7 +357,7 @@ const CarRentalCheckout = () => {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Price:</span>
                   <span className="text-black font-bold">
-                    ${formData?.totalPrice}
+                    ₹{formData?.totalPrice}
                   </span>
                 </div>
               </div>

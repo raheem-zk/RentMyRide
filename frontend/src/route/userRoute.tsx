@@ -70,7 +70,7 @@ const UserRoute = {
           element:<CarDetails/>
         },
         {
-          path:'checkout',
+          path:'checkout/:carId',
           element:<CarRentalCheckout/>
         },
         {
