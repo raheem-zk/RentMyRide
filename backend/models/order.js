@@ -41,6 +41,18 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  perDayPrice: {
+    type: String,
+    required: true,
+  },
+  totalDays: {
+    type: String,
+    required: true,
+  },
+  totalPrice: {
+    type: String,
+    required: true,
+  },
   carId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cars", 
