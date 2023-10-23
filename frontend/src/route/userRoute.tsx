@@ -12,6 +12,7 @@ import IsLogged from '../middleware/user/isLogged';
 import { ToastContainer } from 'react-toastify';
 import UserProfile from '../page/user/profile';
 import CarRentalCheckout from '../component/user/checkout';
+import CarList from '../page/user/cars';
 
 const UserAppLayout = () => {
   return (
@@ -78,8 +79,8 @@ const UserRoute = {
           element:<UserProfile/>,
         },
         {
-          path:'car',
-          element:'car page',
+          path:'cars',
+          element:<CarList/>,
         }
       ]
     },

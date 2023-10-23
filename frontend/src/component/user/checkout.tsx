@@ -5,7 +5,8 @@ import { ErrorMessage } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import dayjs from "dayjs";
 import { clearBooking, setBookingData } from "../../redux/user/bookingSlice";
-import { booking } from "../../api/userApi";
+import { booking, makePayment } from "../../api/userApi";
+import {loadStripe} from '@stripe/stripe-js';
 
 const CarRentalCheckout = () => {
   const { carId } = useParams();
@@ -99,8 +100,24 @@ const CarRentalCheckout = () => {
     result ? navigate("/"): "";
   };
 
+  const handlePaying = async ()=>{
+    const data ={ amont : 1200}
+    const response = await makePayment(data);
+    const stripe = await loadStripe('pk_test_51O4M4wSJ9BVJ9pm9NmdXObj68T6yivv2vU9RbJdfNimryXkQWJfBuTR4RLlxPIj2urVTzANFEUCtZ5WMv0MOipjH00ph76GDPI');
+
+    console.log(response,  response.data.clientSecret);
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: response.data.clientSecret,
+    });
+
+    if (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="w-full mx-auto">
+      <button onClick={handlePaying}>pay now</button>
       <form>
         <h1 className="p-3 text-center text-black text-2xl font-bold">
           Checkout page
