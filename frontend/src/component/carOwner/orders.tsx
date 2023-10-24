@@ -4,10 +4,13 @@ import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import ActionDropdown from "./orderActionDropdown";
 import { ordersModel } from "../../models/models";
 import { MdReadMore } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getOrdersList } from "../../api/carOwnerApi";
+import { addOwnerOrders } from "../../redux/carOwner/ordersSlice";
+import { Link } from "react-router-dom";
 
 const CarOrderList = () => {
+  const dispatch = useDispatch();
   const [orders, setOrders] = useState<ordersModel[]>([]);
   const [load, setLoad] = useState(false);
   const { carOwner } = useSelector((state: any) => state.carOwnerAuth);
@@ -21,6 +24,7 @@ const CarOrderList = () => {
 
   const getOrders = async () => {
     const response = await getOrdersList(carOwner._id);
+    dispatch(addOwnerOrders(response.data.ordersData))
     setOrders(response.data.ordersData);
   };
 
@@ -96,7 +100,7 @@ const CarOrderList = () => {
                     type="button"
                     className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    <MdReadMore size={20} />
+                    <Link to={`/car-owner/orders/${order?._id}/more-details`}><MdReadMore size={20} /></Link>
                   </button>
                 </div>
               </Td>

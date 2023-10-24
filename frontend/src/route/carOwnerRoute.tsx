@@ -13,6 +13,7 @@ import Cars from "../page/carOwner/cars";
 import Orders from "../page/carOwner/orders";
 import EditCar from "../page/carOwner/editCar";
 import CarDetails from "../page/carOwner/carDetails";
+import OrderMoreDetails from "../page/carOwner/orderMoreDetails";
 
 const CarAppLayout = () => {
   return <Outlet />;
@@ -95,6 +96,15 @@ const CarOwnerRoute = {
             <>
               <IsLogged />
               <Orders/>
+            </>
+          ),
+        },
+        {
+          path: "orders/:orderId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <OrderMoreDetails/>
             </>
           ),
         },
