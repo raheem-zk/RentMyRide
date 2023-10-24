@@ -6,13 +6,18 @@ const REJECT = "rejected";
 export const orders = async (req, res) => {
   try {
     const { ownerId } = req.params;
+
     const cars = await carSchema.find({ ownerId });
     const carIds = cars.map((car) => car._id);
-    const ordersData = await ordersSchema.find({
-      carId: { $in: carIds  },
-    })
-    .populate("carId")
-    .populate("userId");
+
+    const ordersData = await ordersSchema
+      .find({
+        carId: { $in: carIds },
+      })
+      .populate("carId")
+      .populate("userId")
+      .sort({ _id: -1 });
+      
     return res.json({ message: "success", ordersData });
   } catch (error) {
     console.error(error);
