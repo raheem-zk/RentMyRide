@@ -53,6 +53,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    default:'pending' // [ pending, approved, rejected] 
+  },
   carId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cars", 

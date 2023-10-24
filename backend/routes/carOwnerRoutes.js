@@ -3,7 +3,7 @@ import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/A
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCar, addCategory, addFuelType, addModel, addTransmission } from '../controller/carOwner/carSpecController.js';
 import { cars, editCar, uploadCar } from '../controller/carOwner/carController.js';
-import { orders } from '../controller/carOwner/orderController.js';
+import { approveOrder, orders, rejectOrder } from '../controller/carOwner/orderController.js';
 
 const router = express();
 
@@ -24,5 +24,7 @@ router.get('/cars/:ownerId',VerifyToken,cars);
 router.post('/edit-car/:carId',VerifyToken,editCar)
 
 router.get('/orders/:ownerId',VerifyToken, orders)
+router.patch('/order/approve/:orderId', approveOrder)
+router.patch('/order/reject/:orderId', rejectOrder)
 
 export default router;
