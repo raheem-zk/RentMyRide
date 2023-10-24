@@ -59,7 +59,7 @@ const orderSchema = new mongoose.Schema({
   },
   carId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Cars", 
+    ref: "Car", 
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

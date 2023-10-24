@@ -2,13 +2,17 @@ import ordersSchema from "../../models/order.js";
 import carSchema from "../../models/carOwner/car.js";
 const APPROVE = "approved";
 const REJECT = "rejected";
+
 export const orders = async (req, res) => {
   try {
     const { ownerId } = req.params;
     const cars = await carSchema.find({ ownerId });
+    const carIds = cars.map((car) => car._id);
     const ordersData = await ordersSchema.find({
-      carId: { $in: cars.map((car) => car._id) },
-    });
+      carId: { $in: carIds  },
+    })
+    .populate("carId")
+    .populate("userId");
     return res.json({ message: "success", ordersData });
   } catch (error) {
     console.error(error);
