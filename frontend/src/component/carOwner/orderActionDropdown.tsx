@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { CiCircleMore } from "react-icons/ci";
-import { carOwnerAxios } from "../../axios/axios";
+import { approveOrder, rejectOrder } from "../../api/carOwnerApi";
 
 function ActionDropdown({ orderId, reload }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,24 +11,16 @@ function ActionDropdown({ orderId, reload }) {
   };
 
   const onApprove = async () => {
-    try {
-      await carOwnerAxios.patch(`/order/approve/${orderId}`);
-      reload();
-    } catch (error) {
-      // Handle the error, e.g., display an error message
-    }
+    await approveOrder(orderId);
+    reload();
     toggleDropdown();
   };
 
   const onReject = async () => {
-    try {
-      await carOwnerAxios.patch(`/order/reject/${orderId}`);
-      reload();
-    } catch (error) {
-      // Handle the error, e.g., display an error message
-    }
+    await rejectOrder(orderId);
+    reload();
     toggleDropdown();
-  }
+  };
 
   return (
     <div className="relative inline-block text-left">

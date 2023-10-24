@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import ActionDropdown from "./orderActionDropdown";
-import { carOwnerAxios } from "../../axios/axios";
 import { ordersModel } from "../../models/models";
 import { MdReadMore } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { getOrdersList } from "../../api/carOwnerApi";
 
 const CarOrderList = () => {
   const [orders, setOrders] = useState<ordersModel[]>([]);
@@ -20,7 +20,7 @@ const CarOrderList = () => {
   }, [load]);
 
   const getOrders = async () => {
-    const response = await carOwnerAxios.get(`/orders/${carOwner._id}`);
+    const response = await getOrdersList(carOwner._id);
     setOrders(response.data.ordersData);
   };
 
@@ -89,7 +89,9 @@ const CarOrderList = () => {
               </Td>
               <Td className="border border-gray-300 p-3">
                 <div className="flex items-center space-x-4">
-                  <ActionDropdown orderId={order?._id} reload={reload} />
+                  {order.status !== "approved" && (
+                    <ActionDropdown orderId={order?._id} reload={reload} />
+                  )}
                   <button
                     type="button"
                     className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-500"
