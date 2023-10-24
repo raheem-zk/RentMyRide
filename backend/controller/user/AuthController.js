@@ -136,6 +136,44 @@ export const googleSignin = async (req, res)=>{
 
     return res.json({message:'success', token, userData});
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+export const verifyForgot = async (req, res)=>{
+  const { email } = req.body;
+  try {
+    const result = await userSchema.findOne({email: email});
+
+    if(!result){
+      return res.status(404).json({message:'Email is not matched'});
+    }
+
+    const otp = generateOTP();
+    console.log(otp)
+    copyOtp = otp;
+
+    const mailOptions = {
+      to: email,
+      subject: 'OTP for Forgot password',
+      html: `
+        <h3>OTP for Forgot password is:</h3>
+        <h1 style="font-weight: bold;">${otp}</h1>
+      `,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        return res.status(404).json({ message: 'The provided email does not match any registered user.' });
+      }
+      console.log("Message sent: %s", info.messageId);
+      return res.status(200).json({ message: "success" });
+    });
+    return res.status(200).json({ message: "success" });
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
