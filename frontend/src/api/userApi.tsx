@@ -8,3 +8,8 @@ export const booking = async (data)=>{
 export const makePayment = async (data)=>{
     return await userAxios.post('/test', data);
 }
+
+export const getHomeCardIteams = async ()=>{
+    const response = await userAxios.get('/');
+    return response.data.carsData
+}
