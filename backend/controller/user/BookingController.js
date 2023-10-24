@@ -1,7 +1,6 @@
-import OrderShema from "../../models/order.js";
+import orderShema from "../../models/order.js";
 import userSchema from "../../models/user.js";
-// import { loadStripe } from '@stripe/stripe-js';
-import Stripe from 'stripe'
+import Stripe from "stripe";
 export const stripe = new Stripe(process.env.STRIP_PRIVET_KEY);
 
 export const rentBooking = async (req, res) => {
@@ -16,7 +15,7 @@ export const rentBooking = async (req, res) => {
         },
       }
     );
-    const orderModel = new OrderShema(data);
+    const orderModel = new orderShema(data);
     await orderModel.save();
     return res.json({ message: "success" });
   } catch (error) {
@@ -27,31 +26,62 @@ export const rentBooking = async (req, res) => {
   }
 };
 
-export const test = async (req, res) => {
+export const bookingCheckoutSession = async (req, res) => {
   try {
-    console.log('lkkkk')
-    // console.log(process.env.STRIP_PRIVET_KEY)
-    const AMOUT = 200
-    // const paymentIntent = await stripe.paymentIntents.create({  // woriking not full
-    //   amount: AMOUT, // Replace with the actual order amount calculation
-    //   currency: 'inr',
-    //   statement_descriptor_suffix: 'Payment using Stripe',
-    //   automatic_payment_methods: { enabled: true }, // Specify the payment method types you want to accept (e.g., 'card')
-    // });
-    console.log(req.body);
-    const paymentIntent = await stripe.paymentIntents.create({
-      currency: "Inr",
-      amount: AMOUT * 100,
-      automatic_payment_methods: { enabled: true },
+    const data = req.body;
+    const pickupDate = new Date(data.pickupDate);
+    const dropoffDate = new Date(data.dropoffDate);
+
+    const orderData = await orderShema.find({ carId: data?.carId });
+
+    if (orderData) {
+      const isConflict = orderData.some((order) => {
+        const orderPickupDate = new Date(order.pickupDate);
+        const orderDropoffDate = new Date(order.dropoffDate);
+
+        if (orderPickupDate < pickupDate && orderDropoffDate < pickupDate) {
+          return true;
+        } else if (
+          pickupDate < orderPickupDate &&
+          dropoffDate < orderPickupDate
+        ) {
+          return true;
+        }
+        return false;
+      });
+
+      if (!isConflict) {
+        return res.status(400).json({
+          message:
+            "Date conflict: This car is not available for the selected dates.",
+        });
+      }
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "inr",
+            product_data: {
+              name: "Car Rental Booking",
+            },
+            unit_amount: data?.totalPrice * 100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${process.env.FRONTEND_URL}payment-success/${data?.orderId}`,
+      cancel_url: `${process.env.FRONTEND_URL}payment-fail`,
     });
 
-    console.log(paymentIntent);
-
-    res.json({message:'success',clientSecret: paymentIntent.client_secret,});
+    return res.json({ message: "success", url: session.url });
   } catch (error) {
     console.log(error);
     return res
-    .status(500)
-    .json({ message: "Internal server error", error: true });
+      .status(500)
+      .json({ message: "Internal server error", error: true });
   }
 };
