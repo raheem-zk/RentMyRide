@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import dayjs from "dayjs";
-import { clearBooking, setBookingData } from "../../redux/user/bookingSlice";
-import { booking, makePayment } from "../../api/userApi";
-import {loadStripe} from '@stripe/stripe-js';
+import { setBookingData } from "../../redux/user/bookingSlice";
+import { makePayment } from "../../api/userApi";
+import { v4 as uuidv4 } from 'uuid';
 
 const CarRentalCheckout = () => {
   const { carId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state: any) => state.userAuth);
   const { cars } = useSelector((state: any) => state.carsDatas);
@@ -21,6 +20,7 @@ const CarRentalCheckout = () => {
   const currentDate = dayjs().format("YYYY-MM-DD");
 
   const [formData, setFormData] = useState({
+    orderId: "",
     carId: carId,
     name: user?.firstName ?? "",
     email:user?.email ?? "",
@@ -62,7 +62,8 @@ const CarRentalCheckout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormData({ ...formData, perDayPrice: carData?.perDayPrice });
+    const orderId = uuidv4();
+    setFormData({ ...formData, perDayPrice: carData?.perDayPrice , orderId: orderId });
 
     if (
       !formData.pickupDate ||
@@ -95,29 +96,15 @@ const CarRentalCheckout = () => {
       return ErrorMessage("The license number should be 16 characters.");
     }
     dispatch(setBookingData(formData));
-    const result = await booking(formData);
-    result ? dispatch(clearBooking()): "";
-    result ? navigate("/"): "";
-  };
-
-  const handlePaying = async ()=>{
-    const data ={ amont : 1200}
-    const response = await makePayment(data);
-    const stripe = await loadStripe('pk_test_51O4M4wSJ9BVJ9pm9NmdXObj68T6yivv2vU9RbJdfNimryXkQWJfBuTR4RLlxPIj2urVTzANFEUCtZ5WMv0MOipjH00ph76GDPI');
-
-    console.log(response,  response.data.clientSecret);
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: response.data.clientSecret,
-    });
-
-    if (error) {
-      console.error(error);
+    const url = await makePayment(formData);
+    if(url){
+      window.location.href = url;
+      return
     }
-  }
+  };
 
   return (
     <div className="w-full mx-auto">
-      <button onClick={handlePaying}>pay now</button>
       <form>
         <h1 className="p-3 text-center text-black text-2xl font-bold">
           Checkout page

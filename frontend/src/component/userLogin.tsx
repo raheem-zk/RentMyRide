@@ -16,8 +16,6 @@ function UserLogin() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
     if (password.length < 7) {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
@@ -33,7 +31,6 @@ function UserLogin() {
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${res.data.token}`;
-          console.log(res.data.userData);
           dispatch(userLoggedIn(res.data.userData));
           navigate("/");
         })

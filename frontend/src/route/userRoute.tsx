@@ -13,6 +13,8 @@ import { ToastContainer } from "react-toastify";
 import UserProfile from "../page/user/profile";
 import CarRentalCheckout from "../component/user/checkout";
 import CarList from "../page/user/cars";
+import PaymentSuccess from "../component/payment/paymentSuccess";
+import PaymentFail from "../component/payment/paymentFail";
 
 const UserAppLayout = () => {
   return (
@@ -77,6 +79,24 @@ const UserRoute = {
             <>
               <IsLogged />
               <CarRentalCheckout />
+            </>
+          ),
+        },
+        {
+          path: "payment-success/:orderId",
+          element: (
+            <>
+              <IsLogged />
+              <PaymentSuccess />
+            </>
+          ),
+        },
+        {
+          path: "payment-fail",
+          element: (
+            <>
+              <IsLogged />
+              <PaymentFail />
             </>
           ),
         },
