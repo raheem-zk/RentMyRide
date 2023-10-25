@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
+  orderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    unique: true, 
+  },
   name: {
     type: String,
     required: true,
@@ -55,15 +60,15 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default:'pending' // [ pending, approved, rejected] 
+    default: "pending", // [ pending, approved, rejected]
   },
   carId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Car", 
+    ref: "Car",
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", 
+    ref: "User",
   },
 });
 
