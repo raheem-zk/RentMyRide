@@ -4,6 +4,7 @@ import { userList , userBlock, userUnblock } from '../controller/admin/UsersCont
 import VerifyToken from "../middleware/jwtAdminVerification.js";
 import { carApproved, carList, carRejected } from "../controller/admin/carsController.js";
 import { carOwnersList, ownerBlock, ownerUnblock } from "../controller/admin/carOwnersController.js";
+import { getOrders } from "../controller/admin/controller.js";
 
 const router = express();
 
@@ -23,4 +24,6 @@ router.get('/car-owners',VerifyToken,carOwnersList)
 router.patch('/car-owners/:id/unblock',VerifyToken,ownerUnblock)
 router.patch('/car-owners/:id/block',VerifyToken,ownerBlock)
 
+// orders
+router.get('/orders',VerifyToken, getOrders);
 export default router;
