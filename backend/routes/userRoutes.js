@@ -14,6 +14,7 @@ import {
   rentBooking,
 } from "../controller/user/BookingController.js";
 import {
+  forgotPasswordUpdate,
   updatePassword,
   updateProfile,
 } from "../controller/user/UserProfileController.js";
@@ -29,10 +30,11 @@ router.get("/", home);
 
 router.post("/forgot-password", verifyForgot);
 router.post("/forgot-password/otp", otpVerification);
-router.post("/forgot-password/set-password", updatePassword);
+router.post("/forgot-password/set-password", forgotPasswordUpdate);
 
 router.post("/rent-booking/confirm", VerifyToken, rentBooking);
 router.post("/rent-booking", VerifyToken, bookingCheckoutSession);
 
 router.patch("/profile/:userId/edit", VerifyToken, updateProfile);
+router.patch("/profile/:userId/edit-password", VerifyToken, updatePassword);
 export default router;
