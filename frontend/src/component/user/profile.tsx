@@ -1,24 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-const demoImage = 'https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
+import ProfileEditDropdown from "./profileEditDropdown";
+const demoImage =
+  "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg";
 
 const Profile = () => {
   const { user } = useSelector((state: any) => state.userAuth);
-  return (
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+  return !user ? (
+    ""
+  ) : (
     <div className="max-w-screen-lg mx-auto">
       <div className="bg-white shadow rounded p-6 relative">
-        <Link
-          to="/profile/edit"
-          className="px-3 py-3 hover:bg-gray-100 rounded-full absolute right-3 top-3"
-        >
+        <button onClick={toggleDropdown} className="px-3 py-3 hover:bg-gray-100 rounded-full absolute right-3 top-3">
           <AiOutlineEdit size={25} />
-        </Link>
+        </button>
+        {isDropdownOpen && <ProfileEditDropdown/>}
         <div className="text-center">
           <img
             className="mx-auto rounded-full h-24 w-24 object-cover"
-            src={user.avatar ? user.avatar : demoImage }
+            src={user.avatar ? user.avatar : demoImage}
             alt={`${user.firstName} ${user.lastName}`}
           />
           <h2 className="mt-4 text-xl font-semibold">
