@@ -13,6 +13,7 @@ import CarMoreDetails from "../page/admin/carMoreDetails";
 import UserMoreDetails from "../page/admin/userMoreDetails";
 import OwnerMoreDetails from "../page/admin/ownerMoreDetails";
 import { ToastContainer } from "react-toastify";
+import Orders from "../page/admin/orders";
 
 const AdminAppLayout = () => {
   return (
@@ -105,6 +106,15 @@ const AdminRoute = {
             <>
               <IsLogged />
               <CarOwnersList />
+            </>
+          ),
+        },
+        {
+          path: "orders",
+          element: (
+            <>
+              <IsLogged />
+              <Orders />
             </>
           ),
         },
