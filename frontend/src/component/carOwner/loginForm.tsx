@@ -15,22 +15,19 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
     if (password.length < 7) {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
     try {
-      const res = await carOwnerAxios.post(`/login`,{ email, password });
+      const res = await carOwnerAxios.post(`/login`, { email, password });
       if (res.data.error) {
         return ErrorMessage(res.data.message);
       }
-      localStorage.setItem("carOwner", res.data.token);
+      localStorage.setItem("carOwnerToken", res.data.token);
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${res.data.token}`;
-      console.log(res.data.userData);
-      dispatch(SetCarOwner(res.data.userData));
+      dispatch(SetCarOwner(res.data.ownerData));
       navigate("/car-owner/dashboard");
     } catch (error) {
       console.log(error);

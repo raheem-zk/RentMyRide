@@ -3,7 +3,7 @@ import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { CiCircleMore } from "react-icons/ci";
 import { approveOrder, rejectOrder } from "../../api/carOwnerApi";
 
-function ActionDropdown({ orderId, reload }) {
+function ActionDropdown({ orderId, reload }:any) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
