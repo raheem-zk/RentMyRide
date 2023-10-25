@@ -15,6 +15,7 @@ import CarRentalCheckout from "../component/user/checkout";
 import CarList from "../page/user/cars";
 import PaymentSuccess from "../component/payment/paymentSuccess";
 import PaymentFail from "../component/payment/paymentFail";
+import EditProfile from "../page/user/editProfile";
 
 const UserAppLayout = () => {
   return (
@@ -106,6 +107,15 @@ const UserRoute = {
             <>
               <IsLogged />
               <UserProfile />
+            </>
+          ),
+        },
+        {
+          path: "profile/edit",
+          element: (
+            <>
+              <IsLogged />
+              <EditProfile />
             </>
           ),
         },
