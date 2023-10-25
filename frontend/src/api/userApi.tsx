@@ -14,3 +14,8 @@ export const getHomeCardIteams = async ()=>{
     const response = await userAxios.get('/');
     return response.data.carsData
 }
+
+export const updateProfileData = async (data, userId)=>{
+    const response = await userAxios.patch(`/profile/${userId}/edit`, data);
+    return response.data.message=='success' ? true : false;
+}
