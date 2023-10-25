@@ -14,6 +14,7 @@ import UserMoreDetails from "../page/admin/userMoreDetails";
 import OwnerMoreDetails from "../page/admin/ownerMoreDetails";
 import { ToastContainer } from "react-toastify";
 import Orders from "../page/admin/orders";
+import OrderMoreDetails from "../page/admin/orderMoreDetaisl";
 
 const AdminAppLayout = () => {
   return (
@@ -115,6 +116,15 @@ const AdminRoute = {
             <>
               <IsLogged />
               <Orders />
+            </>
+          ),
+        },
+        {
+          path: "orders/:orderId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <OrderMoreDetails />
             </>
           ),
         },
