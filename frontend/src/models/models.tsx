@@ -112,3 +112,15 @@ export interface BookingData {
   totalPrice: number;
   perDayPrice: number | string;
 }
+
+export interface profileEditModal {
+  private _id(data: { firstName: string; lastName: string; email: string; phoneNumber: string | number; age: number; address: string; license: string; place: string; }, _id: any): unknown;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string | number | null | undefined;
+  place: string | null | undefined;
+  age: number | null | undefined;
+  address: string | null | undefined;
+  license: string | null | undefined;
+}
