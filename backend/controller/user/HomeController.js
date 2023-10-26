@@ -6,7 +6,6 @@ const LIMIT = 10;
 
 export const home = async (req, res) => {
   try {
-    console.log(req.headers.authorization);
     const carsData = await carsSchema
       .find({ status: APPROVEL, ownerStatus: true })
       .populate("fuelType")

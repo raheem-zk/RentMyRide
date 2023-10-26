@@ -61,7 +61,7 @@ const carSchema = new mongoose.Schema({
   },
   availability: {
     type: String,
-    default: 'Available',
+    default: 'Available', //[Available, Unavailable, Rented]
   },
   ownerStatus: {
     type: Boolean,

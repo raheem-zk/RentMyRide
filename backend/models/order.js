@@ -60,7 +60,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: "pending", // [ pending, approved, rejected]
+    default: "pending", // [ pending, approved, rejected,finished]
   },
   carId: {
     type: mongoose.Schema.Types.ObjectId,
