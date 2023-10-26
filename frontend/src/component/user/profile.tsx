@@ -1,16 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileEditDropdown from "./profileEditDropdown";
+import { setProfile } from "../../redux/user/authSlice";
+import { profileUploadCloudinery, updateProfileImage } from "../../api/userApi";
 const demoImage =
   "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg";
 
 const Profile = () => {
   const { user } = useSelector((state: any) => state.userAuth);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const fileInputRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const dispatch = useDispatch();
+
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
+
+  const handleImageUpload = async (e)=>{
+    const file = e.target.files[0];
+    if (file) {
+      const result = await profileUploadCloudinery(file)
+      const response = await updateProfileImage(user?._id ,result)
+      response && setSelectedImage(result);
+    }
+  }
+
+  useEffect(()=>{
+    if(selectedImage){
+      const data = {profilePicture:selectedImage}
+      dispatch(setProfile(data))
+      setSelectedImage(null);
+    }
+  },[selectedImage,setProfile])
+
   return !user ? (
     ""
   ) : (
@@ -24,10 +48,18 @@ const Profile = () => {
         </button>
         {isDropdownOpen && <ProfileEditDropdown />}
         <div className="text-center">
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+          onChange={handleImageUpload}
+        />
           <img
-            className="mx-auto rounded-full h-24 w-24 object-cover"
-            src={user.avatar ? user.avatar : demoImage}
+            className="mx-auto rounded-full h-24 w-24 object-cover cursor-pointer"
+            src={user?.profilePicture ? user.profilePicture : demoImage}
             alt={`${user.firstName} ${user.lastName}`}
+            onClick={()=>fileInputRef.current.click()}
           />
           <h2 className="mt-4 text-xl font-semibold">
             {user.firstName} {user.lastName}
