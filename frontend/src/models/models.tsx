@@ -78,27 +78,26 @@ export interface carOwner {
   carId: CarDetailsModel[] | string;
 }
 
-
 export interface ordersModel {
-  _id: string,
-  name: string, 
-  email: string,
-  phone: string,
-  pickupLocation: string,
-  dropoffLocation: string,
-  pickupDate: Date,
-  pickupTime: string,
-  dropoffDate: Date,
-  dropoffTime: string,
-  license: string,
-  status: string
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  pickupLocation: string;
+  dropoffLocation: string;
+  pickupDate: Date;
+  pickupTime: string;
+  dropoffDate: Date;
+  dropoffTime: string;
+  license: string;
+  status: string;
 }
 
 export interface BookingData {
   carId: string | undefined;
   name: string;
   email: string;
-  phone: string; 
+  phone: string;
   pickupLocation: string;
   dropoffLocation: string;
   pickupDate: String;
@@ -114,7 +113,19 @@ export interface BookingData {
 }
 
 export interface profileEditModal {
-  private _id(data: { firstName: string; lastName: string; email: string; phoneNumber: string | number; age: number; address: string; license: string; place: string; }, _id: any): unknown;
+  private _id(
+    data: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phoneNumber: string | number;
+      age: number;
+      address: string;
+      license: string;
+      place: string;
+    },
+    _id: any
+  ): unknown;
   firstName: string;
   lastName: string;
   email: string;
@@ -123,4 +134,21 @@ export interface profileEditModal {
   age: number | null | undefined;
   address: string | null | undefined;
   license: string | null | undefined;
+}
+
+export interface filterModel {
+  searchText: string | null | undefined;
+  category: string | null | undefined;
+  brand: string | null | undefined;
+  model: string | null | undefined;
+  fuelType: string | null | undefined;
+  transmition: string | null | undefined;
+}
+
+export interface filterOptionsDatas {
+  category: Spec[] | [];
+  brand: Spec[] | [];
+  model: Spec[] | [];
+  transmission: Spec[] | [];
+  fuelType: Spec[] | [];
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { userAxios } from "../axios/axios"
+import { carOwnerAxios, userAxios } from "../axios/axios"
 
 export const booking = async (data)=>{
     await userAxios.post('/rent-booking/confirm',data);
@@ -42,4 +42,15 @@ export const profileUploadCloudinery = async (img)=>{
 export const updateProfileImage = async (userId, url)=>{
     await userAxios.patch(`/profile/${userId}/edit/profile-photo`, { url:url });
     return true;
+}
+
+export const getFilterOptionsData = async ()=>{
+    const response = await carOwnerAxios.get('/add-car');
+    console.log(response)
+    const data = {category : response.data.category , 
+                 brand: response.data.brand,
+                model : response.data.model,
+                fuelType: response.data.fueltype,
+                transmission: response.data.transmission,}
+    return data;
 }
