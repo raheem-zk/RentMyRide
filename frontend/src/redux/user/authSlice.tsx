@@ -29,6 +29,10 @@ const authSlice = createSlice({
       const copyOfUserData = { ...state.user, ...action.payload };
       state.user = copyOfUserData;
     },
+    setProfile: (state, action: any) => {
+      const data = { ...state.user, ...action.payload };
+      state.user = data;
+    },
     logout: (state) => {
       state.user = null;
       state.success = false;
@@ -36,5 +40,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { userLoggedIn, updateData, logout } = authSlice.actions;
+export const { userLoggedIn, updateData, logout, setProfile } =
+  authSlice.actions;
 export default authSlice.reducer;
