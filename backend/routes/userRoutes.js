@@ -7,7 +7,7 @@ import {
   verifySignup,
   verifyForgot,
 } from "../controller/user/AuthController.js";
-import { home } from "../controller/user/HomeController.js";
+import { filterData, home } from "../controller/user/HomeController.js";
 import VerifyToken from "../middleware/jwtUserVerification.js";
 import {
   bookingCheckoutSession,
@@ -40,4 +40,5 @@ router.patch("/profile/:userId/edit", VerifyToken, updateProfile);
 router.patch("/profile/:userId/edit-password", VerifyToken, updatePassword);
 router.patch("/profile/:userId/edit/profile-photo", VerifyToken, updateProfilePhoto);
 
+router.get('/filter',filterData)
 export default router;
