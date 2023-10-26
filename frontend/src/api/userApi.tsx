@@ -1,3 +1,4 @@
+import axios from "axios";
 import { userAxios } from "../axios/axios"
 
 export const booking = async (data)=>{
@@ -23,4 +24,22 @@ export const updateProfileData = async (data, userId)=>{
 export const updatePassword = async (userId, data)=>{
     const response = await userAxios.patch(`/profile/${userId}/edit-password`,data)
     return response.data.message=='success' ? true : false;
+}
+
+export const profileUploadCloudinery = async (img)=>{ 
+    const presetKey = import.meta.env.VITE_PRESETKEY;
+    const cloudName = import.meta.env.VITE_CLOUD_NAME;
+
+    const formData = new FormData();
+    formData.append("file", img);
+    formData.append("upload_preset", presetKey);
+    formData.append("cloud_name", cloudName);
+
+    const response = await axios.post(import.meta.env.VITE_CLOUDINERY_API,formData)
+    return response.data.url;
+}
+
+export const updateProfileImage = async (userId, url)=>{
+    await userAxios.patch(`/profile/${userId}/edit/profile-photo`, { url:url });
+    return true;
 }
