@@ -18,7 +18,7 @@ const IsLogged = ()=> {
     const token = localStorage.getItem("userToken");
     if(!token){
       dispatch(logout());
-      navigate("/admin/login");
+      navigate("/login");
     }
   })
   return null;

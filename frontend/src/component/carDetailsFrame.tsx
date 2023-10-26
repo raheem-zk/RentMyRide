@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CarDetailsModel } from "../models/models";
 import CarRentForm from "./bookingForm";
+import Loading from "./loading";
 
 const CarDetailsFrame = () => {
   const { carId } = useParams();
@@ -27,7 +28,7 @@ const CarDetailsFrame = () => {
   };
 
   if (!car) {
-    return <>Loding....</>;
+    return <Loading />;
   }
   return (
     <div className="container mx-auto p-4">
@@ -76,15 +77,17 @@ const CarDetailsFrame = () => {
           </p>
 
           {/* Book Now Button */}
-          <button
-            onClick={handleModal}
+          <Link
+            to={`/checkout/${car?._id}`}
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
           >
             Book Now
-          </button>
+          </Link>
 
           {/* Booking Modal */}
-          {isModalOpen && <CarRentForm carId={car?._id} handleModal={handleModal}/>}
+          {isModalOpen && (
+            <CarRentForm carId={car?._id} handleModal={handleModal} />
+          )}
         </div>
       </div>
     </div>
