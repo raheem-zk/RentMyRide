@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
-import { getFilterOptionsData } from "../api/userApi";
+import { filteredData, getFilterOptionsData } from "../api/userApi";
 import { filterModel, filterOptionsDatas } from "../models/models";
 
-const Filter = () => {
+const Filter = ({ filteredCars }) => {
   const [filterOptions, setFilterOptions] = useState<filterOptionsDatas>({
     category: [],
     brand: [],
@@ -11,6 +11,7 @@ const Filter = () => {
     transmission: [],
     fuelType: [],
   });
+
   const getFilterOptions = async () => {
     const data = await getFilterOptionsData();
     setFilterOptions({ ...filterOptions, ...data });
@@ -19,7 +20,7 @@ const Filter = () => {
   useEffect(() => {
     getFilterOptions();
   }, []);
-  
+
   const [filterData, setFilterData] = useState<filterModel>({
     searchText: "",
     category: "",
@@ -37,7 +38,19 @@ const Filter = () => {
       setFilterData(updatedFilterData);
     }
   };
-  console.log(filterData);
+
+  const getFilterData = async () => {
+    const data = await filteredData(filterData);
+    filteredCars(data);
+  };
+
+  useEffect(() => {
+    getFilterData();
+  }, [filterData]);
+
+  const heandleSearch = (e) => {
+    setFilterData({ ...filterData, ["searchText"]: e.target.value });
+  };
 
   return (
     <div>
@@ -50,13 +63,13 @@ const Filter = () => {
           className="pl-10 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           placeholder="Search for cars..."
           value={filterData?.searchText}
-          onChange={(e)=>handleFilter("searchText", e.target)}
+          onChange={heandleSearch}
         />
       </div>
       <div>
         {filterOptions &&
           Object.keys(filterOptions).map((key) => (
-            <div className="p-4 border rounded-lg shadow-md m-2">
+            <div key={key} className="p-4 border rounded-lg shadow-md m-2">
               <p className="font-semibold text-xl">{key.toUpperCase()}</p>
               <div className="mt-4">
                 {filterOptions[key].map((item) => (
