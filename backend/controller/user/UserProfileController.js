@@ -76,3 +76,24 @@ export const updatePassword = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const updateProfilePhoto = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { url } = req.body;
+
+    if (!userId || !url) {
+      return res.status(400).json({ message: 'User ID or Profile Picture is missing' });
+    }
+
+    await userSchema.updateOne(
+      { _id: userId },
+      { $set: { profilePicture: url } }
+    );
+
+    return res.json({ message: "success" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

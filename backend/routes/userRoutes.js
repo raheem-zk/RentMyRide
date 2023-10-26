@@ -17,6 +17,7 @@ import {
   forgotPasswordUpdate,
   updatePassword,
   updateProfile,
+  updateProfilePhoto,
 } from "../controller/user/UserProfileController.js";
 
 const router = express();
@@ -37,4 +38,6 @@ router.post("/rent-booking", VerifyToken, bookingCheckoutSession);
 
 router.patch("/profile/:userId/edit", VerifyToken, updateProfile);
 router.patch("/profile/:userId/edit-password", VerifyToken, updatePassword);
+router.patch("/profile/:userId/edit/profile-photo", VerifyToken, updateProfilePhoto);
+
 export default router;
