@@ -53,13 +53,16 @@ export const updatePassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    const isPasswordVerified = bcrypt.compareSync(
-      currentPassword,
-      user.password
-    );
-    if (!isPasswordVerified) {
-      return res.status(400).json({ message: "Current password is incorrect" });
+    if (user.password) {
+      const isPasswordVerified = bcrypt.compareSync(
+        currentPassword,
+        user.password
+      );
+      if (!isPasswordVerified) {
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect" });
+      }
     }
 
     const saltRounds = parseInt(process.env.SALTROUNDS);
@@ -83,7 +86,9 @@ export const updateProfilePhoto = async (req, res) => {
     const { url } = req.body;
 
     if (!userId || !url) {
-      return res.status(400).json({ message: 'User ID or Profile Picture is missing' });
+      return res
+        .status(400)
+        .json({ message: "User ID or Profile Picture is missing" });
     }
 
     await userSchema.updateOne(
