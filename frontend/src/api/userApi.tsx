@@ -1,5 +1,6 @@
 import axios from "axios";
 import { carOwnerAxios, userAxios } from "../axios/axios";
+import { ErrorMessage } from "../utils/utils";
 
 export const booking = async (data) => {
   await userAxios.post("/rent-booking/confirm", data);
@@ -42,7 +43,11 @@ export const profileUploadCloudinery = async (img) => {
     import.meta.env.VITE_CLOUDINERY_API,
     formData
   );
-  return response.data.url;
+  if (response.status === 200) {
+    return response.data.url;
+  } else {
+    return ErrorMessage('Failed to upload the image')
+  }
 };
 
 export const updateProfileImage = async (userId, url) => {
@@ -76,3 +81,8 @@ export const filteredData = async (data) => {
   });
   return response?.data?.filteredData;
 };
+
+export const getuserOrders = async (userId,page)=>{
+  const response = await userAxios.get(`/orders/${userId}/${page}`);
+  return response.data;
+}
