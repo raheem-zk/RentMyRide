@@ -19,6 +19,7 @@ import {
   updateProfile,
   updateProfilePhoto,
 } from "../controller/user/UserProfileController.js";
+import { getUserOrders } from "../controller/user/OrderController.js";
 
 const router = express();
 
@@ -28,6 +29,8 @@ router.post("/signup-verify", verifySignup);
 router.post("/otp-verification", otpVerification);
 router.post("/google-signin", googleSignin);
 router.get("/", home);
+
+router.get('/filter',filterData)
 
 router.post("/forgot-password", verifyForgot);
 router.post("/forgot-password/otp", otpVerification);
@@ -40,5 +43,6 @@ router.patch("/profile/:userId/edit", VerifyToken, updateProfile);
 router.patch("/profile/:userId/edit-password", VerifyToken, updatePassword);
 router.patch("/profile/:userId/edit/profile-photo", VerifyToken, updateProfilePhoto);
 
-router.get('/filter',filterData)
+router.get('/orders/:userId/:page',VerifyToken, getUserOrders)
+
 export default router;
