@@ -1,5 +1,6 @@
 import React from "react";
 import { GrClose } from "react-icons/gr";
+import WalletEmpty from "./walletEmpty";
 const WalletHistory = ({ handleClick }) => {
   const transactions = [
     {
@@ -176,12 +177,7 @@ const WalletHistory = ({ handleClick }) => {
       </div>
       <ul className="max-h-screen min-h-fit overflow-y-scroll">
         {transactions.length == 0 ? (
-          <div className="text-center">
-            <p className="text-2xl font-bold mb-4">Wallet is Empty</p>
-            <p className="text-gray-500">
-              You have no wallet history at the moment.
-            </p>
-          </div>
+          <WalletEmpty />
         ) : (
           transactions.map((transaction, index) => (
             <li
