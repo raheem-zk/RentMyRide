@@ -60,13 +60,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  wallet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Wallet",
+    unique: true,
+  },
   status: {
     type: Boolean,
     default: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now, 
+    default: Date.now,
   },
 });
 

@@ -2,12 +2,14 @@ import userModel from "../../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { generateOTP, transporter } from "../../utils/utils.js";
+import walletSchema from '../../models/wallet.js';
 let copyOtp;
 
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const userData = await userModel.findOne({ email });
+    const userData = await userModel.findOne({ email })
+    .populate('wallet');
     if (!userData) {
       return res
         .status(400)
@@ -53,7 +55,14 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    await userSchema.save();
+    const userData = await userSchema.save();
+    const walletModel = new walletSchema({
+      userId: userData._id,
+      balance: 0, 
+      history: [], 
+    })
+    const walletData = await walletModel.save();
+    await userModel.updateOne({_id : userData._id}, {$set: {wallet : walletData._id} })
     return res.json({ message: "success" });
   } catch (error) {
     console.error(error);
