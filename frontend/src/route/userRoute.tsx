@@ -17,6 +17,7 @@ import PaymentSuccess from "../component/payment/paymentSuccess";
 import PaymentFail from "../component/payment/paymentFail";
 import EditProfile from "../page/user/editProfile";
 import EditPassword from "../page/user/editPassword";
+import Orders from "../page/user/orders";
 
 const UserAppLayout = () => {
   return (
@@ -126,6 +127,15 @@ const UserRoute = {
             <>
               <IsLogged />
               <EditPassword />
+            </>
+          ),
+        },
+        {
+          path: "profile/my-orders",
+          element: (
+            <>
+              <IsLogged />
+              <Orders />
             </>
           ),
         },
