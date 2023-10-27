@@ -2,8 +2,8 @@ import express from 'express'
 import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/AuthController.js';
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCar, addCategory, addFuelType, addModel, addTransmission } from '../controller/carOwner/carSpecController.js';
-import { uploadCar } from '../controller/carOwner/CarController.js';
-
+import { cars, editCar, uploadCar } from '../controller/carOwner/carController.js';
+import { approveOrder, orders, rejectOrder } from '../controller/carOwner/orderController.js';
 
 const router = express();
 
@@ -20,5 +20,11 @@ router.post('/signup',signup);
 router.post('/login',login)
 
 router.post('/add-car',VerifyToken,uploadCar);
+router.get('/cars/:ownerId',VerifyToken,cars);
+router.post('/edit-car/:carId',VerifyToken,editCar)
+
+router.get('/orders/:ownerId',VerifyToken, orders)
+router.patch('/order/approve/:orderId', approveOrder)
+router.patch('/order/reject/:orderId', rejectOrder)
 
 export default router;

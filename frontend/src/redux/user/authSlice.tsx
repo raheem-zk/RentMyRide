@@ -1,35 +1,45 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { profileEditModal } from "../../models/models";
 
 interface UserState {
-    user: UserData | null;
-    success: boolean;
-  }
-  
-  interface UserData {
-    firstName: string;
-    lastName: string;
-    age: number | undefined;
-    phoneNumber: number | undefined;
-    email: string;
-  }
-const INITTAL_STATE :UserState  = {
-    user: null ,
-    success: false,
+  user: UserData | null;
+  success: boolean;
 }
-const authSlice = createSlice({
-    name:'user',
-    initialState:INITTAL_STATE,
-    reducers:{
-        userLoggedIn:(state, action : PayloadAction <UserData>)=>{
-            state.user = action.payload;
-            state.success = true;
-        },
-        logout:(state)=>{
-            state.user = null
-            state.success = false;
-        }
-    }
-})
 
-export const { userLoggedIn , logout} = authSlice.actions;
+interface UserData {
+  firstName: string;
+  lastName: string;
+  age: number | undefined;
+  phoneNumber: number | undefined;
+  email: string;
+}
+const INITTAL_STATE: UserState = {
+  user: null,
+  success: false,
+};
+const authSlice = createSlice({
+  name: "user",
+  initialState: INITTAL_STATE,
+  reducers: {
+    userLoggedIn: (state, action: PayloadAction<UserData>) => {
+      state.user = action.payload;
+      state.success = true;
+    },
+    updateData: (state, action: PayloadAction<profileEditModal>) => {
+      const copyOfUserData = { ...state.user, ...action.payload };
+      state.user = copyOfUserData;
+    },
+    setProfile: (state, action: any) => {
+      const data = { ...state.user, ...action.payload };
+      state.user = data;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.success = false;
+    },
+  },
+});
+
+export const { userLoggedIn, updateData, logout, setProfile } =
+  authSlice.actions;
 export default authSlice.reducer;

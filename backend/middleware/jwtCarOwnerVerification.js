@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 const VerifyToken = (req, res, next)=>{
     try {
         const token = req.headers.authorization;
-        console.log(token,'car owner token ')
         if(!token){
             return res
             .status(401)

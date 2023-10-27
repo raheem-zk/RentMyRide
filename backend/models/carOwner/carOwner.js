@@ -60,6 +60,10 @@ const carOwnerSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  carId: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Car" }],
+    ref: "Cars",
+  },
   createdAt: {
     type: Date,
     default: Date.now, 

@@ -11,6 +11,7 @@ const IsLogout= ()=> {
       navigate("/admin/dashboard");
     }
   }, [success]);
+  
   return null;
 }
 

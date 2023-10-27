@@ -19,6 +19,10 @@ const carSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  year: {
+    type: String,
+    required: true,
+  },
   transmission: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Transmission",
@@ -57,8 +61,20 @@ const carSchema = new mongoose.Schema({
   },
   availability: {
     type: String,
-    default: 'Available',
+    default: 'Available', //[Available, Unavailable, Rented]
   },
+  ownerStatus: {
+    type: Boolean,
+    default: true,
+  },
+  startDate: {
+    type: Date,
+    default: Date.now,
+  },
+  endDate: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 const Car = mongoose.model("Car", carSchema);

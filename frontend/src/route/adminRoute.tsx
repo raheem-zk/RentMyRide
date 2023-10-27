@@ -9,9 +9,20 @@ import Cars from "../page/admin/carsList";
 import CarOwnersList from "../page/admin/carownersList";
 import IsLogout from "../middleware/admin/isLogout";
 import IsLogged from "../middleware/admin/isLogged";
+import CarMoreDetails from "../page/admin/carMoreDetails";
+import UserMoreDetails from "../page/admin/userMoreDetails";
+import OwnerMoreDetails from "../page/admin/ownerMoreDetails";
+import { ToastContainer } from "react-toastify";
+import Orders from "../page/admin/orders";
+import OrderMoreDetails from "../page/admin/orderMoreDetaisl";
 
 const AdminAppLayout = () => {
-  return <AdminFrame />;
+  return (
+    <>
+      <ToastContainer />
+      <AdminFrame />
+    </>
+  );
 };
 
 const AdminLoginLayout = () => {
@@ -64,11 +75,56 @@ const AdminRoute = {
           ),
         },
         {
+          path: "cars/:carId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <CarMoreDetails />
+            </>
+          ),
+        },
+        {
+          path: "users/:userId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <UserMoreDetails />
+            </>
+          ),
+        },
+        {
+          path: "car-owners/:ownerId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <OwnerMoreDetails />
+            </>
+          ),
+        },
+        {
           path: "car-owners",
           element: (
             <>
               <IsLogged />
               <CarOwnersList />
+            </>
+          ),
+        },
+        {
+          path: "orders",
+          element: (
+            <>
+              <IsLogged />
+              <Orders />
+            </>
+          ),
+        },
+        {
+          path: "orders/:orderId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <OrderMoreDetails />
             </>
           ),
         },

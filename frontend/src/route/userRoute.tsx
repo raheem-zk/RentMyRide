@@ -1,75 +1,149 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Login from '../page/user/login';
-import SignUp from '../page/user/signUp';
-import UserLogout from '../page/user/logout';
-import Home from '../page/user/home';
-import Navbar from '../component/navbar';
-import CarDetails from '../page/user/carMoreDetails';
-import PhoneNav from '../component/phoneNav';
-import IsLogout from '../middleware/user/isLogout';
-import IsLogged from '../middleware/user/isLogged';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Login from "../page/user/login";
+import SignUp from "../page/user/signUp";
+import UserLogout from "../page/user/logout";
+import Home from "../page/user/home";
+import Navbar from "../component/navbar";
+import CarDetails from "../page/user/carMoreDetails";
+import PhoneNav from "../component/phoneNav";
+import IsLogout from "../middleware/user/isLogout";
+import IsLogged from "../middleware/user/isLogged";
+import { ToastContainer } from "react-toastify";
+import UserProfile from "../page/user/profile";
+import CarRentalCheckout from "../component/user/checkout";
+import CarList from "../page/user/cars";
+import PaymentSuccess from "../component/payment/paymentSuccess";
+import PaymentFail from "../component/payment/paymentFail";
+import EditProfile from "../page/user/editProfile";
+import EditPassword from "../page/user/editPassword";
+import Orders from "../page/user/orders";
 
 const UserAppLayout = () => {
   return (
     <>
-    <Navbar/>
-    <Outlet />
-    <PhoneNav/>
+      <Navbar />
+      <Outlet />
+      <PhoneNav />
+      <ToastContainer />
     </>
   );
 };
 
-const UserAuthAppLayout =()=>{
-  return (
-    <Outlet/>
-  )
-}
+const UserAuthAppLayout = () => {
+  return <Outlet />;
+};
 const UserRoute = {
-  path: '/',
+  path: "/",
   element: <UserAuthAppLayout />,
   children: [
     {
-      path: 'login',
-      element:
-      <>
-      <IsLogout/>
-      <Login />
-      </> ,
+      path: "login",
+      element: (
+        <>
+          <IsLogout />
+          <Login />
+        </>
+      ),
     },
     {
-      path: 'signup',
-      element: 
-      <>
-      <IsLogout/>
-      <SignUp />
-      </>,
+      path: "signup",
+      element: (
+        <>
+          <IsLogout />
+          <SignUp />
+        </>
+      ),
     },
     {
-      path: 'logout',
-      element: 
-      <>
-      <IsLogged/>
-      <UserLogout />
-      </>,
+      path: "logout",
+      element: (
+        <>
+          <IsLogged />
+          <UserLogout />
+        </>
+      ),
     },
     {
-      path: '/',
-      element: <UserAppLayout/>,
-      children:[
+      path: "/",
+      element: <UserAppLayout />,
+      children: [
         {
-          path:'/',
-          element:<Home/>
+          path: "/",
+          element: <Home />,
         },
         {
-          path:'cars/more-details/:carId',
-          element:<CarDetails/>
+          path: "cars/more-details/:carId",
+          element: <CarDetails />,
         },
         {
-          path:'car',
-          element:'car page',
-        }
-      ]
+          path: "checkout/:carId",
+          element: (
+            <>
+              <IsLogged />
+              <CarRentalCheckout />
+            </>
+          ),
+        },
+        {
+          path: "payment-success/:orderId",
+          element: (
+            <>
+              <IsLogged />
+              <PaymentSuccess />
+            </>
+          ),
+        },
+        {
+          path: "payment-fail",
+          element: (
+            <>
+              <IsLogged />
+              <PaymentFail />
+            </>
+          ),
+        },
+        {
+          path: "profile",
+          element: (
+            <>
+              <IsLogged />
+              <UserProfile />
+            </>
+          ),
+        },
+        {
+          path: "profile/edit",
+          element: (
+            <>
+              <IsLogged />
+              <EditProfile />
+            </>
+          ),
+        },
+        {
+          path: "profile/edit-password",
+          element: (
+            <>
+              <IsLogged />
+              <EditPassword />
+            </>
+          ),
+        },
+        {
+          path: "profile/my-orders",
+          element: (
+            <>
+              <IsLogged />
+              <Orders />
+            </>
+          ),
+        },
+        {
+          path: "cars",
+          element: <CarList />,
+        },
+      ],
     },
   ],
 };

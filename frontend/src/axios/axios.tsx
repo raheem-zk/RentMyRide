@@ -27,7 +27,7 @@ const createRoleSpecificAxiosInstance = (tokenName, rolePath) => {
     (response) => response,
     (error) => {
       ErrorMessage(error.response.data.message);
-      if (error.response.status === 401 && error.response.message === "Unauthorized") {
+      if (error.response.status === 401 && error.response.data.message === "Unauthorized") {
         localStorage.removeItem(tokenName);
       } else if (error.response.status === 500) {
         console.error("Internal Server Error:", error.response.data);

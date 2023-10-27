@@ -1,4 +1,5 @@
 import carSchema from "../../models/carOwner/car.js";
+import ownerSchema from '../../models/carOwner/carOwner.js';
 
 export const uploadCar = async (req, res) => {
   try {
@@ -24,11 +25,15 @@ export const uploadCar = async (req, res) => {
 
 export const addCar = async (data) => {
   try {
-    console.log(data);
     const carModel = new carSchema(data);
     let result = await carModel.save();
+    console.log(result, 'the uploded car result ');
     if(result){
-      console.log('resul of last', result,' end..');
+      const  results = await ownerSchema.updateOne(
+        { _id: data.ownerId }, 
+        { $push: { carId: result._id } }
+      );
+      console.log('result', result._id, results);
       return true;
     }
     return false;
@@ -37,3 +42,31 @@ export const addCar = async (data) => {
     return false;
   }
 };
+
+export const cars = async (req, res)=>{
+  try {
+    const { ownerId } = req.params;
+    const carsData = await carSchema.find({ownerId})
+    .populate("fuelType")
+    .populate("transmission")
+    .populate("brand")
+    .populate("model")
+    .populate("category");
+    return res.json({message:'success', carsData})
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+export const editCar = async (req, res)=>{
+  try {
+    const { carId } = req.params;
+    const data = req.body;
+    const response = await carSchema.updateOne({_id: carId},{$set: data});
+    return res.json({message:'success'});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}

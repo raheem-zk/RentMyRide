@@ -55,9 +55,9 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
     handleClick(id, status, rejectedMessage);
     handleModal();
   };
-
+  console.log(data)
   return (
-    <div className="h-fit mt-16 md:w-4/5 w-full">
+    <div className="h-fit md:w-4/5 w-full">
       <div className="m-4 p-3 shadow-md shadow-gray-300">
         <div className="w-full h-12 shadow shadow-gray-300 flex items-center justify-between">
           <h1 className="text-black md:text-2xl py-1 pl-3 font-bold">

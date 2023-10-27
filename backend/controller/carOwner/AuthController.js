@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { generateOTP, transporter } from "../../utils/utils.js";
 import { addCar } from "./carController.js";
+import carSchema from '../../models/carOwner/car.js';
 let copyOtp;
 
 export const verifySignup = async (req, res) => {

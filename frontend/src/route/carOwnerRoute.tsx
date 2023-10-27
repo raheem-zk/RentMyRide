@@ -8,13 +8,24 @@ import AddCarPage from "../page/carOwner/addCar";
 import CarOwnerFrame from "../component/carOwner/carOwnerFrame";
 import IsLogout from "../middleware/carowner/isLogout";
 import IsLogged from "../middleware/carowner/isLogged";
+import { ToastContainer } from "react-toastify";
+import Cars from "../page/carOwner/cars";
+import Orders from "../page/carOwner/orders";
+import EditCar from "../page/carOwner/editCar";
+import CarDetails from "../page/carOwner/carDetails";
+import OrderMoreDetails from "../page/carOwner/orderMoreDetails";
 
 const CarAppLayout = () => {
   return <Outlet />;
 };
 
 const CarOwnerLayout = () => {
-  return <CarOwnerFrame />;
+  return (
+    <>
+      <CarOwnerFrame />
+      <ToastContainer />
+    </>
+  );
 };
 
 const CarOwnerRoute = {
@@ -67,6 +78,51 @@ const CarOwnerRoute = {
             <>
               <IsLogged />
               <AddCarPage />
+            </>
+          ),
+        },
+        {
+          path: "cars",
+          element: (
+            <>
+              <IsLogged />
+              <Cars/>
+            </>
+          ),
+        },
+        {
+          path: "orders",
+          element: (
+            <>
+              <IsLogged />
+              <Orders/>
+            </>
+          ),
+        },
+        {
+          path: "orders/:orderId/more-details",
+          element: (
+            <>
+              <IsLogged />
+              <OrderMoreDetails/>
+            </>
+          ),
+        },
+        {
+          path: "edit-car/:carId",
+          element: (
+            <>
+              <IsLogged />
+              <EditCar/>
+            </>
+          ),
+        },
+        {
+          path: "car-details/:carId",
+          element: (
+            <>
+              <IsLogged />
+              <CarDetails/>
             </>
           ),
         },

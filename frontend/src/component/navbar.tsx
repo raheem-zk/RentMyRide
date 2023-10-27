@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Navbar =()=> {
   const { success } = useSelector((state: any)=>state.userAuth);
   return (
- <div className="my-6  bg-white p-3  top-0 sticky z-50 shadow shadow-gray-200"> 
+ <div className="md:my-5   bg-white p-3  top-0 sticky z-50 shadow shadow-gray-200"> 
   <div className="container mx-auto my-3 flex items-center justify-between">
       <div id="logo" className="text-gray-950 text-2xl font-bold">
         RMR
@@ -15,14 +15,14 @@ const Navbar =()=> {
         <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
           HOME
         </Link>
-        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
+        <Link to={'/cars'} className="text-gray-950 hover:text-yellow-500">
           CARS
         </Link>
         <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
           PAGES
         </Link>
-        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
-          CATEGORY
+        <Link to={'/profile'} className="text-gray-950 hover:text-yellow-500">
+          PROFILE
         </Link>
       </nav>
     <div className="md:flex hidden items-center ">

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ErrorMessage } from "../utils/utils";
 import { userAxios } from "../axios/axios";
+import OtpComponent from "./otpForm";
+import { otpVerification } from "../utils/userUtils";
+
 
 const SignupPage: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -14,9 +16,13 @@ const SignupPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const [optComponent, setOtpComponent] = useState<boolean>(false);
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
+  const handleOtpComponet = () => {
+    setOtpComponent(!optComponent);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (
@@ -36,6 +42,13 @@ const SignupPage: React.FC = () => {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
+    const result = await userAxios.post('/signup-verify',{ email,phoneNumber})
+    if(result){
+      handleOtpComponet()
+    }
+  };
+
+  const sendSignupData = async ()=>{
     const userData = {
       firstName,
       lastName,
@@ -59,7 +72,7 @@ const SignupPage: React.FC = () => {
     } catch (err) {
       console.log(err)
     }
-  };
+  }
 
   return (
     <div className="flex-1 flex items-center justify-center p-5">
@@ -69,6 +82,15 @@ const SignupPage: React.FC = () => {
           <h2 className="text-4xl font-extrabold">Create an Account</h2>
           <p className="mt-2">Join RentMyRide today!</p>
         </div>
+        {/* otp */}
+        {optComponent && (
+        <OtpComponent
+          title={"Car Owner Signup Otp Verification"}
+          handleOtp={otpVerification}
+          toggleModal={handleOtpComponet}
+          sendSignupData={sendSignupData}
+        />
+      )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">

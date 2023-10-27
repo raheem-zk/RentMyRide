@@ -1,22 +1,30 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import CarCard from './carCard';
-import { CarouselCustomNavigation } from './homeCarousel';
-type StateSlice ={
-  userAuth: {}
-}
+import React, { useEffect, useState } from "react";
+import CarCard from "./carCard";
+import { CarouselCustomNavigation } from "./homeCarousel";
+import { getHomeCardIteams } from "../api/userApi";
+import { useDispatch } from "react-redux";
+import { addCarsData } from "../redux/user/carsSlice";
 
 function Homepage() {
-    const dispatch = useDispatch();
-    const data = useSelector((state : StateSlice )=> state?.userAuth );
+  const [data, setData] = useState();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getCardData();
+  }, []);
+
+  const getCardData = async () => {
+    const response = await getHomeCardIteams();
+    dispatch(addCarsData(response));
+    setData(response);
+  };
 
   return (
-    <>
-      {/* <CarouselCustomNavigation/> */}
-      <CarCard/>
-    </>
-  )
+    data && (
+      <>
+        <CarCard data={data} />
+      </>
+    )
+  );
 }
 
-export default Homepage
-
+export default Homepage;

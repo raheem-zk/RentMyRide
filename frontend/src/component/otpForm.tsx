@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const OtpComponent = ({ title, toggleModal, handleOtp, sendSignupData}) => {
-  const [otp, setOtp] = useState('');
+const OtpComponent = ({ title, toggleModal, handleOtp, sendSignupData }) => {
+  const [otp, setOtp] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await handleOtp(otp)
-    if(result){
-      sendSignupData()
+    const result = await handleOtp(otp);
+    if (result) {
+      sendSignupData();
     }
   };
 
@@ -55,23 +55,27 @@ const OtpComponent = ({ title, toggleModal, handleOtp, sendSignupData}) => {
               >
                 Enter OTP
               </label>
-              <input
-                type="text"
-                id="otp"
-                name="otp"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="Enter OTP"
-                className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:ring focus:ring-opacity-50"
-                required
-              />
+              <div className="flex">
+                <input
+                  type="number"
+                  id="otp"
+                  name="otp"
+                  minLength={6}
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter OTP"
+                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:ring focus:ring-opacity-50"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md ml-2 px-4 py-2"
+                >
+                  Submit
+                </button>
+              </div>
             </div>
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Submit
-            </button>
           </form>
         </div>
       </div>

@@ -3,7 +3,13 @@ import { transporter } from "../../utils/utils.js";
 
 export const carList = async (req, res) => {
   try {
-    const data = (await carSchema.find()) ?? [];
+    const data =
+      await carSchema.find()
+        .populate("fuelType")
+        .populate("transmission")
+        .populate("brand")
+        .populate("model")
+        .populate("category") ?? [];
     return res.json({ message: "success", carsData: data });
   } catch (error) {
     console.error(error);
@@ -20,7 +26,9 @@ export const carApproved = async (req, res) => {
       { _id: id },
       { $set: { status: "Approved" } }
     );
-    const { ownerId } = await carSchema.findOne({ _id: id }).populate('ownerId') 
+    const { ownerId } = await carSchema
+      .findOne({ _id: id })
+      .populate("ownerId");
 
     if (result.modifiedCount > 0) {
       var mailOptions = {
@@ -37,12 +45,10 @@ export const carApproved = async (req, res) => {
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.error("Error sending email:", error);
-          return res
-            .status(500)
-            .json({
-              message: "Email sending encountered an error",
-              error: true,
-            });
+          return res.status(500).json({
+            message: "Email sending encountered an error",
+            error: true,
+          });
         }
 
         console.log("Message sent: %s", info.messageId);
@@ -61,14 +67,16 @@ export const carApproved = async (req, res) => {
 
 export const carRejected = async (req, res) => {
   try {
-    const { message, id }= req.params;
+    const { message, id } = req.params;
 
     const result = await carSchema.updateOne(
       { _id: id },
       { $set: { status: "Rejected" } }
     );
-    const { ownerId } = await carSchema.findOne({ _id: id }).populate('ownerId') 
-    
+    const { ownerId } = await carSchema
+      .findOne({ _id: id })
+      .populate("ownerId");
+
     if (result.modifiedCount > 0) {
       var mailOptions = {
         to: ownerId.email,
@@ -80,17 +88,15 @@ export const carRejected = async (req, res) => {
           "<p>Please review and make the necessary corrections, and then resubmit your registration.</p>" +
           "<p>Best regards,</p>" +
           "<p><a href='http://www.RentMyRide.com'>www.RentMyRide.com</a></p>",
-      };      
-      
+      };
+
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.error("Error sending email:", error);
-          return res
-            .status(500)
-            .json({
-              message: "Email sending encountered an error",
-              error: true,
-            });
+          return res.status(500).json({
+            message: "Email sending encountered an error",
+            error: true,
+          });
         }
 
         console.log("Message sent: %s", info.messageId);
