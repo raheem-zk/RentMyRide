@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ProfileEditDropdown from "./profileEditDropdown";
 import { setProfile } from "../../redux/user/authSlice";
 import { profileUploadCloudinery, updateProfileImage } from "../../api/userApi";
+import { BsFillTagsFill } from "react-icons/bs";
+import WalletHistory from "./walletHistory";
 const demoImage =
   "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg";
 
@@ -18,26 +20,34 @@ const Profile = () => {
     setDropdownOpen(!isDropdownOpen);
   };
 
-  const handleImageUpload = async (e)=>{
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const result = await profileUploadCloudinery(file)
-      const response = await updateProfileImage(user?._id ,result)
+      const result = await profileUploadCloudinery(file);
+      const response = await updateProfileImage(user?._id, result);
       response && setSelectedImage(result);
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(selectedImage){
-      const data = {profilePicture:selectedImage}
-      dispatch(setProfile(data))
+  useEffect(() => {
+    if (selectedImage) {
+      const data = { profilePicture: selectedImage };
+      dispatch(setProfile(data));
       setSelectedImage(null);
     }
-  },[selectedImage,setProfile])
+  }, [selectedImage, setProfile]);
 
   return !user ? (
     ""
   ) : (
+    <>
+<div className="fixed inset-y-0 z-10 right-0 bg-green-500 w-1/2 flex justify-center items-center">
+  {/* <div> */}
+    <WalletHistory />
+  {/* </div> */}
+</div>
+
+
     <div className="max-w-screen-lg mx-auto">
       <div className="bg-white shadow rounded p-6 relative">
         <button
@@ -48,18 +58,18 @@ const Profile = () => {
         </button>
         {isDropdownOpen && <ProfileEditDropdown />}
         <div className="text-center">
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          ref={fileInputRef}
-          onChange={handleImageUpload}
-        />
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+          />
           <img
             className="mx-auto rounded-full h-24 w-24 object-cover cursor-pointer"
             src={user?.profilePicture ? user.profilePicture : demoImage}
             alt={`${user.firstName} ${user.lastName}`}
-            onClick={()=>fileInputRef.current.click()}
+            onClick={() => fileInputRef.current.click()}
           />
           <h2 className="mt-4 text-xl font-semibold">
             {user.firstName} {user.lastName}
@@ -72,6 +82,15 @@ const Profile = () => {
             <span className="font-semibold">Email</span>
             <span>{user.email}</span>
           </div>
+          {user.wallet && (
+            <div className="flex items-center justify-between">
+              <span className="font-semibold">Wallet</span>
+              <div className="flex items-center">
+                <span className="text-green-500">{user.wallet?.balance}</span>
+                <BsFillTagsFill className="ml-2 text-green-500" />
+              </div>
+            </div>
+          )}
           {user.phoneNumber && (
             <div className="flex items-center justify-between">
               <span className="font-semibold">Phone</span>
@@ -105,6 +124,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

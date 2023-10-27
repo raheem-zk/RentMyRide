@@ -76,3 +76,9 @@ export const filteredData = async (data) => {
   });
   return response?.data?.filteredData;
 };
+
+
+export const getuserOrders = async (userId)=>{
+  const response = await userAxios.get(`/orders/${userId}`);
+  return response.data.ordersData;
+}
