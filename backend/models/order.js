@@ -70,6 +70,10 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  orderDate: {
+    type: Date,
+    default : new Date,
+  },
 });
 
 const Order = mongoose.model("Order", orderSchema);
