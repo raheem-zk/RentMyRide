@@ -6,6 +6,7 @@ import { setProfile } from "../../redux/user/authSlice";
 import { profileUploadCloudinery, updateProfileImage } from "../../api/userApi";
 import { BsFillTagsFill } from "react-icons/bs";
 import WalletHistory from "./walletHistory";
+import { Link } from "react-router-dom";
 
 const demoImage =
   "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg";
@@ -26,7 +27,8 @@ const Profile = () => {
     const file = e.target.files[0];
     if (file) {
       const result = await profileUploadCloudinery(file);
-      const response = await updateProfileImage(user?._id, result);
+
+      const response = result && (await updateProfileImage(user?._id, result));
       response && setSelectedImage(result);
     }
   };
@@ -79,7 +81,13 @@ const Profile = () => {
             <h2 className="mt-4 text-xl font-semibold">
               {user.firstName} {user.lastName}
             </h2>
-            <p className="text-gray-600">{user.title}</p>
+            <p className="text-gray-600">{user?.title}</p>
+            <Link
+        to="/profile/my-orders"
+        className="text-blue-500 hover:underline mt-2 block"
+      >
+        My Orders
+      </Link>
           </div>
 
           <div className="mt-8 space-y-4">
