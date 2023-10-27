@@ -56,6 +56,11 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
+  wallet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Wallet",
+    unique: true,
+  },
   status: {
     type: Boolean,
     default: true,
