@@ -153,26 +153,11 @@ export const otpVerification = async (req, res) => {
 
 export const googleSignin = async (req, res) => {
   try {
-    const { email, family_name, given_name } = req.body;
-    
-    const result = await userModel.findOne({ email });
-    
-    if (result) {
-      if(result.status===false){
-        return res
-          .status(400)
-          .json({
-            message: "User Account Blocked: Please contact customer support for further assistance",
-            error: true,
-          });
-      }
-      
-      const token = jwt.sign(
-        { user: email, role: "user" },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      return res.json({ message: "success", token, userData: result });
+    const { email, family_name, given_name}= req.body;
+    const result = await userModel.findOne({email: email})
+    if(result){
+      const token = jwt.sign({ user:email, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      return res.json({message:'success', token, userData:result});
     }
 
     const userSchema = new userModel({

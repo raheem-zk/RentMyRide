@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage } from "../../utils/utils";
 import { CarDetailsModel } from "../../models/models";
 import dayjs from "dayjs";
 import { setBookingData } from "../../redux/user/bookingSlice";
 import { makePayment } from "../../api/userApi";
-import { v4 as uuidv4 } from 'uuid';
+import mongoose from "mongoose";
 
 const CarRentalCheckout = () => {
   const { carId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state: any) => state.userAuth);
   const { cars } = useSelector((state: any) => state.carsDatas);
   const [carData, setCarData] = useState<CarDetailsModel | null>(null);
@@ -23,7 +24,7 @@ const CarRentalCheckout = () => {
     orderId: "",
     carId: carId,
     name: user?.firstName ?? "",
-    email:user?.email ?? "",
+    email: user?.email ?? "",
     phone: user?.phoneNumber ?? "",
     pickupLocation: "",
     dropoffLocation: "",
@@ -36,6 +37,7 @@ const CarRentalCheckout = () => {
     userId: user?._id,
     totalDays: 2,
     totalPrice: 0,
+    paymentMethod: "card",
     perDayPrice: carData?.perDayPrice ?? "",
   });
 
@@ -52,18 +54,25 @@ const CarRentalCheckout = () => {
     setFormData({
       ...formData,
       totalDays: totalDays,
+      perDayPrice: carData?.perDayPrice,
       totalPrice: parseInt(carData?.perDayPrice) * totalDays,
     });
   }, [formData.pickupDate, formData.dropoffDate]);
 
+  useEffect(()=>{
+    const orderIdObjectId = new mongoose.Types.ObjectId();
+
+    setFormData({
+      ...formData,
+      orderId: orderIdObjectId.toString(),
+    });
+  },[])
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const orderId = uuidv4();
-    setFormData({ ...formData, perDayPrice: carData?.perDayPrice , orderId: orderId });
 
     if (
       !formData.pickupDate ||
@@ -77,7 +86,8 @@ const CarRentalCheckout = () => {
       !formData.license ||
       !formData.address ||
       !formData.totalDays ||
-      !formData.totalPrice
+      !formData.totalPrice ||
+      !formData.paymentMethod
     ) {
       return ErrorMessage("Please fill in all fields");
     }
@@ -88,18 +98,39 @@ const CarRentalCheckout = () => {
     if (pickupDate > dropoffDate) {
       return ErrorMessage("The date is not correct");
     }
-    if (formData.phone.length !== 10) {
+    if (
+      typeof formData.phone === "string" &&
+      formData.phone.trim().length !== 10
+    ) {
       return ErrorMessage("The phone number should be 10 digits.");
     }
 
     if (formData.license.length !== 16) {
       return ErrorMessage("The license number should be 16 characters.");
     }
-    dispatch(setBookingData(formData));
-    const url = await makePayment(formData);
-    if(url){
-      window.location.href = url;
-      return
+
+    if (
+      formData.paymentMethod == "wallet" &&
+      user?.wallet?.balance >= formData.totalPrice
+    ) {
+      dispatch(setBookingData(formData));
+      await makePayment(formData);
+      return navigate(`/payment-success/${formData.orderId}`);
+    } else if (
+      formData.paymentMethod == "wallet" &&
+      user?.wallet?.balance < formData.totalPrice
+    ) {
+      return ErrorMessage(
+        "Insufficient Wallet Balance: Your wallet does not have sufficient funds to complete the transaction"
+      );
+    } else if (formData.paymentMethod == "card") {
+      dispatch(setBookingData(formData));
+      const url = await makePayment(formData);
+
+      if (url) {
+        window.location.href = url;
+        return;
+      }
     }
   };
 
@@ -109,16 +140,16 @@ const CarRentalCheckout = () => {
         <h1 className="p-3 text-center text-black text-2xl font-bold">
           Checkout page
         </h1>
-        <div className="flex justify-between md:ml-10 p-4">
+        <div className="flex flex-col md:flex-row justify-between md:ml-10 p-4">
           <div className="flex">
-            <div className="w-40">
+            <div className="w-full md:w-40">
               <img
-                src={carData ? carData?.images[0] :''}
+                src={carData ? carData?.images[0] : ""}
                 alt="Car"
                 className="max-w-full h-auto"
               />
             </div>
-            <div className="ml-4">
+            <div className="mt-4 md:mt-0 ml-4">
               <p className="text-2xl font-bold">{carData?.carName}</p>
               <p className="text-lg">{carData?.category?.name}</p>
               <p className="text-lg">{carData?.perDayPrice}</p>
@@ -127,7 +158,7 @@ const CarRentalCheckout = () => {
         </div>
         <div className="bg-white shadow-md rounded p-8 mb-4">
           <div className="p-5 rounded-md bg-gray-100">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="pickupLocation"
@@ -170,7 +201,7 @@ const CarRentalCheckout = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div>
                 <label
                   htmlFor="dropoffLocation"
@@ -213,7 +244,7 @@ const CarRentalCheckout = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div>
                 <label
                   htmlFor="pickupTime"
@@ -253,7 +284,7 @@ const CarRentalCheckout = () => {
 
           <div className="mt-4 p-5 rounded-md bg-gray-100">
             <p className="text-xl font-bold mb-4">User Details</p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="name"
@@ -345,7 +376,35 @@ const CarRentalCheckout = () => {
               </div>
             </div>
           </div>
-
+          <div className="mt-4 border border-gray-300 p-4 rounded-md shadow-md md:w-1/2 mx-auto">
+            <h2 className="text-lg font-semibold mb-4">
+              Choose a Payment Method
+            </h2>
+            <div className="space-y-2">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value="card"
+                  name="paymentMethod"
+                  checked={formData?.paymentMethod === "card"}
+                  onChange={handleChange}
+                  className="form-radio text-indigo-600 h-5 w-5"
+                />
+                <span className="text-gray-900">Card</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value="wallet"
+                  name="paymentMethod"
+                  checked={formData?.paymentMethod === "wallet"}
+                  onChange={handleChange}
+                  className="form-radio text-indigo-600 h-5 w-5"
+                />
+                <span className="text-gray-900">Wallet</span>
+              </label>
+            </div>
+          </div>
           <div>
             <div>
               <p className="text-xl font-bold mb-4">Price Details</p>
@@ -368,7 +427,7 @@ const CarRentalCheckout = () => {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="bg-green-600 py-2 px-3 rounded-lg font-bold text-white"
+                className="bg-green-600 py-2 px-3 rounded-lg font-bold text-white w-full md:w-auto"
               >
                 Pay Now
               </button>
