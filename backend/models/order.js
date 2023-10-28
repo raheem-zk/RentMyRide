@@ -62,6 +62,16 @@ const orderSchema = new mongoose.Schema({
     type: String,
     default: "pending", // [ pending, approved, rejected,finished]
   },
+  paymentMethod: {
+    type: String, //(e.g., 'Card', 'PayPal', etc.)
+    default:'Card',
+    required: true,
+  },
+  paymentStatus: {
+    type: String, // (e.g., 'Pending', 'Paid', 'Failed', etc.)
+    default:'Pending',
+    required: true,
+  },
   carId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Car",
