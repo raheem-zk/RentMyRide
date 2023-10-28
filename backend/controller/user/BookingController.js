@@ -7,7 +7,7 @@ export const stripe = new Stripe(process.env.STRIP_PRIVET_KEY);
 export const rentBooking = async (req, res) => {
   try {
     const data = req.body;
-    const result = await userSchema.updateOne(
+    await userSchema.updateOne(
       { _id: data?.userId },
       {
         $set: {
@@ -37,7 +37,10 @@ export const bookingCheckoutSession = async (req, res) => {
     const pickupDate = new Date(data.pickupDate);
     const dropoffDate = new Date(data.dropoffDate);
 
-    const orderData = await orderShema.find({ carId: data?.carId });
+    const orderData = await orderShema.find({
+      carId: data?.carId,
+      paymentStatus: "Paid",
+    });
     if (orderData.length !== 0) {
       const isConflict = orderData.some((order) => {
         const orderPickupDate = new Date(order.pickupDate);
@@ -61,15 +64,35 @@ export const bookingCheckoutSession = async (req, res) => {
         });
       }
     }
-    if (data.paymentMethod !== "card") {
+
+    if (data.paymentMethod === "wallet") {
+      const userWallet = await walletSchema.findOne({ userId: data.userId });
+      if (userWallet.balance < data.totalPrice) {
+        return res.status(400).json({
+          message:
+            "Insufficient Wallet Balance: Your wallet does not have sufficient funds to complete the transaction",
+        });
+      }
       const orderModel = new orderShema(data);
       await orderModel.save();
+
+      const walletData = {
+        amount: data.totalPrice,
+        type: "credit",
+        description: "Paid for car rental",
+      };
+
       await walletSchema.updateOne(
         { userId: data.userId },
-        { $inc: { balance: -data.totalPrice } }
+        {
+          $inc: { balance: -data.totalPrice },
+          $push: { history: walletData },
+        }
       );
+
       return res.json({ message: "success", url: "" });
     }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
