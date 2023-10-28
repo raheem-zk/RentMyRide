@@ -152,3 +152,33 @@ export interface filterOptionsDatas {
   transmission: Spec[] | [];
   fuelType: Spec[] | [];
 }
+
+export interface walletHistoryModel {
+  amount: number;
+  type: string;
+  description: string;
+  date: Date | string;
+}
+
+export interface walletModel {
+  balance: number;
+  history: walletHistoryModel[];
+}
+
+export interface userModel {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: number | string | null | undefined;
+  place: string | null | undefined;
+  age: number | null | undefined;
+  address: string | null | undefined;
+  license: string | null | undefined;
+  profilePicture: string | null | undefined;
+  wallet: walletModel;
+}
+
+export interface userInittalModel {
+  user: userModel | null;
+  success: boolean;
+}

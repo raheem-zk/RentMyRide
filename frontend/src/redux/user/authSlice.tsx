@@ -1,31 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { profileEditModal } from "../../models/models";
+import { userInittalModel, userModel } from "../../models/models";
 
-interface UserState {
-  user: UserData | null;
-  success: boolean;
-}
-
-interface UserData {
-  firstName: string;
-  lastName: string;
-  age: number | undefined;
-  phoneNumber: number | undefined;
-  email: string;
-}
-const INITTAL_STATE: UserState = {
+const INITTAL_STATE: userInittalModel = {
   user: null,
   success: false,
 };
+
 const authSlice = createSlice({
   name: "user",
   initialState: INITTAL_STATE,
   reducers: {
-    userLoggedIn: (state, action: PayloadAction<UserData>) => {
+    userLoggedIn: (state, action: PayloadAction<userModel>) => {
       state.user = action.payload;
       state.success = true;
     },
-    updateData: (state, action: PayloadAction<profileEditModal>) => {
+    updateData: (state, action: PayloadAction<userModel>) => {
       const copyOfUserData = { ...state.user, ...action.payload };
       state.user = copyOfUserData;
     },
