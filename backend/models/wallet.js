@@ -18,6 +18,7 @@ const walletSchema = new mongoose.Schema({
         enum: ['credit', 'debit'], // Possible values: 'credit' or 'debit'
         required: true,
       },
+      description: String,
       date: {
         type: Date,
         default: Date.now,
