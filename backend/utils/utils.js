@@ -61,7 +61,7 @@ const rentCarAvailable = async (carId, endDate, orderId) => {
 };
 
 export const orderVerification = async () => {
-  const data = await orderSchema.find({ status: "approved" });
+  const data = await orderSchema.find({ status: "approved" ,paymentStatus:"Paid" });
   const currentDate = new Date();
   data.forEach(async (order) => {
     const startDate = new Date(order.pickupDate);
