@@ -1,5 +1,6 @@
 import orderShema from "../../models/order.js";
 import userSchema from "../../models/user.js";
+import walletSchema from "../../models/wallet.js";
 import Stripe from "stripe";
 export const stripe = new Stripe(process.env.STRIP_PRIVET_KEY);
 
@@ -7,7 +8,7 @@ export const rentBooking = async (req, res) => {
   try {
     const data = req.body;
     const result = await userSchema.updateOne(
-      { _id: data.userId },
+      { _id: data?.userId },
       {
         $set: {
           license: data.license,
@@ -15,8 +16,12 @@ export const rentBooking = async (req, res) => {
         },
       }
     );
-    const orderModel = new orderShema(data);
-    await orderModel.save();
+
+    await orderShema.updateOne(
+      { orderId: data?.orderId },
+      { $set: { paymentMethod: data.paymentMethod, paymentStatus: "Paid" } }
+    );
+
     return res.json({ message: "success" });
   } catch (error) {
     console.error(error);
@@ -33,8 +38,7 @@ export const bookingCheckoutSession = async (req, res) => {
     const dropoffDate = new Date(data.dropoffDate);
 
     const orderData = await orderShema.find({ carId: data?.carId });
-
-    if (orderData) {
+    if (orderData.length !== 0) {
       const isConflict = orderData.some((order) => {
         const orderPickupDate = new Date(order.pickupDate);
         const orderDropoffDate = new Date(order.dropoffDate);
@@ -57,7 +61,15 @@ export const bookingCheckoutSession = async (req, res) => {
         });
       }
     }
-
+    if (data.paymentMethod !== "card") {
+      const orderModel = new orderShema(data);
+      await orderModel.save();
+      await walletSchema.updateOne(
+        { userId: data.userId },
+        { $inc: { balance: -data.totalPrice } }
+      );
+      return res.json({ message: "success", url: "" });
+    }
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -76,6 +88,9 @@ export const bookingCheckoutSession = async (req, res) => {
       success_url: `${process.env.FRONTEND_URL}payment-success/${data?.orderId}`,
       cancel_url: `${process.env.FRONTEND_URL}payment-fail`,
     });
+
+    const orderModel = new orderShema(data);
+    await orderModel.save();
 
     return res.json({ message: "success", url: session.url });
   } catch (error) {
