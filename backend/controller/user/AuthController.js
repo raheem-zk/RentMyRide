@@ -156,6 +156,14 @@ export const googleSignin = async (req, res) => {
     const { email, family_name, given_name } = req.body;
     const result = await userModel.findOne({ email: email });
     if (result) {
+      if (result.status === false) {
+        return res.status(400).json({
+          message:
+            "User Account Blocked: Please contact customer support for further assistance",
+          error: true,
+        });
+      }
+      
       const token = jwt.sign(
         { user: result._id, role: "user" },
         process.env.JWT_SECRET,
