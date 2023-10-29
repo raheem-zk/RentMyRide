@@ -31,7 +31,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { user: email, role: "user" },
+      { user: userData._id , role: "user" },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -157,7 +157,7 @@ export const googleSignin = async (req, res) => {
     const result = await userModel.findOne({ email: email });
     if (result) {
       const token = jwt.sign(
-        { user: email, role: "user" },
+        { user: result._id, role: "user" },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -186,7 +186,7 @@ export const googleSignin = async (req, res) => {
     const userData = await userModel.findOne({ email }).populate("wallet");
 
     const token = jwt.sign(
-      { user: email, role: "user" },
+      { user: userData._id, role: "user" },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
