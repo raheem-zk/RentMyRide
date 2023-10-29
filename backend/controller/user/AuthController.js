@@ -9,7 +9,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const userData = await userModel.findOne({ email }).populate("wallet");
-    
+
     if (!userData) {
       return res.status(400).json({
         message: "Invalid email address or email not found",
@@ -48,7 +48,7 @@ export const login = async (req, res) => {
 export const signup = async (req, res) => {
   try {
     const { firstName, lastName, age, phoneNumber, email, password } = req.body;
-   
+
     const alreadyExistUser = await userModel.findOne({
       $or: [{ email }, { phoneNumber }],
     });
@@ -62,7 +62,7 @@ export const signup = async (req, res) => {
 
     const saltRounds = parseInt(process.env.SALTROUNDS);
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
+
     const userSchema = new userModel({
       firstName,
       lastName,
@@ -97,7 +97,7 @@ export const signup = async (req, res) => {
 export const verifySignup = async (req, res) => {
   try {
     const { email, phoneNumber } = req.body;
-    
+
     const result = await userModel.findOne({
       $or: [{ email }, { phoneNumber }],
     });
@@ -153,11 +153,15 @@ export const otpVerification = async (req, res) => {
 
 export const googleSignin = async (req, res) => {
   try {
-    const { email, family_name, given_name}= req.body;
-    const result = await userModel.findOne({email: email})
-    if(result){
-      const token = jwt.sign({ user:email, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' })
-      return res.json({message:'success', token, userData:result});
+    const { email, family_name, given_name } = req.body;
+    const result = await userModel.findOne({ email: email });
+    if (result) {
+      const token = jwt.sign(
+        { user: email, role: "user" },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      return res.json({ message: "success", token, userData: result });
     }
 
     const userSchema = new userModel({
@@ -165,22 +169,22 @@ export const googleSignin = async (req, res) => {
       firstName: given_name,
       lastName: family_name,
     });
-   
+
     const response = await userSchema.save();
     const walletModel = new walletSchema({
       userId: response._id,
       balance: 0,
       history: [],
     });
-    
+
     const walletData = await walletModel.save();
     await userModel.updateOne(
       { _id: response._id },
       { $set: { wallet: walletData._id } }
     );
-    
+
     const userData = await userModel.findOne({ email }).populate("wallet");
-    
+
     const token = jwt.sign(
       { user: email, role: "user" },
       process.env.JWT_SECRET,
@@ -215,21 +219,37 @@ export const verifyForgot = async (req, res) => {
         <h1 style="font-weight: bold;">${otp}</h1>
       `,
     };
-    
+
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error(error);
-        return res
-          .status(404)
-          .json({
-            message: "The provided email does not match any registered user.",
-          });
+        return res.status(404).json({
+          message: "The provided email does not match any registered user.",
+        });
       }
       console.log("Message sent: %s", info.messageId);
       return res.status(200).json({ message: "success" });
     });
 
     return res.status(200).json({ message: "success" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getUpdatedUserData = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userData = await userModel.findOne({ _id: userId }).populate("wallet");
+    if (!userData) {
+      return res.status(404).json({
+        message:
+          "User not found. The requested user does not exist in our system.",
+        error: true,
+      });
+    }
+    return res.json({ message: "success", userData });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });

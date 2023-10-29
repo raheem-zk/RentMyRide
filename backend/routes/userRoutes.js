@@ -6,6 +6,7 @@ import {
   otpVerification,
   verifySignup,
   verifyForgot,
+  getUpdatedUserData,
 } from "../controller/user/AuthController.js";
 import { filterData, home } from "../controller/user/HomeController.js";
 import VerifyToken from "../middleware/jwtUserVerification.js";
@@ -29,6 +30,8 @@ router.post("/signup-verify", verifySignup);
 router.post("/otp-verification", otpVerification);
 router.post("/google-signin", googleSignin);
 router.get("/", home);
+
+router.get('/getupdatedData/:userId',VerifyToken, getUpdatedUserData)
 
 router.get('/filter',filterData)
 

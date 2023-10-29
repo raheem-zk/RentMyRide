@@ -86,3 +86,8 @@ export const getuserOrders = async (userId,page)=>{
   const response = await userAxios.get(`/orders/${userId}/${page}`);
   return response.data;
 }
+
+export const updatedUserData = async (userId)=>{
+  const response = await userAxios.get(`/getupdatedData/${userId}`);
+  return response.data.userData;
+}
