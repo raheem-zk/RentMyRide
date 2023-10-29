@@ -136,6 +136,13 @@ export const login = async (req, res) => {
         error: true,
       });
     }
+    if(ownerData.status===false){
+      return res.status(400).json({
+        message:
+          "Car Owner Account Blocked: Please contact customer support for further assistance",
+        error: true,
+      })
+    }
     const isPasswordVerified = bcrypt.compareSync(password, ownerData.password);
     if (!isPasswordVerified) {
       return res.status(400).json({ message: "Invalid Password", error: true });
