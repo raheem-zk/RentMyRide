@@ -17,15 +17,19 @@ import { CarDetailsModel } from "../../models/models";
 import { useDispatch, useSelector } from "react-redux";
 import { addCar, clearCarData } from "../../redux/carOwner/addCarSlice";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { BsFillTrashFill } from "react-icons/bs";
+import {
+  uploadCar,
+  uploadCarImage,
+  uploadeEditCar,
+} from "../../api/carOwnerApi";
 
 interface Item {
   name: string;
   _id: string;
 }
 
-const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
+const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   const [brand, setBrand] = useState<Item[]>([]);
   const [category, setCategory] = useState<Item[]>([]);
   const [model, setModel] = useState<Item[]>([]);
@@ -53,43 +57,29 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
     setFiles([...files, ...e.target.files]);
   };
 
-  const deleteImage = (imageToDelete)=>{
+  const deleteImage = (imageToDelete) => {
     const updatedFiles = files.filter((image) => image !== imageToDelete);
     setFiles(updatedFiles);
-  }
-  const deleteEditImage = (imageToDelete)=>{
-    const updatedFiles = carDetails.images.filter((image) => image !== imageToDelete);
+  };
+
+  const deleteEditImage = (imageToDelete) => {
+    const updatedFiles = carDetails.images.filter(
+      (image) => image !== imageToDelete
+    );
     setCarDetails({
       ...carDetails,
-      images: [...updatedFiles]
-    })
-  }
+      images: [...updatedFiles],
+    });
+  };
+
   const uploadImages = async (images: any) => {
     if (!images || images.length === 0) return [];
-
     const url: string[] = [];
 
-    const presetKey = import.meta.env.VITE_PRESETKEY;
-    const cloudName = import.meta.env.VITE_CLOUD_NAME;
-
-    try {
-      for (let i = 0; i < images.length; i++) {
-        const img = images[i];
-        const formData = new FormData();
-        formData.append("file", img);
-        formData.append("upload_preset", presetKey);
-        formData.append("cloud_name", cloudName);
-
-        const response = await axios.post(
-          import.meta.env.VITE_CLOUDINERY_API,
-          formData
-        );
-        let urlData = response.data.url;
-        url.push(urlData);
-      }
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      ErrorMessage(error?.response?.data?.message || "Image upload failed");
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      const data = await uploadCarImage(img);
+      url.push(data);
     }
     return url;
   };
@@ -137,8 +127,8 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
       [name]: value,
     });
   };
-  useEffect(()=>{
-    if(editCarData){
+  useEffect(() => {
+    if (editCarData) {
       setCarDetails({
         ...carDetails,
         ownerId: success ? carOwner._id : "",
@@ -157,29 +147,29 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
         endDate: editCarData.endDate || "",
       });
     }
-  },[editCarData])
+  }, [editCarData]);
 
   useEffect(() => {
     if (uploadedImages.length > 0) {
       setCarDetails({
         ...carDetails,
-        images: [...carDetails.images,...uploadedImages],
+        images: [...carDetails.images, ...uploadedImages],
       });
       setUploadedImages([]);
       setSubmit(true);
     }
   }, [uploadedImages, carDetails]);
 
-  const updateCarDetails = async ()=>{
-    await carOwnerAxios.post(`/edit-car/${editCarData._id}`, carDetails);
-    successMessage('Car Updated successfully')
+  const updateCarDetails = async () => {
+    await uploadeEditCar(editCarData._id, carDetails);
+    successMessage("Car Updated successfully");
     navigate("/car-owner/cars");
     return;
-  }
+  };
 
   const uploadCarDetails = async () => {
-    await carOwnerAxios.post("/add-car", carDetails);
-    successMessage('Car Added successfully')
+    await uploadCar(carDetails);
+    successMessage("Car successfully added to your account");
     dispatch(clearCarData());
     navigate("/car-owner/cars");
     return;
@@ -196,14 +186,32 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
   };
 
   useEffect(() => {
-    if (carDetails.images.length !== 0 && !editCarData && success && submit===true ) { // add car
+    if (
+      carDetails.images.length !== 0 &&
+      !editCarData &&
+      success &&
+      submit === true
+    ) {
+      // add car
       dispatch(addCar(carDetails));
       uploadCarDetails();
-    } else if (carDetails.images.length !== 0 && !success && !editCarData && submit===true) { // register time add car 
+    } else if (
+      carDetails.images.length !== 0 &&
+      !success &&
+      !editCarData &&
+      submit === true
+    ) {
+      // register time add car
       dispatch(addCar(carDetails));
       uploadRegisterTime();
-    } else if(carDetails.images.length !== 0 && header && editCarData && submit===true){ // edit car
-      updateCarDetails()
+    } else if (
+      carDetails.images.length !== 0 &&
+      header &&
+      editCarData &&
+      submit === true
+    ) {
+      // edit car
+      updateCarDetails();
     }
     setSubmit(false);
   }, [carDetails, submit]);
@@ -260,16 +268,19 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
     if (parseInt(perDayPrice) > 25000 || parseInt(perDayPrice) < 300) {
       return ErrorMessage("The amount is not correct, please check");
     }
-    if ( images.length === 0 &&files.length < 4 || files.length > 5) {
+    if ((images.length === 0 && files.length < 4) || files.length > 5) {
       return ErrorMessage("Image minimum is 4 and maximum is 5");
-    } else if (images.length !==0 && (files.length+ images.length) > 5 || (files.length+ images.length) < 4){
+    } else if (
+      (images.length !== 0 && files.length + images.length > 5) ||
+      files.length + images.length < 4
+    ) {
       return ErrorMessage("Image minimum is 4 and maximum is 5");
     }
 
     const uploadedUrls = files.length !== 0 ? await uploadImages(files) : null;
-    if(uploadedUrls){
+    if (uploadedUrls) {
       setUploadedImages(uploadedUrls);
-    }else{
+    } else {
       setSubmit(true);
     }
   };
@@ -279,7 +290,9 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
       <ToastContainer />
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-4xl font-extrabold">{header ? header : 'Add Your Car Details'}</h2>
+          <h2 className="text-4xl font-extrabold">
+            {header ? header : "Add Your Car Details"}
+          </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -527,7 +540,10 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
                       src={URL.createObjectURL(image)}
                       alt="posts"
                     />
-                    <span onClick={(e)=>deleteImage(image)} className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full">
+                    <span
+                      onClick={(e) => deleteImage(image)}
+                      className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full"
+                    >
                       <BsFillTrashFill />
                     </span>
                   </div>
@@ -543,7 +559,10 @@ const AddCar = ({ next, HandlePage , header, editCarData }: any) => {
                       src={image}
                       alt="posts"
                     />
-                    <span onClick={(e)=>deleteEditImage(image)} className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full">
+                    <span
+                      onClick={(e) => deleteEditImage(image)}
+                      className="delete-button absolute top-0 right-0 p-2 cursor-pointer bg-white border border-gray-300 rounded-full"
+                    >
                       <BsFillTrashFill />
                     </span>
                   </div>
