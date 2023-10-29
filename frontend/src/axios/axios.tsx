@@ -5,9 +5,9 @@ import { ErrorMessage } from "../utils/utils";
 const baseBackendUrl = import.meta.env.VITE_BACKEND_URL;
 
 // Define role-specific paths
-const userPath = ""; 
-const adminPath = "/admin"; 
-const carOwnerPath = "/car-owner"; 
+const userPath = "";
+const adminPath = "/admin";
+const carOwnerPath = "/car-owner";
 const createRoleSpecificAxiosInstance = (tokenName, rolePath) => {
   const instance = axios.create({
     baseURL: `${baseBackendUrl}${rolePath}`,
@@ -27,7 +27,12 @@ const createRoleSpecificAxiosInstance = (tokenName, rolePath) => {
     (response) => response,
     (error) => {
       ErrorMessage(error.response.data.message);
-      if (error.response.status === 401 && error.response.data.message === "Unauthorized") {
+      if (
+        (error.response.status === 401 &&
+          error.response.data.message === "Unauthorized") ||
+        error.response.data.message ===
+          "Access Denied: Your account has been temporarily blocked"
+      ) {
         localStorage.removeItem(tokenName);
       } else if (error.response.status === 500) {
         console.error("Internal Server Error:", error.response.data);
