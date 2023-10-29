@@ -35,3 +35,6 @@ export const uploadCarImage = async (img) => {
   }
 };
 
+export const uploadCar = async (carDetails)=>{
+  await carOwnerAxios.post("/add-car", carDetails);
+}
