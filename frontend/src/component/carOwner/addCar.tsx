@@ -327,6 +327,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addBrand}
+                  value={editCarData?.brand}
                 />
               </div>
               <div>
@@ -338,6 +339,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addModel}
+                  value={editCarData?.model}
                 />
               </div>
               <div>
@@ -349,6 +351,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addTransmission}
+                  value={editCarData?.transmission}
                 />
               </div>
               <div>
@@ -360,6 +363,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addCategory}
+                  value={editCarData?.category}
                 />
               </div>
             </div>
@@ -374,6 +378,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                     AddingForm={AddingForm}
                     handleCarDetailsChange={handleCarDetailsChange}
                     HandleForm={addFueltype}
+                    value={editCarData?.fuelType}
                   />
                 </div>
                 <div>

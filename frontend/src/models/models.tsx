@@ -18,6 +18,7 @@ export interface DropdownProps {
   HandleForm: (value: any) => void;
   Reload: () => void;
   handleCarDetailsChange: (e) => void;
+  value : Spec | undefined ;
 }
 
 export interface AddingFunction {
@@ -45,7 +46,7 @@ export interface CarDetailsModel {
   endDate: string;
 }
 
-interface Spec {
+export interface Spec {
   _id: string;
   name: string;
 }
