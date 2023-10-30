@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import { carOwnerAxios } from "../../axios/axios";
 import Dropdown from "../dropdown";
 import AddingForm from "./addingForm";
 import { MdArrowBack } from "react-icons/md";
@@ -13,12 +12,13 @@ import {
   verifiyOwnerSignup,
 } from "../../utils/carIteams";
 import { ErrorMessage, isDateValid, successMessage } from "../../utils/utils";
-import { CarDetailsModel } from "../../models/models";
+import { CarDetailsModel, filterOptionsDatas } from "../../models/models";
 import { useDispatch, useSelector } from "react-redux";
 import { addCar, clearCarData } from "../../redux/carOwner/addCarSlice";
 import { useNavigate } from "react-router-dom";
 import { BsFillTrashFill } from "react-icons/bs";
 import {
+  getCarModels,
   uploadCar,
   uploadCarImage,
   uploadeEditCar,
@@ -86,21 +86,13 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   };
 
   const getDropdownItems = async () => {
-    try {
-      const res = await carOwnerAxios.get("/add-car");
-      if (res.data.error) {
-        ErrorMessage(res.data.error);
-      }
-      setBrand(res?.data?.brand || []);
-      setCategory(res?.data?.category || []);
-      setModel(res?.data?.model || []);
-      setTransmission(res?.data?.transmission || []);
-      setFuelType(res?.data?.fueltype || []);
-    } catch (error) {
-      ErrorMessage(
-        error?.response?.data?.message || "Error fetching dropdown items"
-      );
-    }
+    const data: filterOptionsDatas = await getCarModels();
+
+    setBrand(data?.brand || []);
+    setCategory(data?.category || []);
+    setModel(data?.model || []);
+    setTransmission(data?.transmission || []);
+    setFuelType(data?.fuelType || []);
   };
 
   const [carDetails, setCarDetails] = useState<CarDetailsModel>({
@@ -145,8 +137,10 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
         perDayPrice: editCarData.perDayPrice || "",
         description: editCarData.description || "",
         fuelType: editCarData.fuelType || "",
-        startDate: dayjs(editCarData?.startDate).format('YYYY-MM-DD') || '2023-10-31',
-        endDate: dayjs(editCarData?.endDate).format('YYYY-MM-DD') || '2023-10-31',
+        startDate:
+          dayjs(editCarData?.startDate).format("YYYY-MM-DD") || "2023-10-31",
+        endDate:
+          dayjs(editCarData?.endDate).format("YYYY-MM-DD") || "2023-10-31",
       });
     }
   }, [editCarData]);

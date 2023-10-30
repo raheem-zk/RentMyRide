@@ -35,10 +35,23 @@ export const uploadCarImage = async (img) => {
   }
 };
 
-export const uploadCar = async (carDetails)=>{
+export const uploadCar = async (carDetails) => {
   await carOwnerAxios.post("/add-car", carDetails);
-}
+};
 
-export const uploadeEditCar = async (carId, carDetails)=>{
+export const uploadeEditCar = async (carId, carDetails) => {
   await carOwnerAxios.post(`/edit-car/${carId}`, carDetails);
-}
+};
+
+export const getCarModels = async () => {
+  const response = await carOwnerAxios.get("/get-car-models-and-details");
+  const data = {
+    brand: response.data?.brand,
+    category: response.data?.category,
+    model: response.data?.model,
+    transmission: response.data?.transmission,
+    fuelType: response.data?.fuelType,
+  };
+  
+  return data;
+};
