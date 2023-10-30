@@ -4,14 +4,14 @@ import modelSchema from '../../models/carOwner/model.js';
 import transmissionSchema from '../../models/carOwner/transmission.js';
 import fuelSchema from '../../models/carOwner/fueltype.js';
 
-export const addCar = async (req,res)=>{
+export const getCarModels = async (req,res)=>{
     try {
         const brand = await brandSchema.find() ?? [];
         const category = await categorySchema.find() ?? [];
         const model = await modelSchema.find() ?? [];
         const transmission = await transmissionSchema.find() ?? [];
-        const fueltype = await fuelSchema.find() ?? [];
-        return res.json({message:'success', brand ,category, model, transmission, fueltype })
+        const fuelType = await fuelSchema.find() ?? [];
+        return res.json({message:'success', brand ,category, model, transmission, fuelType })
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal Server Error' });
