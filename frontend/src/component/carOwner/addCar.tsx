@@ -23,6 +23,7 @@ import {
   uploadCarImage,
   uploadeEditCar,
 } from "../../api/carOwnerApi";
+import dayjs from "dayjs";
 
 interface Item {
   name: string;
@@ -144,8 +145,8 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
         perDayPrice: editCarData.perDayPrice || "",
         description: editCarData.description || "",
         fuelType: editCarData.fuelType || "",
-        startDate: editCarData.startDate || "",
-        endDate: editCarData.endDate || "",
+        startDate: dayjs(editCarData?.startDate).format('YYYY-MM-DD') || '2023-10-31',
+        endDate: dayjs(editCarData?.endDate).format('YYYY-MM-DD') || '2023-10-31',
       });
     }
   }, [editCarData]);
