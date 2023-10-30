@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import { carOwnerAxios } from "../../axios/axios";
 import Dropdown from "../dropdown";
 import AddingForm from "./addingForm";
 import { MdArrowBack } from "react-icons/md";
@@ -13,16 +12,18 @@ import {
   verifiyOwnerSignup,
 } from "../../utils/carIteams";
 import { ErrorMessage, isDateValid, successMessage } from "../../utils/utils";
-import { CarDetailsModel } from "../../models/models";
+import { CarDetailsModel, filterOptionsDatas } from "../../models/models";
 import { useDispatch, useSelector } from "react-redux";
 import { addCar, clearCarData } from "../../redux/carOwner/addCarSlice";
 import { useNavigate } from "react-router-dom";
 import { BsFillTrashFill } from "react-icons/bs";
 import {
+  getCarModels,
   uploadCar,
   uploadCarImage,
   uploadeEditCar,
 } from "../../api/carOwnerApi";
+import dayjs from "dayjs";
 
 interface Item {
   name: string;
@@ -85,28 +86,20 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   };
 
   const getDropdownItems = async () => {
-    try {
-      const res = await carOwnerAxios.get("/add-car");
-      if (res.data.error) {
-        ErrorMessage(res.data.error);
-      }
-      setBrand(res?.data?.brand || []);
-      setCategory(res?.data?.category || []);
-      setModel(res?.data?.model || []);
-      setTransmission(res?.data?.transmission || []);
-      setFuelType(res?.data?.fueltype || []);
-    } catch (error) {
-      console.error("Error fetching dropdown items:", error);
-      ErrorMessage(
-        error?.response?.data?.message || "Error fetching dropdown items"
-      );
-    }
+    const data: filterOptionsDatas = await getCarModels();
+
+    setBrand(data?.brand || []);
+    setCategory(data?.category || []);
+    setModel(data?.model || []);
+    setTransmission(data?.transmission || []);
+    setFuelType(data?.fuelType || []);
   };
 
   const [carDetails, setCarDetails] = useState<CarDetailsModel>({
-    ownerId: success ? carOwner._id : "",
+    _id: "",
+    ownerId: success ? carOwner : null,
     carName: "",
-    images: "",
+    images: [],
     brand: "",
     model: "",
     year: "",
@@ -131,9 +124,10 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
     if (editCarData) {
       setCarDetails({
         ...carDetails,
+        _id: editCarData?._id,
         ownerId: success ? carOwner._id : "",
         carName: editCarData.carName || "",
-        images: editCarData.images || "",
+        images: editCarData.images || [],
         brand: editCarData.brand || "",
         model: editCarData.model || "",
         year: editCarData.year || "",
@@ -143,8 +137,10 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
         perDayPrice: editCarData.perDayPrice || "",
         description: editCarData.description || "",
         fuelType: editCarData.fuelType || "",
-        startDate: editCarData.startDate || "",
-        endDate: editCarData.endDate || "",
+        startDate:
+          dayjs(editCarData?.startDate).format("YYYY-MM-DD") || "2023-10-31",
+        endDate:
+          dayjs(editCarData?.endDate).format("YYYY-MM-DD") || "2023-10-31",
       });
     }
   }, [editCarData]);
@@ -155,6 +151,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
         ...carDetails,
         images: [...carDetails.images, ...uploadedImages],
       });
+      setFiles([]);
       setUploadedImages([]);
       setSubmit(true);
     }
@@ -325,6 +322,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addBrand}
+                  value={editCarData?.brand}
                 />
               </div>
               <div>
@@ -336,6 +334,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addModel}
+                  value={editCarData?.model}
                 />
               </div>
               <div>
@@ -347,6 +346,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addTransmission}
+                  value={editCarData?.transmission}
                 />
               </div>
               <div>
@@ -358,6 +358,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   AddingForm={AddingForm}
                   handleCarDetailsChange={handleCarDetailsChange}
                   HandleForm={addCategory}
+                  value={editCarData?.category}
                 />
               </div>
             </div>
@@ -372,6 +373,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                     AddingForm={AddingForm}
                     handleCarDetailsChange={handleCarDetailsChange}
                     HandleForm={addFueltype}
+                    value={editCarData?.fuelType}
                   />
                 </div>
                 <div>
@@ -533,7 +535,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
             {files &&
               files.map((image, index) => (
                 <>
-                  <div className="image-container relative">
+                  <div key={index + 2} className="image-container relative">
                     <img
                       key={index}
                       className="w-auto py-2"
@@ -552,7 +554,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
             {carDetails.images &&
               carDetails.images.map((image, index) => (
                 <>
-                  <div className="image-container relative">
+                  <div key={index + 2} className="image-container relative">
                     <img
                       key={index}
                       className="w-auto py-2"

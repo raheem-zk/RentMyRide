@@ -1,19 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DropdownProps } from "../models/models";
 
-const Dropdown: React.FC<DropdownProps> = ({ data, title, AddingForm, HandleForm, Reload , handleCarDetailsChange}) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  value,
+  data,
+  title,
+  AddingForm,
+  HandleForm,
+  Reload,
+  handleCarDetailsChange,
+}) => {
   const [item, setItem] = useState("");
   const [add, setAdd] = useState(false);
-  const action = ()=>{
+  const action = () => {
     setAdd(!add);
-  }
-  const handleChenge = (e)=>{
+  };
+
+  const handleChenge = (e) => {
     setItem(e.target.value);
-    if (e.target.value == "add" ) {
+    if (e.target.value == "add") {
       action();
     }
-    handleCarDetailsChange(e)
-  }
+    handleCarDetailsChange(e);
+  };
 
   return (
     <div className="relative inline-block text-left w-full">
@@ -31,17 +40,29 @@ const Dropdown: React.FC<DropdownProps> = ({ data, title, AddingForm, HandleForm
           onChange={handleChenge}
           className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:ring focus:ring-opacity-50"
         >
-          <option value="" className="text-green-800 ">select one</option>
+          <option value={value ? value?._id : ""} className="text-green-800 ">
+            {value ? value?.name : "select one"}
+          </option>
           {data &&
             data.map((item) => (
               <option key={item._id} value={item._id}>
                 {item.name}
               </option>
             ))}
-          <option value="add" className="text-green-800 ">Add a {title}</option>
+          <option value="add" className="text-green-800 ">
+            Add a {title}
+          </option>
         </select>
       </div>
-      {add && <AddingForm Reload={Reload} title={title} handleAdding={HandleForm} action={action} handleCarDetailsChange={handleCarDetailsChange}/>}
+      {add && (
+        <AddingForm
+          Reload={Reload}
+          title={title}
+          handleAdding={HandleForm}
+          action={action}
+          handleCarDetailsChange={handleCarDetailsChange}
+        />
+      )}
     </div>
   );
 };
