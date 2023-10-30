@@ -19,7 +19,7 @@ const VerifyToken = async (req, res, next)=>{
             if(!decoded.role ==='carOwner'){
                 return res.status(401).json({ message: 'Unauthorized' });
             }
-            const carOwnerData = await carOwnerSchema.findOnde({_id:decoded.user , status:true})
+            const carOwnerData = await carOwnerSchema.findOne({_id:decoded.user , status:true})
             if(!carOwnerData){
                 return res.status(401).json({ message: 'Access Denied: Your account has been temporarily blocked' });
             }
