@@ -96,7 +96,6 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       setTransmission(res?.data?.transmission || []);
       setFuelType(res?.data?.fueltype || []);
     } catch (error) {
-      console.error("Error fetching dropdown items:", error);
       ErrorMessage(
         error?.response?.data?.message || "Error fetching dropdown items"
       );
@@ -104,9 +103,10 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   };
 
   const [carDetails, setCarDetails] = useState<CarDetailsModel>({
-    ownerId: success ? carOwner._id : "",
+    _id: "",
+    ownerId: success ? carOwner : null,
     carName: "",
-    images: "",
+    images: [],
     brand: "",
     model: "",
     year: "",
@@ -131,9 +131,10 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
     if (editCarData) {
       setCarDetails({
         ...carDetails,
+        _id: editCarData?._id,
         ownerId: success ? carOwner._id : "",
         carName: editCarData.carName || "",
-        images: editCarData.images || "",
+        images: editCarData.images || [],
         brand: editCarData.brand || "",
         model: editCarData.model || "",
         year: editCarData.year || "",
@@ -155,6 +156,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
         ...carDetails,
         images: [...carDetails.images, ...uploadedImages],
       });
+      setFiles([]);
       setUploadedImages([]);
       setSubmit(true);
     }
@@ -533,7 +535,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
             {files &&
               files.map((image, index) => (
                 <>
-                  <div className="image-container relative">
+                  <div key={index + 2} className="image-container relative">
                     <img
                       key={index}
                       className="w-auto py-2"
@@ -552,7 +554,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
             {carDetails.images &&
               carDetails.images.map((image, index) => (
                 <>
-                  <div className="image-container relative">
+                  <div key={index + 2} className="image-container relative">
                     <img
                       key={index}
                       className="w-auto py-2"
