@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ErrorMessage } from "../../utils/utils";
 import { SetCarOwner } from "../../redux/carOwner/authSlice";
-import { carOwnerAxios } from "../../axios/axios";
+import { uploadLoginData } from "../../api/carOwnerApi";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -18,20 +17,10 @@ const LoginForm: React.FC = () => {
     if (password.length < 7) {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
-    try {
-      const res = await carOwnerAxios.post(`/login`, { email, password });
-      if (res.data.error) {
-        return ErrorMessage(res.data.message);
-      }
-      localStorage.setItem("carOwnerToken", res.data.token);
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${res.data.token}`;
-      dispatch(SetCarOwner(res.data.ownerData));
-      navigate("/car-owner/dashboard");
-    } catch (error) {
-      console.log(error);
-    }
+    const ownerData = await uploadLoginData(email, password);
+
+    dispatch(SetCarOwner(ownerData));
+    navigate("/car-owner/dashboard");
   };
 
   return (

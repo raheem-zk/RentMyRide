@@ -55,3 +55,12 @@ export const getCarModels = async () => {
   
   return data;
 };
+
+export const uploadLoginData = async (email, password)=>{
+  const response = await carOwnerAxios.post(`/login`, { email, password });
+  localStorage.setItem("carOwnerToken", response.data.token);
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${response.data.token}`;
+  return response.data.ownerData;
+}
