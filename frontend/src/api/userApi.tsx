@@ -56,15 +56,16 @@ export const updateProfileImage = async (userId, url) => {
 };
 
 export const getFilterOptionsData = async () => {
-  const response = await carOwnerAxios.get("/add-car");
-  console.log(response);
+  const response = await carOwnerAxios.get("/get-car-models-and-details");
+
   const data = {
-    category: response.data.category,
-    brand: response.data.brand,
-    model: response.data.model,
-    fuelType: response.data.fueltype,
-    transmission: response.data.transmission,
+    brand: response.data?.brand,
+    category: response.data?.category,
+    model: response.data?.model,
+    transmission: response.data?.transmission,
+    fuelType: response.data?.fuelType,
   };
+  
   return data;
 };
 
@@ -77,9 +78,10 @@ export const filteredData = async (data) => {
       model: data?.model,
       fuelType: data?.fuelType,
       transmission: data?.transmission,
+      page:data?.page,
     },
   });
-  return response?.data?.filteredData;
+  return {data :response?.data?.filteredData, size:response?.data?.size};
 };
 
 export const getuserOrders = async (userId,page)=>{

@@ -52,7 +52,7 @@ const EditProfile = ({ data }) => {
       return ErrorMessage("Please fill all fields");
     }
 
-    if (phoneNumber.length != 10) {
+    if (typeof phoneNumber === "string" && phoneNumber.trim().length !== 10) {
       return ErrorMessage(
         "The phone number is not valid; please check your phone number"
       );

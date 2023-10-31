@@ -3,7 +3,7 @@ import { MdSearch } from "react-icons/md";
 import { filteredData, getFilterOptionsData } from "../api/userApi";
 import { filterModel, filterOptionsDatas } from "../models/models";
 
-const Filter = ({ filteredCars }) => {
+const Filter = ({ filteredCars, handlePagenation ,handleSize}) => {
   const [filterOptions, setFilterOptions] = useState<filterOptionsDatas>({
     category: [],
     brand: [],
@@ -11,7 +11,6 @@ const Filter = ({ filteredCars }) => {
     transmission: [],
     fuelType: [],
   });
-
   const getFilterOptions = async () => {
     const data = await getFilterOptionsData();
     setFilterOptions({ ...filterOptions, ...data });
@@ -28,6 +27,7 @@ const Filter = ({ filteredCars }) => {
     model: "",
     fuelType: "",
     transmition: "",
+    page:1,
   });
 
   const handleFilter = (key, value) => {
@@ -40,13 +40,18 @@ const Filter = ({ filteredCars }) => {
   };
 
   const getFilterData = async () => {
-    const data = await filteredData(filterData);
+    const {data, size} = await filteredData(filterData);
     filteredCars(data);
+    handleSize(size ?? 1);
   };
 
   useEffect(() => {
     getFilterData();
   }, [filterData]);
+
+  useEffect(()=>{
+    setFilterData({ ...filterData, page:handlePagenation  });
+  },[handlePagenation]);
 
   const heandleSearch = (e) => {
     setFilterData({ ...filterData, ["searchText"]: e.target.value });

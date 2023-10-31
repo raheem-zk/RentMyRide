@@ -5,16 +5,31 @@ import { CarDetailsModel } from "../models/models";
 import { Link } from "react-router-dom";
 import Filter from "./filter";
 import NoCar from "./notCar";
+import Pagination from "./pagination";
 
 const CarListingPage = ({ data }) => {
   const [cars, setCars] = useState<CarDetailsModel[]>(data);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(1);
   const handleFilter = (data) => {
     setCars(data);
+  };
+
+  const filterPageination = (number) => {
+    setPage(number);
+  };
+
+  const handleSize = (data) => {
+    setSize(data);
   };
   return (
     <div className="flex p-3">
       <div className="bg-amber-400 w-1/5 h-fit py-3 rounded mb-2">
-        <Filter filteredCars={handleFilter} />
+        <Filter
+          filteredCars={handleFilter}
+          handlePagenation={page}
+          handleSize={handleSize}
+        />
       </div>
       <div className="w-4/5 h-full">
         <h1 className="text-3xl font-bold text-center mb-4">Available Cars</h1>
@@ -67,6 +82,7 @@ const CarListingPage = ({ data }) => {
               </div>
             ))
           )}
+          <Pagination size={size} filterPagination={filterPageination} />
         </div>
       </div>
     </div>
