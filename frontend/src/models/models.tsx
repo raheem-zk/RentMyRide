@@ -144,6 +144,7 @@ export interface filterModel {
   model: string | null | undefined;
   fuelType: string | null | undefined;
   transmition: string | null | undefined;
+  page: number | null | undefined;
 }
 
 export interface filterOptionsDatas {

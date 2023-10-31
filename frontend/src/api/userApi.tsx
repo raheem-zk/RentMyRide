@@ -78,9 +78,10 @@ export const filteredData = async (data) => {
       model: data?.model,
       fuelType: data?.fuelType,
       transmission: data?.transmission,
+      page:data?.page,
     },
   });
-  return response?.data?.filteredData;
+  return {data :response?.data?.filteredData, size:response?.data?.size};
 };
 
 export const getuserOrders = async (userId,page)=>{
