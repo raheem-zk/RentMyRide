@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { generateOTP, transporter } from "../../utils/utils.js";
 import { addCar } from "./carController.js";
-import carSchema from '../../models/carOwner/car.js';
+import carSchema from "../../models/carOwner/car.js";
 let copyOtp;
 
 export const verifySignup = async (req, res) => {
@@ -21,7 +21,7 @@ export const verifySignup = async (req, res) => {
 
     // send mail with defined transport object
     const otp = generateOTP();
-    console.log(otp)
+    console.log(otp);
     copyOtp = otp;
     var mailOptions = {
       to: email,
@@ -44,22 +44,22 @@ export const verifySignup = async (req, res) => {
     return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const verifyOtp = (req, res)=>{
+export const verifyOtp = (req, res) => {
   try {
     const { otp } = req.body;
-    if(!otp == copyOtp){
-      return res.status(401).json({message: 'OTP is not Valied'});
+    if (!otp == copyOtp) {
+      return res.status(401).json({ message: "OTP is not Valied" });
     }
-    return res.json({message:'success'})
+    return res.json({ message: "success" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};
 
 export const signup = async (req, res) => {
   try {
@@ -106,8 +106,13 @@ export const signup = async (req, res) => {
     const carDetails = req.body.carDetails;
     carDetails.ownerId = owner._id;
 
-    const matched = await carSchema.findOne({licensePlate: carDetails.licensePlate});
-    if(matched){
+    const matched = await carSchema.findOne({
+      licensePlate: carDetails.licensePlate,
+    });
+
+    if (matched) {
+      await ownerSchema.deleteOne({ _id: owner._id });
+
       return res.status(404).json({
         message: "Car with the provided license plate already exists.",
         error: true,
@@ -115,14 +120,13 @@ export const signup = async (req, res) => {
     }
 
     const lastResult = await addCar(carDetails);
-    console.log(lastResult);
-    if(lastResult){
+    if (lastResult) {
       return res.json({ message: "success" });
     }
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -136,12 +140,12 @@ export const login = async (req, res) => {
         error: true,
       });
     }
-    if(ownerData.status===false){
+    if (ownerData.status === false) {
       return res.status(400).json({
         message:
           "Car Owner Account Blocked: Please contact customer support for further assistance",
         error: true,
-      })
+      });
     }
     const isPasswordVerified = bcrypt.compareSync(password, ownerData.password);
     if (!isPasswordVerified) {
@@ -155,7 +159,6 @@ export const login = async (req, res) => {
     return res.json({ message: "success", token, ownerData });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
