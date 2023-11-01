@@ -33,7 +33,7 @@ export const home = async (req, res) => {
 export const filterData = async (req, res) => {
   try {
     const filter = {};
-    const PAGE = req?.query?.page || 1;
+    const PAGE = req?.query?.page ? (req.query.page >= 1 ? req.query.page : 1) : 1;
     const SKIP = (PAGE - 1) * LIMIT;
 
     filter.ownerStatus = true;
@@ -96,7 +96,6 @@ export const filterData = async (req, res) => {
 
     const TotalSize = await carsSchema.countDocuments(filter);
     const size = Math.ceil(TotalSize / LIMIT);
-    console.log(filteredData);
     return res.json({ message: "success", filteredData, size });
   } catch (error) {
     console.error(error);
