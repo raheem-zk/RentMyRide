@@ -79,6 +79,7 @@ export const filteredData = async (data) => {
       fuelType: data?.fuelType,
       transmission: data?.transmission,
       page:data?.page,
+      sortOrder: data?.sortOrder,
     },
   });
   return {data :response?.data?.filteredData, size:response?.data?.size};

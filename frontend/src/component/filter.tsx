@@ -3,7 +3,7 @@ import { MdSearch } from "react-icons/md";
 import { filteredData, getFilterOptionsData } from "../api/userApi";
 import { filterModel, filterOptionsDatas } from "../models/models";
 
-const Filter = ({ filteredCars, handlePagenation ,handleSize}) => {
+const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
   const [filterOptions, setFilterOptions] = useState<filterOptionsDatas>({
     category: [],
     brand: [],
@@ -27,7 +27,8 @@ const Filter = ({ filteredCars, handlePagenation ,handleSize}) => {
     model: "",
     fuelType: "",
     transmition: "",
-    page:1,
+    page: 1,
+    sortOrder: "",
   });
 
   const handleFilter = (key, value) => {
@@ -40,22 +41,27 @@ const Filter = ({ filteredCars, handlePagenation ,handleSize}) => {
   };
 
   const getFilterData = async () => {
-    const {data, size} = await filteredData(filterData);
+    const { data, size } = await filteredData(filterData);
     filteredCars(data);
+    console.log(data);
     handleSize(size ?? 1);
+  };
+
+  useEffect(() => {
+    setFilterData({ ...filterData, page: handlePagenation });
+  }, [handlePagenation]);
+
+  const handleSearch = (e) => {
+    setFilterData({ ...filterData, ["searchText"]: e.target.value });
+  };
+
+  const handleSort = (value) => {
+    setFilterData({ ...filterData, sortOrder: value });
   };
 
   useEffect(() => {
     getFilterData();
   }, [filterData]);
-
-  useEffect(()=>{
-    setFilterData({ ...filterData, page:handlePagenation  });
-  },[handlePagenation]);
-
-  const heandleSearch = (e) => {
-    setFilterData({ ...filterData, ["searchText"]: e.target.value });
-  };
 
   return (
     <div>
@@ -68,15 +74,39 @@ const Filter = ({ filteredCars, handlePagenation ,handleSize}) => {
           className="pl-10 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           placeholder="Search for cars..."
           value={filterData?.searchText}
-          onChange={heandleSearch}
+          onChange={handleSearch}
         />
       </div>
+      <div>
+        <label className="m-2 flex items-center">
+          <input
+            type="radio"
+            name="sorting"
+            checked={filterData.sortOrder === "lowToHigh"}
+            onChange={() => handleSort("lowToHigh")}
+            className="form-radio h-4 w-5 text-blue-600"
+          />
+          <span className="ml-2 text-gray-800">Sort Low to High</span>
+        </label>
+
+        <label className="m-2 flex items-center">
+          <input
+            type="radio"
+            name="sorting"
+            checked={filterData.sortOrder === "highToLow"}
+            onChange={() => handleSort("highToLow")}
+            className="form-radio h-4 w-5 text-blue-600"
+          />
+          <span className="ml-2 text-gray-800">Sort High to Low</span>
+        </label>
+      </div>
+
       <div>
         {filterOptions &&
           Object.keys(filterOptions).map((key) => (
             <div key={key} className="p-4 border rounded-lg shadow-md m-2">
               <p className="font-semibold text-xl">{key.toUpperCase()}</p>
-              <div className="mt-4">
+              <div className="mt-4 max-h-40 overflow-y-scroll">
                 {filterOptions[key].map((item) => (
                   <div className="flex items-center" key={item._id}>
                     <input
