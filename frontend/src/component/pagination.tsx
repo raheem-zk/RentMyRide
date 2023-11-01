@@ -20,7 +20,7 @@ const Pagination = ({ size, filterPagination, currentPage }) => {
               pageNumber = i + 2;
             } else if (currentPage >= limit && size !== currentPage) {
               pageNumber = i + currentPage - 1;
-            } else if (currentPage == size) {
+            } else if (currentPage == size && size!==1) {
               pageNumber = i + currentPage - 2;
             } else {
               pageNumber = i + 1;

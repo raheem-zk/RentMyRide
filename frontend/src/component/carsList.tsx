@@ -82,7 +82,7 @@ const CarListingPage = ({ data }) => {
               </div>
             ))
           )}
-          <Pagination size={size} filterPagination={filterPageination} />
+          <Pagination currentPage={page} size={size} filterPagination={filterPageination} />
         </div>
       </div>
     </div>
