@@ -80,6 +80,8 @@ export const filteredData = async (data) => {
       transmission: data?.transmission,
       page:data?.page,
       sortOrder: data?.sortOrder,
+      startDate:data?.startDate,
+      endDate: data?.endDate,
     },
   });
   return {data :response?.data?.filteredData, size:response?.data?.size};
