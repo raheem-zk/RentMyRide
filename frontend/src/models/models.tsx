@@ -18,7 +18,7 @@ export interface DropdownProps {
   HandleForm: (value: any) => void;
   Reload: () => void;
   handleCarDetailsChange: (e) => void;
-  value : Spec | undefined ;
+  value: Spec | undefined;
 }
 
 export interface AddingFunction {
@@ -146,6 +146,8 @@ export interface filterModel {
   fuelType: string | null | undefined;
   transmition: string | null | undefined;
   page: number | null | undefined;
+  startDate: string | null | undefined;
+  endDate: string | null | undefined;
 }
 
 export interface filterOptionsDatas {

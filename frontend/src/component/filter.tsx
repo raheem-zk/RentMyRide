@@ -29,6 +29,8 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     transmition: "",
     page: 1,
     sortOrder: "",
+    startDate: "",
+    endDate: "",
   });
 
   const handleFilter = (key, value) => {
@@ -63,6 +65,18 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     getFilterData();
   }, [filterData]);
 
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const handleDateSearch = () => {
+    const updatedFilterData = {
+      ...filterData,
+      startDate: startDate,
+      endDate: endDate,
+    };
+    setFilterData(updatedFilterData);
+    console.log(filterData);
+  };
+
   return (
     <div>
       <div className="relative  mt-3 mx-2">
@@ -77,6 +91,41 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
           onChange={handleSearch}
         />
       </div>
+
+      <div className="max-w-md mx-auto p-4">
+        <div className="bg-white rounded-md shadow-md p-6">
+          <label className="block text-gray-600 mb-2 font-medium">
+            Search by Date Range:
+          </label>
+          <div className=" ">
+            <div className="py-2">
+              <input
+                type="date"
+                className="flex-1 form-input rounded-md border focus:outline-none focus:ring focus:border-blue-300 py-1"
+                placeholder="Start Date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div className="py-2">
+              <input
+                type="date"
+                className="flex-1 form-input rounded-md border focus:outline-none focus:ring focus:border-blue-300 py-1"
+                placeholder="End Date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none "
+              onClick={handleDateSearch}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div>
         <label className="m-2 flex items-center">
           <input
