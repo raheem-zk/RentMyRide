@@ -2,7 +2,7 @@ import carsSchema from "../../models/carOwner/car.js";
 
 const APPROVEL = "Approved";
 const AVAILABLE = "Available";
-const LIMIT = 10;
+const LIMIT = 12;
 
 export const home = async (req, res) => {
   try {
@@ -13,7 +13,9 @@ export const home = async (req, res) => {
       .populate("brand")
       .populate("model")
       .populate("category")
+      .sort({ _id: -1 })
       .limit(LIMIT);
+
     return res.json({ message: "success", carsData });
   } catch (error) {
     console.error(error);
@@ -67,7 +69,9 @@ export const filterData = async (req, res) => {
       .skip(SKIP)
       .limit(LIMIT);
 
-    return res.json({ message: "success", filteredData });
+    const TotalSize = await carsSchema.countDocuments(filter);
+    const size = Math.ceil(TotalSize / LIMIT);
+    return res.json({ message: "success", filteredData, size });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
