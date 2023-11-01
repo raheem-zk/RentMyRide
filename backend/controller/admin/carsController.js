@@ -1,16 +1,33 @@
 import carSchema from "../../models/carOwner/car.js";
 import { transporter } from "../../utils/utils.js";
 
+const LIMIT = 10;
+
 export const carList = async (req, res) => {
   try {
+    const PAGE = req?.query?.page
+      ? req.query.page >= 1
+        ? req.query.page
+        : 1
+      : 1;
+    const SKIP = (PAGE - 1) * LIMIT;
+
     const data =
-      await carSchema.find()
+      (await carSchema
+        .find()
         .populate("fuelType")
         .populate("transmission")
         .populate("brand")
         .populate("model")
-        .populate("category") ?? [];
-    return res.json({ message: "success", carsData: data });
+        .populate("category")
+        .sort({ _id: -1 })
+        .skip(SKIP)
+        .limit(LIMIT)) ?? [];
+        
+    const TotalSize = await carSchema.countDocuments();
+    const size = Math.ceil(TotalSize / LIMIT);
+
+    return res.json({ message: "success", carsData: data, size });
   } catch (error) {
     console.error(error);
     return res
