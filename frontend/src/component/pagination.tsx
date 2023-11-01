@@ -16,11 +16,12 @@ const Pagination = ({ size, filterPagination, currentPage }) => {
           </button>
           {[...Array(size)].map((e, i) => {
             let pageNumber = 1;
+
             if (limit < size && currentPage == limit) {
               pageNumber = i + 2;
             } else if (currentPage >= limit && size !== currentPage) {
               pageNumber = i + currentPage - 1;
-            } else if (currentPage == size && size!==1) {
+            } else if (currentPage == size && size > limit) {
               pageNumber = i + currentPage - 2;
             } else {
               pageNumber = i + 1;
