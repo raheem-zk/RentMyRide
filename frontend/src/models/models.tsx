@@ -138,6 +138,7 @@ export interface profileEditModal {
 }
 
 export interface filterModel {
+  sortOrder: string;
   searchText: string | null | undefined;
   category: string | null | undefined;
   brand: string | null | undefined;
