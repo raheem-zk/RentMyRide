@@ -10,13 +10,14 @@ const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState(false);
   const [size, setSize] = useState(0);
+  const [page, setPage] = useState(1);
+  
   useEffect(() => {
     getOrder();
   }, []);
 
   const getOrder = async () => {
     const { ordersData, size } = await getuserOrders(user._id, 1);
-    console.log(ordersData, size);
     setSize(size);
     setOrders(ordersData);
   };
@@ -24,10 +25,13 @@ const OrderHistory = () => {
   const handleClick = () => {
     setFilter(!filter);
   };
+
   const filterPagination = async (pageNumber) => {
     const { ordersData } = await getuserOrders(user._id, pageNumber);
     setOrders(ordersData);
+    setPage(pageNumber);
   };
+
   return (
     <div className="max-w-screen-lg mx-auto p-4">
       <div className=" justify-between flex">
@@ -67,7 +71,7 @@ const OrderHistory = () => {
               <OrderCard key={order?._id} order={order} />
             ))}
           </div>
-          <Pagination size={size} filterPagination={filterPagination} />
+          <Pagination currentPage={page} size={size} filterPagination={filterPagination} />
         </>
       ) : (
         <p className="text-gray-600">No orders found in your history.</p>
