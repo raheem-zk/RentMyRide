@@ -8,7 +8,7 @@ const OwnerMoreDetails = () => {
   const { ownerId } = useParams();
   const { owner } = useSelector((state: any) => state.carownersList);
   const data = owner.find((owner) => owner._id === ownerId);
-  console.log(data);
+
   if (!data) {
     return <div>Owner not found</div>;
   }
@@ -68,6 +68,9 @@ const OwnerMoreDetails = () => {
           data={data.carId}
           handleAction={handleAction}
           role="cars"
+          filterPagination={(val)=>val }
+          currentPage={1}
+          size={1}
         />
       </div>
     </>
