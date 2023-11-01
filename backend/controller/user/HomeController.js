@@ -6,8 +6,15 @@ const LIMIT = 12;
 
 export const home = async (req, res) => {
   try {
+    const startDate = new Date();
+    const endDate = new Date();
     const carsData = await carsSchema
-      .find({ status: APPROVEL, ownerStatus: true })
+      .find({
+        status: APPROVEL,
+        ownerStatus: true,
+        startDate: { $lte: startDate },
+        endDate: { $gte: endDate },
+      })
       .populate("fuelType")
       .populate("transmission")
       .populate("brand")
@@ -58,10 +65,26 @@ export const filterData = async (req, res) => {
       filter.transmission = req?.query?.transmission;
     }
 
+    let startDate;
+    let endDate;
+
+    if (req.query.startDate && req.query.endDate) {
+      startDate = new Date(req.query.startDate);
+      endDate = new Date(req.query.endDate);
+    } else {
+      startDate = new Date();
+      endDate = new Date();
+    }
     const sortOrder = req?.query?.sortOrder === "highToLow" ? -1 : 1;
 
     const filteredData = await carsSchema
-      .find(filter)
+      .find({
+        $and: [
+          filter,
+          { startDate: { $lte: startDate } },
+          { endDate: { $gte: endDate } },
+        ],
+      })
       .populate("fuelType")
       .populate("transmission")
       .populate("brand")
@@ -73,6 +96,7 @@ export const filterData = async (req, res) => {
 
     const TotalSize = await carsSchema.countDocuments(filter);
     const size = Math.ceil(TotalSize / LIMIT);
+    console.log(filteredData);
     return res.json({ message: "success", filteredData, size });
   } catch (error) {
     console.error(error);
