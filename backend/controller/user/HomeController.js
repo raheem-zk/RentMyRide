@@ -26,7 +26,6 @@ export const home = async (req, res) => {
 export const filterData = async (req, res) => {
   try {
     const filter = {};
-    console.log(LIMIT);
     const PAGE = req?.query?.page || 1;
     const SKIP = (PAGE - 1) * LIMIT;
 
@@ -59,6 +58,8 @@ export const filterData = async (req, res) => {
       filter.transmission = req?.query?.transmission;
     }
 
+    const sortOrder = req?.query?.sortOrder === "highToLow" ? -1 : 1;
+
     const filteredData = await carsSchema
       .find(filter)
       .populate("fuelType")
@@ -66,6 +67,7 @@ export const filterData = async (req, res) => {
       .populate("brand")
       .populate("model")
       .populate("category")
+      .sort({ perDayPrice: sortOrder })
       .skip(SKIP)
       .limit(LIMIT);
 
