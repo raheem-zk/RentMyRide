@@ -4,20 +4,29 @@ import { MdOutlineReadMore } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { addOrders } from "../../redux/admin/ordersSlice";
 import { Link } from "react-router-dom";
+import Pagination from "../pagination";
+import { ordersMoreData } from "../../models/models";
 
 const OrdersList = () => {
   const dispatch = useDispatch();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<ordersMoreData[]>([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(1);
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [page]);
 
   const getData = async () => {
-    const data = await getOrders();
+    const {data, size} = await getOrders(page);
     dispatch(addOrders(data));
+    setSize(size);
     setOrders(data);
   };
+
+  const filterPagination = (value)=>{
+    setPage(value);
+  }
 
   return !orders ? (
     "orders not found"
@@ -53,7 +62,7 @@ const OrdersList = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {orders.map((order: ordersMoreData) => (
             <tr key={order._id}>
               <td className="border-t-2 border-gray-200 px-4 py-2">
                 {order?.orderId}
@@ -89,6 +98,7 @@ const OrdersList = () => {
           ))}
         </tbody>
       </table>
+      <Pagination currentPage={page} filterPagination={filterPagination} size={size}/>
     </div>
   );
 };
