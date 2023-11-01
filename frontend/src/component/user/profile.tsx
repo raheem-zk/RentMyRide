@@ -51,7 +51,7 @@ const Profile = () => {
     <>
       {wallethistory && (
         <div className="fixed z-10 right-0 md:w-2/4 w-full h-screen flex ">
-          <WalletHistory handleClick={handleWallethistoryShow} />
+          <WalletHistory handleClick={handleWallethistoryShow} transactions={user?.wallet?.history} />
         </div>
       )}
 
@@ -99,7 +99,7 @@ const Profile = () => {
               <div className="flex items-center justify-between">
                 <span className="font-semibold">Wallet</span>
                 <div className="flex items-center">
-                  <span className="text-green-500">{user.wallet?.balance}</span>
+                  <span className="text-green-500">₹{user.wallet?.balance}</span>
                   <BsFillTagsFill
                     className="ml-2 text-green-500 cursor-pointer"
                     onClick={handleWallethistoryShow}
