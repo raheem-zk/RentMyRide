@@ -3,27 +3,27 @@ import TabelFrame from "./tabelFrame";
 import { useDispatch } from "react-redux";
 import { addUsers } from "../../redux/admin/usersSlice";
 import { adminAxios } from "../../axios/axios";
+import { usersData } from "../../api/adminApi";
 
 function UserListTable() {
   const [usersList, setUserList] = useState([]);
   const [update, setUpdate] = useState("");
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(1);
 
   useEffect(() => {
     getUserData();
-  }, [update]);
+  }, [update, page]);
 
   const getUserData = async () => {
-    try {
-      const response = await adminAxios.get(`/users`);
-      const userData = response?.data?.userData;
+      const {userData, size} = await usersData(page);
 
       setUserList(userData);
+      setSize(size);
       setUpdate("");
       dispatch(addUsers(userData));
-    } catch (err) {
-      console.error(err);
-    }
+
   };
 
   const handleAction = async (id: string, action: string, message: string) => {
@@ -35,6 +35,10 @@ function UserListTable() {
     }
   };
 
+  const filterPagination = (value)=>{
+    setPage(value);
+  }
+  
   const heading = "Users";
 
   return (
@@ -43,6 +47,9 @@ function UserListTable() {
       data={usersList}
       handleAction={handleAction}
       role="users"
+      filterPagination={filterPagination}
+      currentPage={page}
+      size={size}
     />
   );
 }

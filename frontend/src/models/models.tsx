@@ -187,3 +187,42 @@ export interface userInittalModel {
   user: userModel | null;
   success: boolean;
 }
+
+export interface AdminSideOwnerModel {
+  carName: string;
+  images: any;
+  _id: string;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+  phoneNumber: number;
+  place: string | null;
+  age: number;
+  address: string | null;
+  license: string | null;
+  profilePicture: string | null;
+  gender: string | null;
+  status: boolean | string;
+  createdAt: Date;
+}
+
+export interface AdminSideTabelFrameProps {
+  heading: string | null;
+  data: AdminSideOwnerModel[] | null;
+  handleAction: (id: string, status: string, message: string) => void;
+  role: string;
+  filterPagination: (val: number) => void;
+  currentPage: number;
+  size: number;
+};
+
+export interface ordersMoreData {
+  _id: string;
+  orderId: string;
+  carId: CarDetailsModel ;
+  userId : UserData;
+  pickupDate: string;
+  dropoffDate : string;
+  totalPrice : number ;
+  status : string;
+}

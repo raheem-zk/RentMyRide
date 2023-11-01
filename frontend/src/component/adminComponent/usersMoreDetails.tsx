@@ -1,79 +1,72 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { NotUpdated } from '../../utils/adminUtils';
+import React from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { NotUpdated } from "../../utils/adminUtils";
 
 const UserMoreDetails = () => {
-    const { userId } = useParams();
-    const { users } = useSelector((state) => state.usersList);
+  const { userId } = useParams();
+  const { users } = useSelector((state) => state.usersList);
 
-    const user = users.find((user) => user._id === userId);
+  const user = users.find((user) => user._id === userId);
 
-    if (!user) {
-        return <div>User not found</div>;
-    }
-    return (
-        <div className="md:m-5 bg-white p-4 rounded-lg shadow-lg">
-            <h1 className="text-3xl font-semibold text-center mb-4 text-indigo-600">User Details</h1>
-            <table className="w-full">
-            <tr>
-                    <th className="bg-gray-800 text-white p-2">Profile Photo</th>
-                    <td className="p-2">
-                        {user?.profilePicture ? (
-                            <img
-                                src={user.profilePicture}
-                                alt="Profile"
-                                className="rounded-full w-16 h-16"
-                            />
-                        ) : <NotUpdated />}
-                    </td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">ID</th>
-                    <td className="p-2">{user?._id}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">First Name</th>
-                    <td className="p-2">{user?.firstName }</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Last Name</th>
-                    <td className="p-2">{user?.lastName}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Email</th>
-                    <td className="p-2 text-blue-500">{user?.email}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Status</th>
-                    <td className="p-2 text-green-500 font-semibold">{user?.status ? "Active" : "Inactive" }</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Phone</th>
-                    <td className="p-2">{user?.phoneNumber ?user?.phoneNumber : <NotUpdated/>}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Place</th>
-                    <td className="p-2">{user?.place ? user?.place : <NotUpdated/>}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Age</th>
-                    <td className="p-2">{user?.age ? user?.age : <NotUpdated/>}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">license</th>
-                    <td className="p-2">{user?.license ? user?.license : <NotUpdated/>}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Address</th>
-                    <td className="p-2">{user?.address ? user?.address :<NotUpdated/>}</td>
-                </tr>
-                <tr>
-                    <th className="bg-gray-800 text-white p-2">Joined Date</th>
-                    <td className="p-2 text-gray-500">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</td>                </tr>
-            </table>
+  if (!user) {
+    return <div>User not found</div>;
+  }
+  return (
+    <div className="md:m-5 bg-white p-4 rounded-lg shadow-lg">
+      <h1 className="text-3xl font-semibold text-center mb-4 text-indigo-600">
+        User Details
+      </h1>
+      <div>
+        <div className="bg-white shadow-lg p-6 rounded-lg mx-auto m-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex justify-center items-center">
+              <img
+                src={
+                  user?.profilePicture
+                    ? user.profilePicture
+                    : "https://thumbs.dreamstime.com/b/flat-male-avatar-image-beard-hairstyle-businessman-profile-icon-vector-179285629.jpg"
+                }
+                alt="Car"
+                className="h-auto"
+              />
+            </div>
+            <div className="flex-col justify-center my-5">
+              <p className="text-lg mb-2">
+                Name:{" "}
+                <span className="font-semibold">
+                  {user?.firstName} {user?.lastName}
+                </span>
+              </p>
+              <p className="text-lg mb-2">
+                Email: <span className="font-semibold">{user?.email}</span>
+              </p>
+              <p className="text-lg mb-2">
+                Phone Number:{" "}
+                <span className="font-semibold">{user?.phoneNumber}</span>
+              </p>
+              <p className="text-lg mb-2">
+                Licence Number:{" "}
+                <span className="font-semibold">{user?.license}</span>
+              </p>
+              <p className="text-lg mb-2">
+                Address: <span className="font-semibold">{user?.address}</span>
+              </p>
+              <p className="text-lg mb-2">
+                Age:{" "}
+                <span className="font-semibold">
+                  {user?.age ? user?.age : "not Updated"}
+                </span>
+              </p>
+            </div>
+            <div className="flex-col justify-center my-5">
+              <p>CreateAt: {user?.createdAt}</p>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default UserMoreDetails;

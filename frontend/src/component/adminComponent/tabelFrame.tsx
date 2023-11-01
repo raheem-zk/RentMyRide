@@ -1,39 +1,27 @@
 import React, { useState } from "react";
 import { FiEye, FiSettings, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Pagination from "../pagination";
+import {
+  AdminSideOwnerModel,
+  AdminSideTabelFrameProps,
+} from "../../models/models";
 
-interface Data {
-  carName: string;
-  images: any;
-  _id: string;
-  firstName: string | null;
-  lastName: string | null;
-  email: string;
-  phoneNumber: number;
-  place: string | null;
-  age: number;
-  address: string | null;
-  license: string | null;
-  profilePicture: string | null;
-  gender: string | null;
-  status: boolean | string;
-  createdAt: Date;
-}
-
-type TabelFrameProps = {
-  heading: string | null;
-  data: Data[] | null;
-  handleAction: (id: string, status: string, message: string ) => void;
-  role: string;
-};
-
-function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
+function TabelFrame({
+  heading,
+  data,
+  handleAction,
+  role,
+  filterPagination,
+  currentPage,
+  size,
+}: AdminSideTabelFrameProps) {
   const [modal, setModal] = useState(false);
   const [rejectedMessage, setRejectedMessage] = useState("");
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
 
-  const handleClick = (id: string, status: string, message: string ) => {
+  const handleClick = (id: string, status: string, message: string) => {
     handleAction(id, status, message);
   };
 
@@ -55,9 +43,9 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
     handleClick(id, status, rejectedMessage);
     handleModal();
   };
-  console.log(data)
+
   return (
-    <div className="h-fit md:w-4/5 w-full">
+    <div className="h-fit w-full">
       <div className="m-4 p-3 shadow-md shadow-gray-300">
         <div className="w-full h-12 shadow shadow-gray-300 flex items-center justify-between">
           <h1 className="text-black md:text-2xl py-1 pl-3 font-bold">
@@ -84,7 +72,7 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
 
           <tbody>
             {data &&
-              data.map((item: Data, index: number) => (
+              data.map((item: AdminSideOwnerModel, index: number) => (
                 <tr className="hover:bg-gray-100" key={item._id}>
                   <td className="text-center">{index + 1}</td>
                   <td className="px-4 py-2 text-center">
@@ -93,14 +81,18 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
                         <img
                           src={
                             item.profilePicture ||
-                            (item?.images ? item?.images[0] : "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=")
+                            (item?.images
+                              ? item?.images[0]
+                              : "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=")
                           }
                           alt="profile pic"
                           className="w-full h-full rounded-full"
                         />
                       </div>
                       <p className="font-semibold">
-                        {`${item.firstName || ""} ${item.lastName || ""} ${item.carName || ""}`}
+                        {`${item.firstName || ""} ${item.lastName || ""} ${
+                          item.carName || ""
+                        }`}
                       </p>
                     </div>
                   </td>
@@ -133,7 +125,9 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
                         <select
                           id="carStatus"
                           value={item.status}
-                          onChange={(e) => handleStatus(item._id, e.target.value)}
+                          onChange={(e) =>
+                            handleStatus(item._id, e.target.value)
+                          }
                         >
                           <option value="Pending">Pending</option>
                           <option value="approve">Approve</option>
@@ -143,7 +137,9 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
                         <select
                           id="carStatus"
                           value={item.status}
-                          onChange={(e) => handleStatus(item._id, e.target.value)}
+                          onChange={(e) =>
+                            handleStatus(item._id, e.target.value)
+                          }
                         >
                           <option value="approve">Approve</option>
                           <option value="reject">Reject</option>
@@ -152,7 +148,9 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
                         <select
                           id="carStatus"
                           value={item.status}
-                          onChange={(e) => handleStatus(item._id, e.target.value)}
+                          onChange={(e) =>
+                            handleStatus(item._id, e.target.value)
+                          }
                         >
                           <option value="reject">Reject</option>
                           <option value="approve">Approve</option>
@@ -171,6 +169,11 @@ function TabelFrame({ heading, data, handleAction, role }: TabelFrameProps) {
               ))}
           </tbody>
         </table>
+        <Pagination
+          currentPage={currentPage}
+          filterPagination={filterPagination}
+          size={size}
+        />
       </div>
 
       {modal && (

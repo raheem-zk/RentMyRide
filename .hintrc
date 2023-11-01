@@ -32,6 +32,7 @@
         "aria-required-children": "off",
         "aria-allowed-attr": "off"
       }
-    ]
+    ],
+    "no-inline-styles": "off"
   }
 }
