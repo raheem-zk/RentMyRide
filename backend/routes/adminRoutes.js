@@ -1,6 +1,6 @@
 import express from "express";
-import { login } from '../controller/admin/AuthController.js'
-import { userList , userBlock, userUnblock } from '../controller/admin/UsersController.js';
+import { login } from '../controller/admin/authController.js'
+import { userList , userBlock, userUnblock } from '../controller/admin/usersController.js';
 import VerifyToken from "../middleware/jwtAdminVerification.js";
 import { carApproved, carList, carRejected } from "../controller/admin/carsController.js";
 import { carOwnersList, ownerBlock, ownerUnblock } from "../controller/admin/carOwnersController.js";
