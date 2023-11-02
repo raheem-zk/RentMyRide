@@ -2,8 +2,9 @@ import axios from "axios";
 import { carOwnerAxios } from "../axios/axios";
 import { ErrorMessage } from "../utils/utils";
 
-export const getOrdersList = async (ownerId) => {
-  return await carOwnerAxios.get(`/orders/${ownerId}`);
+export const getOrdersList = async (ownerId,page) => {
+  const response = await carOwnerAxios.get(`/orders/${ownerId}/${page}`);
+  return { ordersData: response.data?.ordersData, size: response.data?.size ? response.data?.size : 1};
 };
 
 export const approveOrder = async (orderId) => {
