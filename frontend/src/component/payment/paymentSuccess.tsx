@@ -12,8 +12,10 @@ const PaymentSuccess = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState(bookingData)
 
   const uploadBooking = async () => {
+    setOrder(bookingData);
     const response = await booking(bookingData);
     if (response) {
       dispatch(clearBooking());
@@ -60,32 +62,32 @@ const PaymentSuccess = () => {
             <div className="flex-col justify-center my-5">
               <p className="text-lg mb-2">
                 Car Order ID:{" "}
-                <span className="font-semibold">{bookingData?.orderId}</span>
+                <span className="font-semibold">{order?.orderId}</span>
               </p>
               <p className="text-lg mb-2">
                 Total Amount:{" "}
                 <span className="font-semibold text-green-500">
-                  ₹{bookingData?.totalPrice}
+                  ₹{order?.totalPrice}
                 </span>
               </p>
               <p className="text-lg mb-4">
                 Total Days:{" "}
                 <span className="font-semibold">
-                  {bookingData?.totalDays} days
+                  {order?.totalDays} days
                 </span>
               </p>
               <p className="text-lg mb-4">
                 Payment Method:{" "}
                 <span className="font-semibold">
-                  {bookingData?.paymentMethod}
+                  {order?.paymentMethod}
                 </span>
               </p>
             </div>
             <div className="flex-col justify-center my-5">
-              <p>Pickup Location: {bookingData?.pickupLocation}</p>
-              <p>Pickup Date: {bookingData?.pickupDate}</p>
-              <p>Dropoff Location: {bookingData?.dropoffLocation}</p>
-              <p>Dropoff Date: {bookingData?.dropoffDate}</p>
+              <p>Pickup Location: {order?.pickupLocation}</p>
+              <p>Pickup Date: {order?.pickupDate}</p>
+              <p>Dropoff Location: {order?.dropoffLocation}</p>
+              <p>Dropoff Date: {order?.dropoffDate}</p>
             </div>
           </div>
 
@@ -110,15 +112,15 @@ const PaymentSuccess = () => {
               </thead>
               <tbody>
                 <tr className="text-center">
-                  <td className="px-4 py-2 border-b">{bookingData?.email}</td>
+                  <td className="px-4 py-2 border-b">{order?.email}</td>
                   <td className="px-4 py-2 border-b">
-                    ₹{bookingData?.perDayPrice}.00
+                    ₹{order?.perDayPrice}.00
                   </td>
                   <td className="px-4 py-2 border-b">
-                    {bookingData?.totalDays} day
+                    {order?.totalDays} day
                   </td>
                   <td className="px-4 py-2 border-b text-green-700">
-                    ₹{bookingData?.totalPrice}.00
+                    ₹{order?.totalPrice}.00
                   </td>
                 </tr>
               </tbody>
