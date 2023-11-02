@@ -1,11 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { NotUpdated } from "../../utils/adminUtils";
 
 const UserMoreDetails = () => {
   const { userId } = useParams();
-  const { users } = useSelector((state) => state.usersList);
+  const { users } = useSelector((state: any) => state.usersList);
 
   const user = users.find((user) => user._id === userId);
 

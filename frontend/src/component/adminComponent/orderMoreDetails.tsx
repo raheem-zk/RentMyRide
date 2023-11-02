@@ -1,9 +1,6 @@
 import React from "react";
-import { NotUpdated } from "../../utils/adminUtils";
-import { Link } from "react-router-dom";
 
 const AdminOrderDetail = ({ order }) => {
-  console.log(order);
   return (
     <div>
       <h1 className="text-3xl font-semibold text-center mb-4 text-indigo-600">

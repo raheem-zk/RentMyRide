@@ -1,10 +1,10 @@
-import axios from 'axios';
-import React, { useState , SyntheticEvent} from 'react'
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import { adminLoggedIn } from '../redux/admin/authSlice';
-import { adminAxios } from '../axios/axios';
+import axios from "axios";
+import React, { useState, SyntheticEvent } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { adminLoggedIn } from "../redux/admin/authSlice";
+import { adminLoginAPI } from "../api/adminApi";
 
 function AdminLoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -23,29 +23,15 @@ function AdminLoginForm() {
       progress: undefined,
       theme: "light",
     });
-    console.log(message);
   };
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
     if (password.length < 7) {
-      return error('Password must be at least 7 characters long.')
+      return error("Password must be at least 7 characters long.");
     }
-
-    try {
-      await adminAxios.post(`/login`,{email, password})
-      .then((res)=>{
-        localStorage.setItem("adminToken", res.data.token);
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.token}`;
-        dispatch(adminLoggedIn(res.data.adminData))
-        navigate('/admin/dashboard');
-      })
-    } catch (error) {
-      console.log(error);
-    }
+    const adminData = await adminLoginAPI(email, password);
+    dispatch(adminLoggedIn(adminData));
+    navigate("/admin/dashboard");
   };
 
   return (
@@ -101,12 +87,11 @@ function AdminLoginForm() {
               Sign in
             </button>
           </div>
-          <div className="flex justify-center">
-          </div>
+          <div className="flex justify-center"></div>
         </form>
       </div>
     </div>
   );
 }
 
-export default AdminLoginForm
+export default AdminLoginForm;
