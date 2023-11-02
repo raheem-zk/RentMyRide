@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TabelFrame from "./tabelFrame";
-import { adminAxios } from "../../axios/axios";
 import { useDispatch } from "react-redux";
 import { addAllCars } from "../../redux/admin/carsSlice";
-import { carsDataAPI } from "../../api/adminApi";
+import { carActionAPI, carsDataAPI } from "../../api/adminApi";
 
 const Cars = () => {
   const [carsData, setCarsData] = useState([]);
@@ -26,7 +25,7 @@ const Cars = () => {
   };
 
   const handleAction = async (id: string, action: string, message: string) => {
-    await adminAxios.patch(`/cars/${id}/${action}/${message}`);
+    await carActionAPI(id, action, message);
     setUpdate("update");
   };
 

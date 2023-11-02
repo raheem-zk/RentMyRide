@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TabelFrame from "./tabelFrame";
-import { adminAxios } from "../../axios/axios";
 import { useDispatch } from "react-redux";
 import { addOwners } from "../../redux/admin/carownersSlice";
-import { carownersDataAPI } from "../../api/adminApi";
+import { carOwnerActionAPI, carownersDataAPI } from "../../api/adminApi";
 
 const OwnerList = () => {
   const [ownersData, setOwnersData] = useState([]);
@@ -26,7 +25,7 @@ const OwnerList = () => {
 
   const handleAction = async (id: string, action: string, message: string) => {
     try {
-      await adminAxios.patch(`/car-owners/${id}/${action}`);
+      await carOwnerActionAPI(id, action);
       setUpdate("update");
     } catch (error) {
       console.error(error);
