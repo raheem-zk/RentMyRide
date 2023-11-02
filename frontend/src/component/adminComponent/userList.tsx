@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import TabelFrame from "./tabelFrame";
 import { useDispatch } from "react-redux";
 import { addUsers } from "../../redux/admin/usersSlice";
-import { adminAxios } from "../../axios/axios";
-import { usersData } from "../../api/adminApi";
+import { userActionAPI, usersData } from "../../api/adminApi";
 
 function UserListTable() {
   const [usersList, setUserList] = useState([]);
@@ -17,28 +16,23 @@ function UserListTable() {
   }, [update, page]);
 
   const getUserData = async () => {
-      const {userData, size} = await usersData(page);
+    const { userData, size } = await usersData(page);
 
-      setUserList(userData);
-      setSize(size);
-      setUpdate("");
-      dispatch(addUsers(userData));
-
+    setUserList(userData);
+    setSize(size);
+    setUpdate("");
+    dispatch(addUsers(userData));
   };
 
   const handleAction = async (id: string, action: string, message: string) => {
-    try {
-      await adminAxios.patch(`/users/${id}/${action}`);
-      setUpdate("update");
-    } catch (error) {
-      console.error(error);
-    }
+    await userActionAPI(id, action);
+    setUpdate("update");
   };
 
-  const filterPagination = (value)=>{
+  const filterPagination = (value) => {
     setPage(value);
-  }
-  
+  };
+
   const heading = "Users";
 
   return (
