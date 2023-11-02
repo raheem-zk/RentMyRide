@@ -3,21 +3,26 @@ import OrderCard from "./orderCard";
 import { useSelector } from "react-redux";
 import { getuserOrders } from "../../api/userApi";
 import { FcFilledFilter } from "react-icons/fc";
-import Pagination from '../pagination';
+import Pagination from "../pagination";
 
 const OrderHistory = () => {
   const { user } = useSelector((state: any) => state?.userAuth);
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState(false);
-  const [size, setSize] = useState(0);
+  const [size, setSize] = useState(1);
   const [page, setPage] = useState(1);
-  
+  const [filterValue, setFilterValue] = useState("");
+
   useEffect(() => {
     getOrder();
-  }, []);
+  }, [page,filterValue]);
 
   const getOrder = async () => {
-    const { ordersData, size } = await getuserOrders(user._id, 1);
+    const { ordersData, size } = await getuserOrders(
+      user._id,
+      page,
+      filterValue
+    );
     setSize(size);
     setOrders(ordersData);
   };
@@ -27,8 +32,6 @@ const OrderHistory = () => {
   };
 
   const filterPagination = async (pageNumber) => {
-    const { ordersData } = await getuserOrders(user._id, pageNumber);
-    setOrders(ordersData);
     setPage(pageNumber);
   };
 
@@ -51,14 +54,29 @@ const OrderHistory = () => {
           </div>
           {filter && (
             <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-md py-1">
-              <button className="w-full text-left px-3 py-2 block hover:bg-gray-100">
+              <button
+                onClick={() => setFilterValue("finished")}
+                className="w-full text-left px-3 py-2 block hover:bg-gray-100"
+              >
+                Finished
+              </button>
+              <button
+                onClick={() => setFilterValue("pending")}
+                className="w-full text-left px-3 py-2 block hover:bg-gray-100"
+              >
                 Pending
               </button>
-              <button className="w-full text-left px-3 py-2 block hover:bg-gray-100">
-                Completed
-              </button>
-              <button className="w-full text-left px-3 py-2 block hover:bg-gray-100">
+              <button
+                onClick={() => setFilterValue("rented")}
+                className="w-full text-left px-3 py-2 block hover:bg-gray-100"
+              >
                 Rented
+              </button>
+              <button
+                onClick={() => setFilterValue("rejected")}
+                className="w-full text-left px-3 py-2 block hover:bg-gray-100"
+              >
+                Rejected
               </button>
             </div>
           )}
@@ -71,7 +89,11 @@ const OrderHistory = () => {
               <OrderCard key={order?._id} order={order} />
             ))}
           </div>
-          <Pagination currentPage={page} size={size} filterPagination={filterPagination} />
+          <Pagination
+            currentPage={page}
+            size={size}
+            filterPagination={filterPagination}
+          />
         </>
       ) : (
         <p className="text-gray-600">No orders found in your history.</p>

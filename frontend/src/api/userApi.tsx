@@ -87,8 +87,12 @@ export const filteredData = async (data) => {
   return {data :response?.data?.filteredData, size:response?.data?.size};
 };
 
-export const getuserOrders = async (userId,page)=>{
-  const response = await userAxios.get(`/orders/${userId}/${page}`);
+export const getuserOrders = async (userId,page, filterValue)=>{
+  const response = await userAxios.get(`/orders/${userId}/${page}/`,{
+    params:{
+      filterValue
+    }
+  });
   return response.data;
 }
 
