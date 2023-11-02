@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { carOwnerAxios } from "../../axios/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineFundView } from "react-icons/ai";
 import { addOwnerCars } from "../../redux/carOwner/carsSlice";
+import { getOwnerCarsAPI } from "../../api/carOwnerApi";
 
 const OwnerCars = () => {
   const [cars, setCars] = useState<any[]>([]);
@@ -16,9 +16,10 @@ const OwnerCars = () => {
 
   const getCars = async () => {
     const ownerId: string = carOwner._id;
-    const response = await carOwnerAxios.get(`/cars/${ownerId}`);
-    dispatch(addOwnerCars(response.data.carsData));
-    setCars(response.data.carsData);
+    const carsData = await getOwnerCarsAPI(ownerId);
+
+    dispatch(addOwnerCars(carsData));
+    setCars(carsData);
   };
 
   return !cars ? (

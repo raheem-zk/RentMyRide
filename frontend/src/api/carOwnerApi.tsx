@@ -65,3 +65,8 @@ export const uploadLoginData = async (email, password)=>{
   ] = `Bearer ${response.data.token}`;
   return response.data.ownerData;
 }
+
+export const getOwnerCarsAPI = async (ownerId)=>{
+  const response = await carOwnerAxios.get(`/cars/${ownerId}`);
+  return response.data.carsData;
+}
