@@ -78,7 +78,7 @@ export const bookingCheckoutSession = async (req, res) => {
 
       const walletData = {
         amount: data.totalPrice,
-        type: "credit",
+        type: "debit",
         description: "Paid for car rental",
       };
 
