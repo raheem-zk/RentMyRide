@@ -61,6 +61,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   const deleteImage = (imageToDelete) => {
     const updatedFiles = files.filter((image) => image !== imageToDelete);
     setFiles(updatedFiles);
+    successMessage('Image has been successfully deleted')
   };
 
   const deleteEditImage = (imageToDelete) => {
@@ -71,6 +72,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       ...carDetails,
       images: [...updatedFiles],
     });
+    successMessage('Image has been successfully deleted')
   };
 
   const uploadImages = async (images: any) => {

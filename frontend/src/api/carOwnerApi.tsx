@@ -2,8 +2,9 @@ import axios from "axios";
 import { carOwnerAxios } from "../axios/axios";
 import { ErrorMessage } from "../utils/utils";
 
-export const getOrdersList = async (ownerId) => {
-  return await carOwnerAxios.get(`/orders/${ownerId}`);
+export const getOrdersList = async (ownerId,page) => {
+  const response = await carOwnerAxios.get(`/orders/${ownerId}/${page}`);
+  return { ordersData: response.data?.ordersData, size: response.data?.size ? response.data?.size : 1};
 };
 
 export const approveOrder = async (orderId) => {
@@ -63,4 +64,9 @@ export const uploadLoginData = async (email, password)=>{
     "Authorization"
   ] = `Bearer ${response.data.token}`;
   return response.data.ownerData;
+}
+
+export const getOwnerCarsAPI = async (ownerId)=>{
+  const response = await carOwnerAxios.get(`/cars/${ownerId}`);
+  return response.data.carsData;
 }
