@@ -61,7 +61,10 @@ const rentCarAvailable = async (carId, endDate, orderId) => {
 };
 
 export const orderVerification = async () => {
-  const data = await orderSchema.find({ status: "approved" ,paymentStatus:"Paid" });
+  const data = await orderSchema.find({
+    status: "approved",
+    paymentStatus: "Paid",
+  });
   const currentDate = new Date();
   data.forEach(async (order) => {
     const startDate = new Date(order.pickupDate);
@@ -103,3 +106,40 @@ cron.schedule("0 0 * * *", async () => {
   await orderVerification();
   await carAvailabilityVerification();
 });
+
+export const orderDateValidation = (orderData, pickupDate, dropoffDate) => {
+  let isConflict = orderData.map((order) => {
+    const orderPickupDate = new Date(order.pickupDate);
+    const orderDropoffDate = new Date(order.dropoffDate);
+
+    if (orderPickupDate < pickupDate && orderDropoffDate < pickupDate) {
+      return false;
+    } else if (pickupDate < orderPickupDate && dropoffDate < orderPickupDate) {
+      return false;
+    }
+    return true;
+  });
+  return isConflict.some((value)=>value ===true);
+};
+
+
+export const filterSloatValidation = (start, end, orderData, car) => {
+  const order = orderData.find((order) => {
+    if (order.carId.equals(car._id)) {
+      return car;
+    }
+  });
+  if (order) {
+    const pickupDate = new Date(order.pickupDate);
+    const dropoffDate = new Date(order.dropoffDate);
+
+    if (start < pickupDate && end < pickupDate) {
+      return false;
+    } else if (pickupDate < start && dropoffDate < start) {
+      return false;
+    }
+    return true;
+  } else {
+    return false;
+  }
+};
