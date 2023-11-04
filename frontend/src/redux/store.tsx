@@ -1,4 +1,5 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import thunk from 'redux-thunk';
 import authSlice from "./user/authSlice";
 import adminSlice from "./admin/authSlice";
 import storage from "redux-persist/lib/storage";
@@ -40,8 +41,16 @@ const reducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
+const middleware = [
+  ...getDefaultMiddleware({
+    immutableCheck: false, 
+  }),
+  thunk,
+];
+
 const store = configureStore({
   reducer: persistedReducer,
+  middleware,
 });
 
 export default store;
