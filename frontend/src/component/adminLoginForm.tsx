@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useState, SyntheticEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { adminLoggedIn } from "../redux/admin/authSlice";
 import { adminLoginAPI } from "../api/adminApi";
+import { ErrorMessage, validateEmail } from "../utils/utils";
 
 function AdminLoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -12,26 +12,28 @@ function AdminLoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const error = (message: string): void => {
-    toast.error(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    if (password.length < 7) {
-      return error("Password must be at least 7 characters long.");
+
+    const emailResult = validateEmail(email);
+
+    if (!emailResult) {
+      ErrorMessage(" Email address is incorrect");
+      return;
     }
-    const adminData = await adminLoginAPI(email, password);
-    dispatch(adminLoggedIn(adminData));
-    navigate("/admin/dashboard");
+
+    if (password.length < 7) {
+      ErrorMessage("Password must be at least 7 characters long.");
+      return;
+    }
+    try {
+      const adminData = await adminLoginAPI(email, password);
+      if (adminData) {
+        dispatch(adminLoggedIn(adminData));
+        navigate("/admin/dashboard");
+        return;
+      }
+    } catch (error) {}
   };
 
   return (
