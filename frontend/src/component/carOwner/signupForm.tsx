@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from "react";
-import { ErrorMessage } from "../../utils/utils";
+import { ErrorMessage, validateEmail } from "../../utils/utils";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signupAdd } from "../../redux/carOwner/signupSlice";
@@ -43,6 +43,12 @@ const SignupForm: React.FC<{ page: () => void }> = ({ page }) => {
     ) {
       return ErrorMessage("Please fill in all the required fields.");
     }
+
+    const emailResult = validateEmail(formData.email);
+    if (!emailResult) {
+      return ErrorMessage(" Email address is incorrect");
+    }
+
     if (formData.pincode.toString().length !== 6) {
       return ErrorMessage("Pincode must be a 6-digit number.");
     }
@@ -58,7 +64,6 @@ const SignupForm: React.FC<{ page: () => void }> = ({ page }) => {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
-    console.log("Form Data:", formData);
     dispatch(signupAdd(formData));
     page();
   };

@@ -2,11 +2,11 @@ import React, { useState, SyntheticEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Google from "./googleLogin";
 import { ToastContainer } from "react-toastify";
-import axios from "axios";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { userLoggedIn } from "../redux/user/authSlice";
-import { ErrorMessage } from "../utils/utils";
+import { ErrorMessage, validateEmail } from "../utils/utils";
 import { userAxios } from "../axios/axios";
+import { userLoginApi } from "../api/userApi";
 
 function UserLogin() {
   const [email, setEmail] = useState<string>("");
@@ -16,27 +16,20 @@ function UserLogin() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    const result = validateEmail(email);
+
+    if (!result) {
+      return ErrorMessage(" Email address is incorrect");
+    }
+
     if (password.length < 7) {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
-    try {
-      await userAxios
-        .post(`/login`, { email, password })
-        .then((res) => {
-          if (res.data.error) {
-            return ErrorMessage(res.data.message);
-          }
-          localStorage.setItem("userToken", res.data.token);
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.token}`;
-          dispatch(userLoggedIn(res.data.userData));
-          navigate("/");
-        })
-    } catch (error) {
-      console.log(error);
-    }
+    const userData = await userLoginApi(email, password);
+
+    dispatch(userLoggedIn(userData));
+    navigate("/");
   };
 
   return (

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ErrorMessage } from "../utils/utils";
-import { userAxios } from "../axios/axios";
+import { ErrorMessage, successMessage, validateEmail } from "../utils/utils";
 import OtpComponent from "./otpForm";
 import { otpVerification } from "../utils/userUtils";
+import { signupAPI, signupVerify } from "../api/userApi";
 
 
 const SignupPage: React.FC = () => {
@@ -34,6 +34,12 @@ const SignupPage: React.FC = () => {
       return ErrorMessage("Please fill in all the required fields.");
     }
 
+    const emailResult = validateEmail(email);
+
+    if (!emailResult) {
+      return ErrorMessage(" Email address is incorrect");
+    }
+
     if (phoneNumber !== null && phoneNumber.toString().length !== 10) {
       return ErrorMessage("Phone number must have exactly 10 digits.");
     }
@@ -42,7 +48,7 @@ const SignupPage: React.FC = () => {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
-    const result = await userAxios.post('/signup-verify',{ email,phoneNumber})
+    const result = await signupVerify(email,phoneNumber)
     if(result){
       handleOtpComponet()
     }
@@ -58,19 +64,10 @@ const SignupPage: React.FC = () => {
       password,
     };
 
-    try {
-      await userAxios.post(`/signup`, userData)
-      .then((res)=>{
-        if(res.data.error){
-          return ErrorMessage(res.data.message);
-        }
-        return navigate('/login');
-      })
-      .catch((err)=>{
-        return ErrorMessage(err.response.data.message)
-      })
-    } catch (err) {
-      console.log(err)
+    const response = await signupAPI(userData)
+    if(response.data.message=='success'){
+      successMessage('Signup Successful')
+      return navigate('/login');
     }
   }
 
