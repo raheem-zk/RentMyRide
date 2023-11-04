@@ -2,6 +2,7 @@ import orderShema from "../../models/order.js";
 import userSchema from "../../models/user.js";
 import walletSchema from "../../models/wallet.js";
 import Stripe from "stripe";
+import { orderDateValidation } from "../../utils/utils.js";
 export const stripe = new Stripe(process.env.STRIP_PRIVET_KEY);
 
 export const rentBooking = async (req, res) => {
@@ -39,25 +40,12 @@ export const bookingCheckoutSession = async (req, res) => {
 
     const orderData = await orderShema.find({
       carId: data?.carId,
+      status:'approved',
       paymentStatus: "Paid",
     });
     if (orderData.length !== 0) {
-      const isConflict = orderData.some((order) => {
-        const orderPickupDate = new Date(order.pickupDate);
-        const orderDropoffDate = new Date(order.dropoffDate);
-
-        if (orderPickupDate < pickupDate && orderDropoffDate < pickupDate) {
-          return true;
-        } else if (
-          pickupDate < orderPickupDate &&
-          dropoffDate < orderPickupDate
-        ) {
-          return true;
-        }
-        return false;
-      });
-
-      if (!isConflict) {
+      const isConflict = orderDateValidation(orderData, pickupDate, dropoffDate);
+      if (isConflict) {
         return res.status(400).json({
           message:
             "Date conflict: This car is not available for the selected dates.",
