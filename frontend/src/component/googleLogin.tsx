@@ -1,47 +1,31 @@
 import React from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 import { ErrorMessage } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { userLoggedIn } from "../redux/user/authSlice";
-import { userAxios } from "../axios/axios";
-
+import { googleSigningAPI } from "../api/userApi";
 
 function Google() {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const GoogleSignin = async(token : any)=>{
-    try {
-      const data : any = jwt_decode(token);
-      console.log('daa', data)
-      await userAxios.post(`/google-signin`,data)
-      .then((res)=>{
-  
-        localStorage.setItem("userToken", res.data.token);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.token}`;
-        dispatch(userLoggedIn(res.data.userData));
-  
-        navigate('/');
-      })
-      .catch((err)=>{
-        return ErrorMessage(err.response.data.message)
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const dispatch = useDispatch();
+
+  const GoogleSignin = async (token: any) => {
+    const data: any = jwt_decode(token);
+    
+    const userData = await googleSigningAPI(data);
+    dispatch(userLoggedIn(userData));
+    navigate("/");
+  };
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
-    <ToastContainer />
+      <ToastContainer />
       <div>
         <GoogleLogin
           onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
             GoogleSignin(credentialResponse.credential);
           }}
           onError={() => {

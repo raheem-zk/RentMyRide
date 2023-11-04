@@ -46,7 +46,7 @@ export const profileUploadCloudinery = async (img) => {
   if (response.status === 200) {
     return response.data.url;
   } else {
-    return ErrorMessage('Failed to upload the image')
+    return ErrorMessage("Failed to upload the image");
   }
 };
 
@@ -65,7 +65,7 @@ export const getFilterOptionsData = async () => {
     transmission: response.data?.transmission,
     fuelType: response.data?.fuelType,
   };
-  
+
   return data;
 };
 
@@ -78,25 +78,62 @@ export const filteredData = async (data) => {
       model: data?.model,
       fuelType: data?.fuelType,
       transmission: data?.transmission,
-      page:data?.page,
+      page: data?.page,
       sortOrder: data?.sortOrder,
-      startDate:data?.startDate,
+      startDate: data?.startDate,
       endDate: data?.endDate,
     },
   });
-  return {data :response?.data?.filteredData, size:response?.data?.size};
+  return { data: response?.data?.filteredData, size: response?.data?.size };
 };
 
-export const getuserOrders = async (userId,page, filterValue)=>{
-  const response = await userAxios.get(`/orders/${userId}/${page}/`,{
-    params:{
-      filterValue
-    }
+export const getuserOrders = async (userId, page, filterValue) => {
+  const response = await userAxios.get(`/orders/${userId}/${page}/`, {
+    params: {
+      filterValue,
+    },
   });
   return response.data;
-}
+};
 
-export const updatedUserData = async (userId)=>{
+export const updatedUserData = async (userId) => {
   const response = await userAxios.get(`/getupdatedData/${userId}`);
   return response.data.userData;
+};
+
+export const userLoginApi = async (email, password) => {
+  const response = await userAxios.post(`/login`, { email, password });
+
+  localStorage.setItem("userToken", response.data.token);
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${response.data.token}`;
+
+  return response.data?.userData;
+};
+
+export const signupVerify = async (email, phoneNumber) => {
+  return await userAxios.post("/signup-verify", { email, phoneNumber });
+};
+
+export const signupAPI = async (userData) => {
+  return await userAxios.post(`/signup`, userData);
+};
+
+export const googleSigningAPI = async (data) => {
+  const response = await userAxios.post(`/google-signing`, data);
+  localStorage.setItem("userToken", response.data.token);
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${response.data.token}`;
+  return response.data.userData;
+};
+
+export const rentBookingAPI = async (formData) => {
+  return await userAxios.post("/rent-booking", formData);
+};
+
+export const getSpesificOrderDetails = async (orderId)=>{
+  const response =  await userAxios.get(`/orders/${orderId}`);
+  return response.data?.data;
 }
