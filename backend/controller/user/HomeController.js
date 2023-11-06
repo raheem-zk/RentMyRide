@@ -1,4 +1,6 @@
 import carsSchema from "../../models/carOwner/car.js";
+import { filterSloatValidation } from "../../utils/utils.js";
+import orderSchema from "../../models/order.js";
 
 const APPROVEL = "Approved";
 const AVAILABLE = "Available";
@@ -12,6 +14,7 @@ export const home = async (req, res) => {
       .find({
         status: APPROVEL,
         ownerStatus: true,
+        availability: AVAILABLE,
         startDate: { $lte: startDate },
         endDate: { $gte: endDate },
       })
@@ -33,7 +36,11 @@ export const home = async (req, res) => {
 export const filterData = async (req, res) => {
   try {
     const filter = {};
-    const PAGE = req?.query?.page ? (req.query.page >= 1 ? req.query.page : 1) : 1;
+    const PAGE = req?.query?.page
+      ? req.query.page >= 1
+        ? req.query.page
+        : 1
+      : 1;
     const SKIP = (PAGE - 1) * LIMIT;
 
     filter.ownerStatus = true;
@@ -93,6 +100,37 @@ export const filterData = async (req, res) => {
       .sort({ perDayPrice: sortOrder })
       .skip(SKIP)
       .limit(LIMIT);
+
+    if (req.query.startDate && req.query.endDate) {
+      const orderData = await orderSchema
+        .find({ paymentStatus: "Paid", status: "approved" })
+        .sort({ _id: -1 });
+
+      if (orderData.length !== 0) {
+        startDate = new Date(req.query.startDate);
+        endDate = new Date(req.query.endDate);
+
+        const copyOfFilterData = [...filteredData];
+
+        filteredData.forEach((car, index) => {
+          const isConflict = filterSloatValidation(
+            startDate,
+            endDate,
+            orderData,
+            car
+          );
+          if (isConflict) {
+            copyOfFilterData.splice(index, 1);
+          }
+        });
+
+        return res.json({
+          message: "success",
+          filteredData: copyOfFilterData,
+          size: 1,
+        });
+      }
+    }
 
     const TotalSize = await carsSchema.countDocuments(filter);
     const size = Math.ceil(TotalSize / LIMIT);

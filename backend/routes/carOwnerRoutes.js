@@ -23,7 +23,7 @@ router.post('/add-car',VerifyToken,uploadCar);
 router.get('/cars/:ownerId',VerifyToken,cars);
 router.post('/edit-car/:carId',VerifyToken,editCar)
 
-router.get('/orders/:ownerId',VerifyToken, orders)
+router.get('/orders/:ownerId/:page',VerifyToken, orders)
 router.patch('/order/approve/:orderId', approveOrder)
 router.patch('/order/reject/:orderId', rejectOrder)
 

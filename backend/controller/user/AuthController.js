@@ -151,7 +151,7 @@ export const otpVerification = async (req, res) => {
   }
 };
 
-export const googleSignin = async (req, res) => {
+export const googleSigning = async (req, res) => {
   try {
     const { email, family_name, given_name } = req.body;
     const result = await userModel.findOne({ email: email }).populate('wallet');
