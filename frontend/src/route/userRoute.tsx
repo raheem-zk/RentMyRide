@@ -18,6 +18,8 @@ import PaymentFail from "../component/payment/paymentFail";
 import EditProfile from "../page/user/editProfile";
 import EditPassword from "../page/user/editPassword";
 import Orders from "../page/user/orders";
+import OrderMoreDetails from "../component/user/orderMoreDetails";
+import ErrorPage from "../component/error";
 
 const UserAppLayout = () => {
   return (
@@ -35,6 +37,7 @@ const UserAuthAppLayout = () => {
 };
 const UserRoute = {
   path: "/",
+  errorElement: <ErrorPage/>,
   element: <UserAuthAppLayout />,
   children: [
     {
@@ -136,6 +139,15 @@ const UserRoute = {
             <>
               <IsLogged />
               <Orders />
+            </>
+          ),
+        },
+        {
+          path: "profile/my-order/:orderId",
+          element: (
+            <>
+              <IsLogged />
+              <OrderMoreDetails />
             </>
           ),
         },

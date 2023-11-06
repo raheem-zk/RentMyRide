@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { CarDetailsModel } from "../models/models";
-import CarRentForm from "./bookingForm";
 import Loading from "./loading";
 
 const CarDetailsFrame = () => {
@@ -10,17 +9,11 @@ const CarDetailsFrame = () => {
   const { cars } = useSelector((state: any) => state.carsDatas);
   const [car, setCar] = useState<CarDetailsModel | null | any>(null);
   const [image, setImage] = useState<string | null | undefined>("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   useEffect(() => {
     const data: CarDetailsModel = cars.find((x) => x._id === carId);
     setCar(data);
     setImage(data.images[0]);
-    console.log(data);
   }, [cars, carId]);
 
   const ChengeImage = (img: string) => {
@@ -30,64 +23,75 @@ const CarDetailsFrame = () => {
   if (!car) {
     return <Loading />;
   }
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col lg:flex-row">
         <div className="lg:w-1/2 pr-4">
-          {/* Left side: Car images */}
           <div className="mb-4">
-            <img src={image} alt="Car" className="w-full rounded-lg" />
+            <img
+              src={image}
+              alt="Car"
+              className="w-full rounded-lg object-cover h-96"
+            />
           </div>
-          <div className="flex space-x-4 justify-center">
+          <div className="grid grid-cols-4 gap-3">
             {car?.images.map((x, index) => (
               <img
                 onClick={() => ChengeImage(x)}
                 key={index}
                 src={x}
                 alt="Car"
-                className="w-16 h-16 rounded-lg"
+                className="w-full h-full rounded-lg object-cover"
               />
             ))}
           </div>
         </div>
-        <div className="lg:w-1/2">
-          <h1 className="text-3xl font-extrabold mb-2">{car?.carName}</h1>
-          <div className="flex items-center mb-4">
-            <span className="text-gray-500">Brand:</span>
-            <span className="ml-2">{car?.brand?.name}</span>
+        <div className="lg:w-1/2 bg-white p-4 rounded-lg shadow-md">
+          <h1 className="text-4xl font-bold mb-4">{car?.carName}</h1>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">Brand:</span>
+              <span className="ml-2">{car?.brand?.name}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">Category:</span>
+              <span className="ml-2">{car?.category?.name}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">Fuel Type:</span>
+              <span className="ml-2">{car?.fuelType?.name}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">Transmission:</span>
+              <span className="ml-2">{car?.transmission?.name}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">Availability:</span>
+              <span className="ml-2">{car?.availability}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">Start Date:</span>
+              <span className="ml-2">
+                {new Date(car?.startDate).toLocaleDateString()}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-gray-500 font-semibold">End Date:</span>
+              <span className="ml-2">
+                {new Date(car?.endDate).toLocaleDateString()}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center mb-4">
-            <span className="text-gray-500">Category:</span>
-            <span className="ml-2">{car?.category?.name}</span>
-          </div>
-          <div className="flex items-center mb-2">
-            <span className="text-gray-500">Fuel Type:</span>
-            <span className="ml-2">{car?.fuelType?.name}</span>
-          </div>
-          <div className="flex items-center mb-4">
-            <span className="text-gray-500">Transmission:</span>
-            <span className="ml-2">{car?.transmission?.name}</span>
-          </div>
-          <div className="flex items-center mb-4">
-            <span className="text-gray-500">Availability:</span>
-            <span className="ml-2">{car?.availability}</span>
-          </div>
-          <p className="text-lg font-semibold text-black mb-4">
+          <p className="text-2xl font-semibold text-black mb-4 mt-4">
             ₹{car?.perDayPrice} per day
           </p>
-
-          {/* Book Now Button */}
           <Link
             to={`/checkout/${car?._id}`}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md inline-block"
           >
             Book Now
           </Link>
-
-          {/* Booking Modal */}
-          {isModalOpen && (
-            <CarRentForm carId={car?._id} handleModal={handleModal} />
-          )}
         </div>
       </div>
     </div>
