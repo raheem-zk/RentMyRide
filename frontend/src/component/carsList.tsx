@@ -6,12 +6,17 @@ import { Link } from "react-router-dom";
 import Filter from "./filter";
 import NoCar from "./notCar";
 import Pagination from "./pagination";
+import { useDispatch } from "react-redux";
+import { addCarsData } from "../redux/user/carsSlice";
 
 const CarListingPage = ({ data }) => {
   const [cars, setCars] = useState<CarDetailsModel[]>(data);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(1);
+  const dispatch = useDispatch();
+
   const handleFilter = (data) => {
+    dispatch(addCarsData(data));
     setCars(data);
   };
 

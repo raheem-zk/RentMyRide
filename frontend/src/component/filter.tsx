@@ -45,7 +45,6 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
   const getFilterData = async () => {
     const { data, size } = await filteredData(filterData);
     filteredCars(data);
-    console.log(data);
     handleSize(size ?? 1);
   };
 
@@ -74,7 +73,6 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
       endDate: endDate,
     };
     setFilterData(updatedFilterData);
-    console.log(filterData);
   };
 
   return (
