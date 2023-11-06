@@ -2,7 +2,7 @@ import express from "express";
 import {
   login,
   signup,
-  googleSignin,
+  googleSigning,
   otpVerification,
   verifySignup,
   verifyForgot,
@@ -20,7 +20,7 @@ import {
   updateProfile,
   updateProfilePhoto,
 } from "../controller/user/UserProfileController.js";
-import { getUserOrders } from "../controller/user/OrderController.js";
+import { getUserOrderMoredetailsData, getUserOrders } from "../controller/user/OrderController.js";
 
 const router = express();
 
@@ -28,7 +28,7 @@ router.post("/login", login);
 router.post("/signup", signup);
 router.post("/signup-verify", verifySignup);
 router.post("/otp-verification", otpVerification);
-router.post("/google-signin", googleSignin);
+router.post("/google-signing", googleSigning);
 router.get("/", home);
 
 router.get('/getupdatedData/:userId',VerifyToken, getUpdatedUserData)
@@ -47,5 +47,6 @@ router.patch("/profile/:userId/edit-password", VerifyToken, updatePassword);
 router.patch("/profile/:userId/edit/profile-photo", VerifyToken, updateProfilePhoto);
 
 router.get('/orders/:userId/:page',VerifyToken, getUserOrders)
+router.get('/orders/:orderId',VerifyToken, getUserOrderMoredetailsData)
 
 export default router;
