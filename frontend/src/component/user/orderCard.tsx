@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const OrderCard = ({ order }) => {
   
@@ -6,7 +7,7 @@ const OrderCard = ({ order }) => {
     <div className="bg-white shadow-md rounded p-4">
       <h2 className="text-xl font-semibold mb-2">Order #{order?.orderId}</h2>
       <div className="text-gray-600 mb-4">Order Date: {order?.orderDate ? new Date (order?.orderDate).toLocaleDateString() : ''}</div>
-      
+      <Link to={`/profile/my-order/${order?.orderId}`}>
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="font-semibold text-gray-800">Car Details:</p>
@@ -29,6 +30,7 @@ const OrderCard = ({ order }) => {
           <p>{new Date(order?.pickupDate).toLocaleDateString()}</p>
         </div>
       </div>
+      </Link>
     </div>
   );
 };

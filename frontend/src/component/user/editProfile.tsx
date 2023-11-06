@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ErrorMessage, successMessage } from "../../utils/utils";
+import { ErrorMessage, successMessage, validateEmail } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
 import { updateProfileData } from "../../api/userApi";
 import { updateData } from "../../redux/user/authSlice";
@@ -50,6 +50,11 @@ const EditProfile = ({ data }) => {
       !place
     ) {
       return ErrorMessage("Please fill all fields");
+    }
+    const emailResult = validateEmail(email);
+
+    if (!emailResult) {
+      return ErrorMessage(" Email address is incorrect");
     }
 
     if (typeof phoneNumber === "string" && phoneNumber.trim().length !== 10) {
