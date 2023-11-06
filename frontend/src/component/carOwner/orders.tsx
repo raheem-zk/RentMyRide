@@ -94,20 +94,32 @@ const CarOrderList = () => {
                 {new Date(order?.dropoffDate).toLocaleDateString()}
               </Td>
               <Td className="border border-gray-300 p-3">
-                {order.status === "approved" ? (
+                {order.status === "approved" 
+                && (
                   <AiOutlineCheck className="text-green-500" />
-                ) : (
-                  <AiOutlineClose className="text-red-500" />
-                )}
+                ) }
+                { order.status === "rejected" &&
+                  (
+                    <AiOutlineClose className="text-red-500" />
+                  )
+                }
+                { order.status === "cancel-request" &&
+                    order.status
+                }
               </Td>
               <Td className="border border-gray-300 p-3">
                 <div className="flex items-center space-x-4">
-                  {order.status !== "approved" && (
-                    <ActionDropdown orderId={order?._id} reload={reload} />
-                  )}
+                  {order.status !== "approved" &&
+                    order.status !== "rejected" && 
+                    order.status !== "cancel-request" && (
+                      <ActionDropdown orderId={order?._id} reload={reload} />
+                    )}
+                    {
+                      order.status === "cancel-request" && <ActionDropdown cancel={true} orderId={order?._id} reload={reload} />
+                    }
                   <button
                     type="button"
-                    className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover-bg-indigo-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     <Link to={`/car-owner/orders/${order?._id}/more-details`}>
                       <MdReadMore size={20} />
