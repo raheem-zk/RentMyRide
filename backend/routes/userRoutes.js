@@ -20,7 +20,7 @@ import {
   updateProfile,
   updateProfilePhoto,
 } from "../controller/user/UserProfileController.js";
-import { getUserOrderMoredetailsData, getUserOrders } from "../controller/user/OrderController.js";
+import { getUserOrderMoredetailsData, getUserOrders, orderCancel } from "../controller/user/OrderController.js";
 
 const router = express();
 
@@ -48,5 +48,6 @@ router.patch("/profile/:userId/edit/profile-photo", VerifyToken, updateProfilePh
 
 router.get('/orders/:userId/:page',VerifyToken, getUserOrders)
 router.get('/orders/:orderId',VerifyToken, getUserOrderMoredetailsData)
+router.post('/orders/cancel', VerifyToken, orderCancel);
 
 export default router;

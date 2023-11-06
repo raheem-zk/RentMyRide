@@ -137,3 +137,7 @@ export const getSpesificOrderDetails = async (orderId)=>{
   const response =  await userAxios.get(`/orders/${orderId}`);
   return response.data?.data;
 }
+
+export const orderCancelAPI = async (orderId, userId, cancellationReason)=>{
+  await userAxios.post(`/orders/cancel`,{cancellationReason, orderId, userId});
+}

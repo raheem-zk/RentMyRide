@@ -27,9 +27,7 @@ const OwnerList = () => {
     try {
       await carOwnerActionAPI(id, action);
       setUpdate("update");
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const filterPagination = (value) => {

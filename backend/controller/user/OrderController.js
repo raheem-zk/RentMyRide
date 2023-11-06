@@ -51,3 +51,17 @@ export const getUserOrderMoredetailsData = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const orderCancel = async (req, res)=>{
+  try {
+    console.log('fff', req.body)
+    const { orderId , userId , cancellationReason} = req.body;
+
+    const response = await orderSchema.updateOne({ orderId, userId }, { $set: { status: "cancel-request", cancellationReason } });
+    console.log(response );
+    return res.json({ message: "Success" });
+  
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}

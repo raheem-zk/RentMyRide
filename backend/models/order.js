@@ -60,7 +60,10 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: "pending", // [ pending, approved, rejected,finished]
+    default: "pending", // [ pending, approved, rejected,finished,cancel-request]
+  },
+  cancellationReason: {
+    type: String, 
   },
   paymentMethod: {
     type: String, //(e.g., 'Card', 'PayPal', etc.)

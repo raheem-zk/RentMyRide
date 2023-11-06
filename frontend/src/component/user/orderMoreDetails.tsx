@@ -32,8 +32,8 @@ const OrderMoreDetails = () => {
     }
     try {
       await orderCancelAPI(orderId, user._id, cancellationReason);
-      getOrderData()
-      setModal(false)
+      getOrderData();
+      setModal(false);
       successMessage(
         "Order cancellation request has been successfully generated."
       );
@@ -214,6 +214,14 @@ const OrderMoreDetails = () => {
             <p className="text-sm">
               Status: <span className="font-semibold">{order.status}</span>
             </p>
+            {order?.cancellationReason && (
+              <p className="text-sm">
+                Cancellation Reason:{" "}
+                <span className="font-semibold">
+                  {order.cancellationReason}
+                </span>
+              </p>
+            )}
             <p className="text-sm">
               Payment Status:{" "}
               <span className="font-semibold">{order.paymentStatus}</span>
