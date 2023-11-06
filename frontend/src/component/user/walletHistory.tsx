@@ -3,6 +3,7 @@ import { GrClose } from "react-icons/gr";
 import WalletEmpty from "./walletEmpty";
 
 const WalletHistory = ({ handleClick, transactions }) => {
+  const reversedTransactions = [...transactions].reverse();
   return (
     <div className="bg-white w-full rounded-lg shadow-md p-4 mx-5">
       <div className="flex justify-between">
@@ -15,10 +16,10 @@ const WalletHistory = ({ handleClick, transactions }) => {
         </button>
       </div>
       <ul className="max-h-screen min-h-fit overflow-y-scroll">
-        {transactions.length == 0 ? (
+        {reversedTransactions.length == 0 ? (
           <WalletEmpty />
         ) : (
-          transactions.map((transaction, index) => (
+          reversedTransactions.map((transaction, index) => (
             <li
               key={index}
               className="flex justify-between items-center mb-2 border-b border-gray-300 pb-2"
