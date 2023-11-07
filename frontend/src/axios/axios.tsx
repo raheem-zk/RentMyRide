@@ -8,6 +8,8 @@ const baseBackendUrl = import.meta.env.VITE_BACKEND_URL;
 const userPath = "";
 const adminPath = "/admin";
 const carOwnerPath = "/car-owner";
+const chatPath = '/chat';
+
 const createRoleSpecificAxiosInstance = (tokenName, rolePath) => {
   const instance = axios.create({
     baseURL: `${baseBackendUrl}${rolePath}`,
@@ -48,5 +50,6 @@ const createRoleSpecificAxiosInstance = (tokenName, rolePath) => {
 const userAxios = createRoleSpecificAxiosInstance("userToken", userPath);
 const adminAxios = createRoleSpecificAxiosInstance("adminToken", adminPath);
 const carOwnerAxios = createRoleSpecificAxiosInstance("carOwnerToken", carOwnerPath);
+const chatAxios = createRoleSpecificAxiosInstance("userToken", chatPath);
 
-export { userAxios, adminAxios, carOwnerAxios };
+export { userAxios, adminAxios, carOwnerAxios, chatAxios };
