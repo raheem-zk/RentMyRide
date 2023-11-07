@@ -2,9 +2,14 @@ import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema(
   {
-    members: {
-      type: Array,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
+    ownerId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CarOwner",
+    }
   },
   {
     timestamps: true,
