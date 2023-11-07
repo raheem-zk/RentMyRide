@@ -1,38 +1,47 @@
-import chatShema from '../../models/chat.js';
+import chatSchema from "../../models/chat.js";
 
-export const createChat = async (req, res)=>{
-    try {
-        const newChat = new chatShema({
-            member:[req.body.senderId, req.body.receiverId]
-        })
-        const result = await newChat.save();
-        return res.json({message:'success', result});
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
-}
+export const createChat = async (req, res) => {
+  try {
+    const { userId, ownerId } = req.body;
 
-export const userChats = async (req, res)=>{
-    try {
-        const chat = chatShema.find({
-            member:{$in : [req.params.userId]}
-        })
-        return res.json({message: 'success', chat})
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
-}
+    const existed = await chatSchema.findOne({ userId, ownerId });
 
-export const findChat = async (req, res)=>{
-    try {
-        const chat = await chatShema.findOne({
-            member:{ $all :[req.params.firstId , req.params.secondId]}
-        })
-        return res.json({message: 'success', chat})
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+    if (existed) {
+      return res.json({ message: "success" });
     }
-}
+
+    const newChat = new chatSchema({
+      ownerId,
+      userId,
+    });
+    const result = await newChat.save();
+    return res.json({ message: "success", result });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const userChats = async (req, res) => {
+  try {
+    const chat = chatSchema.find({
+      member: { $in: [req.params.userId] },
+    });
+    return res.json({ message: "success", chat });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const findChat = async (req, res) => {
+  try {
+    const chat = await chatSchema.findOne({
+      member: { $all: [req.params.firstId, req.params.secondId] },
+    });
+    return res.json({ message: "success", chat });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
