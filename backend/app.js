@@ -3,7 +3,9 @@ import express, { json } from 'express';
 import dbConnect from './config/config.js';
 import userRouter from "./routes/userRoutes.js";
 import adminRouter from './routes/adminRoutes.js';
-import carownerRoter from './routes/carOwnerRoutes.js';
+import carownerRouter from './routes/carOwnerRoutes.js';
+import chatRouter from './routes/chatRoutes.js';
+import messageRouter from './routes/messageRoutes.js';
 import cors from 'cors'
 const app = express();
 
@@ -22,9 +24,11 @@ app.use(cors({
 
 app.use(express.static('public'))
 
-app.use('/',userRouter)
-app.use('/admin',adminRouter);
-app.use('/car-owner',carownerRoter);
+app.use('/', userRouter)
+app.use('/admin', adminRouter);
+app.use('/car-owner', carownerRouter);
+app.use('/chat', chatRouter);
+app.use('/message', messageRouter)
 
 const PORT = process.env.PORT ?? 4000;
 app.listen(PORT ,()=>{
