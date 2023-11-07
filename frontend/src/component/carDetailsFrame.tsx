@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CarDetailsModel } from "../models/models";
 import Loading from "./loading";
+import { createChatAPI } from "../api/chatApi";
 
 const CarDetailsFrame = () => {
+  const { user } = useSelector((state: any) => state.userAuth);
   const { carId } = useParams();
   const { cars } = useSelector((state: any) => state.carsDatas);
   const [car, setCar] = useState<CarDetailsModel | null | any>(null);
   const [image, setImage] = useState<string | null | undefined>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const data: CarDetailsModel = cars.find((x) => x._id === carId);
@@ -19,6 +22,11 @@ const CarDetailsFrame = () => {
   const ChengeImage = (img: string) => {
     setImage(img);
   };
+  
+  const handleChat = async ()=>{
+    await createChatAPI(user._id, car.ownerId);
+    navigate('/chat');
+  }
 
   if (!car) {
     return <Loading />;
@@ -86,12 +94,21 @@ const CarDetailsFrame = () => {
           <p className="text-2xl font-semibold text-black mb-4 mt-4">
             ₹{car?.perDayPrice} per day
           </p>
-          <Link
-            to={`/checkout/${car?._id}`}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md inline-block"
-          >
-            Book Now
-          </Link>
+          <div className="flex">
+            <Link to={`/checkout/${car?._id}`} className="w-full m-2">
+              <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-md mb-4">
+                Book Now
+              </button>
+            </Link>
+            <div className="w-full m-2">
+              <button
+                onClick={handleChat}
+                className="w-full bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md transition duration-300 ease-in-out"
+              >
+                Chat with Car Owner
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
