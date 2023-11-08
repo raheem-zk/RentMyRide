@@ -18,8 +18,8 @@ const Navbar =()=> {
         <Link to={'/cars'} className="text-gray-950 hover:text-yellow-500">
           CARS
         </Link>
-        <Link to={'/'} className="text-gray-950 hover:text-yellow-500">
-          PAGES
+        <Link to={'/chat'} className="text-gray-950 hover:text-yellow-500">
+          CHATS
         </Link>
         <Link to={'/profile'} className="text-gray-950 hover:text-yellow-500">
           PROFILE
