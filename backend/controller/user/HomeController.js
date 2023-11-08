@@ -1,6 +1,7 @@
 import carsSchema from "../../models/carOwner/car.js";
 import { filterSloatValidation } from "../../utils/utils.js";
 import orderSchema from "../../models/order.js";
+import districtShema from '../../models/carOwner/district.js';
 
 const APPROVEL = "Approved";
 const AVAILABLE = "Available";
@@ -140,3 +141,13 @@ export const filterData = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const district = async (req, res)=>{
+  try {
+    const result = await districtShema.find() ?? [];
+    return res.json({message: 'success', result});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
