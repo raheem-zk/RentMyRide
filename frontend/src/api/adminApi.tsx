@@ -70,3 +70,8 @@ export const carActionAPI = async (id, action, message)=>{
 export const carOwnerActionAPI = async (id, action)=>{
   await adminAxios.patch(`/car-owners/${id}/${action}`);
 }
+
+export const dashboardAPI = async ()=>{
+  const response = await adminAxios.get('/dashboard')
+  return response.data;
+}
