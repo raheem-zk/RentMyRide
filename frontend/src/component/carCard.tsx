@@ -18,7 +18,7 @@ function CarCard({ data }) {
                 <img
                   src={car?.images[0]}
                   alt={car?.carName}
-                  className="w-full xl:h-40 md:h-62 object-cover rounded-t-lg"
+                  className="w-full sm:h-40 md:h-62 object-cover rounded-t-lg"
                 />
               </Link>
               <div className="p-2">
