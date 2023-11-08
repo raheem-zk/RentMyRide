@@ -1,16 +1,14 @@
-import axios from "axios";
-const baseBackendUrl = import.meta.env.VITE_BACKEND_URL;
+import { chatAxios } from "../axios/axios";
 
 export const getChatsAPI = async (id) => {
-  const response = await axios.get(`${baseBackendUrl}/chat/${id}`);
-  return response.data.chats;
+  try {
+    const response = await chatAxios.get(`/${id}`);
+    return response.data.chats;
+  } catch (error) {}
 };
 
-export const getUserDataAPI = async (userId)=>{
-  const response = await axios.get(`${baseBackendUrl}/chat/`)
-  return response.data.chats;
-}
-
-export const createChatAPI = async (userId, ownerId)=>{
-  await axios.post(`${baseBackendUrl}/chat`, {userId, ownerId});
-}
+export const createChatAPI = async (userId, ownerId) => {
+  try {
+    await chatAxios.post(`/`, { userId, ownerId });
+  } catch (error) {}
+};
