@@ -4,11 +4,14 @@ import { userList , userBlock, userUnblock } from '../controller/admin/usersCont
 import VerifyToken from "../middleware/jwtAdminVerification.js";
 import { carApproved, carList, carRejected } from "../controller/admin/carsController.js";
 import { carOwnersList, ownerBlock, ownerUnblock } from "../controller/admin/carOwnersController.js";
-import { getOrders } from "../controller/admin/controller.js";
+import { dashboard, getOrders } from "../controller/admin/controller.js";
 
 const router = express();
 
 router.post('/login',login);
+
+router.get('/dashboard',VerifyToken,dashboard)
+
 // users
 router.get('/users',VerifyToken,userList)
 router.patch('/users/:id/unblock',VerifyToken,userUnblock)
