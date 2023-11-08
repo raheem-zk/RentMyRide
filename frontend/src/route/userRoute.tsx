@@ -20,6 +20,8 @@ import EditPassword from "../page/user/editPassword";
 import Orders from "../page/user/orders";
 import OrderMoreDetails from "../component/user/orderMoreDetails";
 import ErrorPage from "../component/error";
+import Chat from "../component/chat/chat";
+import Footer from "../component/footer";
 
 const UserAppLayout = () => {
   return (
@@ -28,6 +30,7 @@ const UserAppLayout = () => {
       <Outlet />
       <PhoneNav />
       <ToastContainer />
+      <Footer/>
     </>
   );
 };
@@ -154,6 +157,15 @@ const UserRoute = {
         {
           path: "cars",
           element: <CarList />,
+        },
+        {
+          path: "chat",
+          element: (
+            <>
+              <IsLogged />
+              <Chat role={'user'} />
+            </>
+          ),
         },
       ],
     },

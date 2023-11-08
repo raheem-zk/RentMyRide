@@ -14,6 +14,7 @@ import Orders from "../page/carOwner/orders";
 import EditCar from "../page/carOwner/editCar";
 import CarDetails from "../page/carOwner/carDetails";
 import OrderMoreDetails from "../page/carOwner/orderMoreDetails";
+import Chat from "../component/chat/chat";
 
 const CarAppLayout = () => {
   return <Outlet />;
@@ -123,6 +124,15 @@ const CarOwnerRoute = {
             <>
               <IsLogged />
               <CarDetails/>
+            </>
+          ),
+        },
+        {
+          path: "chat",
+          element: (
+            <>
+              <IsLogged />
+              <Chat role={'carOwner'}/>
             </>
           ),
         },

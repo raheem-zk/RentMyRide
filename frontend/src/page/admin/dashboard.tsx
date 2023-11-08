@@ -1,11 +1,8 @@
 import React from 'react';
+import DashboardPage from '../../component/adminComponent/dashboard';
 
 function Dashboard() {
-  const data =()=><>hlo its admin dashboard</>
-  return (  
-    <h1>hlo admin Dash Board {data()}</h1>
-
-  )
+  return <DashboardPage/>
 }
 
 export default Dashboard

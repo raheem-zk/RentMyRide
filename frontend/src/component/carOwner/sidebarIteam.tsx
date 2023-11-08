@@ -6,7 +6,8 @@ import {
 } from "react-icons/md";
 import { PiCarSimpleBold } from "react-icons/pi";
 import { CiCircleList } from "react-icons/ci";
-import { AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineLogout } from "react-icons/ai"; 
+import { BsChatDots } from "react-icons/bs"; 
 
 function OwnerSidebarIteam() {
   return (
@@ -45,6 +46,15 @@ function OwnerSidebarIteam() {
             >
               <PiCarSimpleBold />
               Cars
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/car-owner/chat"
+              className="flex items-center px-4 py-2 text-white hover:bg-gray-800"
+            >
+              <BsChatDots />
+              Chat
             </Link>
           </li>
           <li>

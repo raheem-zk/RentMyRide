@@ -24,10 +24,16 @@ export const createChat = async (req, res) => {
 
 export const userChats = async (req, res) => {
   try {
-    const chat = chatSchema.find({
-      member: { $in: [req.params.userId] },
-    });
-    return res.json({ message: "success", chat });
+    const id = req.params.userId;
+
+    const chats = await chatSchema
+    .find({
+      $or: [{ userId: id }, { ownerId: id }]
+    })
+      .populate("userId")
+      .populate("ownerId");
+
+    return res.json({ message: "success", chats });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
