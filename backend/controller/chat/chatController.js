@@ -27,9 +27,10 @@ export const userChats = async (req, res) => {
     const id = req.params.userId;
 
     const chats = await chatSchema
-    .find({
-      $or: [{ userId: id }, { ownerId: id }]
-    })
+      .find({
+        $or: [{ userId: id }, { ownerId: id }],
+      })
+      .sort({ _id: -1 })
       .populate("userId")
       .populate("ownerId");
 
