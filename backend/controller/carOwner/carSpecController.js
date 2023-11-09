@@ -3,6 +3,7 @@ import categorySchema from "../../models/carOwner/category.js";
 import modelSchema from "../../models/carOwner/model.js";
 import transmissionSchema from "../../models/carOwner/transmission.js";
 import fuelSchema from "../../models/carOwner/fueltype.js";
+import districtShema from  '../../models/carOwner/district.js';
 
 export const getCarModels = async (req, res) => {
   try {
@@ -11,6 +12,7 @@ export const getCarModels = async (req, res) => {
     const model = (await modelSchema.find()) ?? [];
     const transmission = (await transmissionSchema.find()) ?? [];
     const fuelType = (await fuelSchema.find()) ?? [];
+    const district = (await districtShema.find()) ?? [];
     return res.json({
       message: "success",
       brand,
@@ -18,6 +20,7 @@ export const getCarModels = async (req, res) => {
       model,
       transmission,
       fuelType,
+      district
     });
   } catch (error) {
     console.error(error);
@@ -141,6 +144,35 @@ export const addTransmission = async (req, res) => {
       return res
         .status(200)
         .json({ message: "Transmission added successfully" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const addDistrict = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const uppercaseName = name.toUpperCase();
+
+    const existingCategory = await districtShema.findOne({
+      name: uppercaseName,
+    });
+    if (existingCategory) {
+      return res
+        .status(401)
+        .json({ message: "District Name Already Exists" });
+    }
+    const districtModel = new districtShema({
+      name: uppercaseName,
+    });
+
+    const response = await districtModel.save();
+    if (response) {
+      return res
+        .status(200)
+        .json({ message: "District added successfully" });
     }
   } catch (error) {
     console.error(error);
