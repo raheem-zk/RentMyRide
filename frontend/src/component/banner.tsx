@@ -1,5 +1,5 @@
 import React from "react";
-import DateBaseFilter from "./dateBaseFilter";
+import DateBasedFilter from "./dateBasedFilter";
 import { filteredData } from "../api/userApi";
 //  const bannerImg = "https://static.vecteezy.com/system/resources/previews/000/192/355/large_2x/vintage-los-angeles-and-classic-candillac-free-vector.jpg"
 const bannerImg =
@@ -22,7 +22,7 @@ const Banner = ({handleFilter}) => {
         <h1 className="text-white text-2xl font-bold text-center">
           RentMYRide
         </h1>
-        <DateBaseFilter handleDateSearch={handleDateSearch} />
+        <DateBasedFilter handleDateSearch={handleDateSearch} />
       </div>
     </div>
   );

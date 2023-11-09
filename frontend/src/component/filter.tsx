@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { filteredData, getFilterOptionsData } from "../api/userApi";
 import { filterModel, filterOptionsDatas } from "../models/models";
-import DateBaseFilter from "./dateBaseFilter";
+import DateBasedFilter from "./dateBasedFilter";
 
 const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
   const [filterOptions, setFilterOptions] = useState<filterOptionsDatas>({
@@ -11,6 +11,7 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     model: [],
     transmission: [],
     fuelType: [],
+    district :[],
   });
   const getFilterOptions = async () => {
     const data = await getFilterOptionsData();
@@ -93,7 +94,7 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
           onChange={handleSearch}
         />
       </div>
-      <DateBaseFilter handleDateSearch={handleDateSearch}/>
+      <DateBasedFilter handleDateSearch={handleDateSearch}/>
 
       <div className="max-w-md mx-auto p-4">
         <div className="bg-white rounded-md shadow-md p-6">
