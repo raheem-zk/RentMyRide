@@ -44,6 +44,7 @@ export interface CarDetailsModel {
   fuelType: Spec | string;
   startDate: string;
   endDate: string;
+  district: Spec | string;
 }
 
 export interface Spec {
@@ -148,6 +149,7 @@ export interface filterModel {
   page: number | null | undefined;
   startDate: string | null | undefined;
   endDate: string | null | undefined;
+  district: string | null | undefined;
 }
 
 export interface filterOptionsDatas {
@@ -156,6 +158,7 @@ export interface filterOptionsDatas {
   model: Spec[] | [];
   transmission: Spec[] | [];
   fuelType: Spec[] | [];
+  district: Spec[] | [];
 }
 
 export interface walletHistoryModel {

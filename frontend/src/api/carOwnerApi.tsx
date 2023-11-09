@@ -52,6 +52,7 @@ export const getCarModels = async () => {
     model: response.data?.model,
     transmission: response.data?.transmission,
     fuelType: response.data?.fuelType,
+    district: response.data?.district,
   };
   
   return data;

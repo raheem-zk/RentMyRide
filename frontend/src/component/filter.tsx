@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { filteredData, getFilterOptionsData } from "../api/userApi";
 import { filterModel, filterOptionsDatas } from "../models/models";
+import DateBaseFilter from "./dateBaseFilter";
 
 const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
   const [filterOptions, setFilterOptions] = useState<filterOptionsDatas>({
@@ -31,6 +32,7 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     sortOrder: "",
     startDate: "",
     endDate: "",
+    district:""
   });
 
   const handleFilter = (key, value) => {
@@ -66,11 +68,13 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const handleDateSearch = () => {
+
+  const handleDateSearch = (startDate, endDate, districtt) => {
     const updatedFilterData = {
       ...filterData,
       startDate: startDate,
       endDate: endDate,
+      districtt: districtt
     };
     setFilterData(updatedFilterData);
   };
@@ -89,6 +93,7 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
           onChange={handleSearch}
         />
       </div>
+      <DateBaseFilter handleDateSearch={handleDateSearch}/>
 
       <div className="max-w-md mx-auto p-4">
         <div className="bg-white rounded-md shadow-md p-6">

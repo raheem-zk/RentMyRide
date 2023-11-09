@@ -1,7 +1,5 @@
-import { useSelector } from "react-redux";
 import { adminAxios, carOwnerAxios } from "../axios/axios"
 import { ErrorMessage } from "./utils"
-import { useNavigate } from "react-router-dom";
 
 const emptyErrorMessage = 'Invalid input. Please provide a valid value'
 export const addBrand = async (data)=>{
@@ -13,14 +11,12 @@ export const addBrand = async (data)=>{
         const response = await carOwnerAxios.post('/add-brand', {name: data});
         return true;
       } catch (error) {
-        console.log('error:', error);
         return false;
       }
 }
 
 export const addCategory = async (data)=>{
   try {
-    console.log('data from the dropdown add brand:', data);
     if(data.trim()==''){
       ErrorMessage(emptyErrorMessage);
       return false
@@ -28,14 +24,12 @@ export const addCategory = async (data)=>{
     const response = await carOwnerAxios.post('/add-category', {name: data});
     return true;
   } catch (error) {
-    console.log('error:', error);
     return false;
   }
 }
 
 export const addModel = async (data)=>{
   try {
-    console.log('data from the dropdown add brand:', data);
     if(data.trim()==''){
       ErrorMessage(emptyErrorMessage);
       return false
@@ -43,14 +37,12 @@ export const addModel = async (data)=>{
     const response = await carOwnerAxios.post('/add-model', {name: data});
     return true;
   } catch (error) {
-    console.log('error:', error);
     return false;
   }
 }
 
 export const addTransmission = async (data)=>{
   try {
-    console.log('data from the dropdown add brand:', data);
     if(data.trim()==''){
       ErrorMessage(emptyErrorMessage);
       return false
@@ -58,14 +50,12 @@ export const addTransmission = async (data)=>{
     const response = await carOwnerAxios.post('/add-transmission', {name: data});
     return true;
   } catch (error) {
-    console.log('error:', error);
     return false;
   }
 }
 
 export const addFueltype = async (data)=>{
   try {
-    console.log('data from the dropdown add brand:', data);
     if(data.trim()==''){
       ErrorMessage(emptyErrorMessage);
       return false
@@ -73,7 +63,18 @@ export const addFueltype = async (data)=>{
     const response = await carOwnerAxios.post('/add-fueltype', {name: data});
     return true;
   } catch (error) {
-    console.log('error:', error);
+    return false;
+  }
+}
+export const addDistrict = async (data)=>{
+  try {
+    if(data.trim()==''){
+      ErrorMessage(emptyErrorMessage);
+      return false
+    }
+    const response = await carOwnerAxios.post('/add-district', {name: data});
+    return true;
+  } catch (error) {
     return false;
   }
 }
@@ -83,7 +84,6 @@ interface VerifiyOwnerSignupProps {
   phoneNumber: string,
 }
 export const verifiyOwnerSignup = async ({email, phoneNumber}:VerifiyOwnerSignupProps): Promise<boolean| undefined>=>{
-  console.log( email, phoneNumber,'verifyOwnerSignup side' );
   try {
     const response = await carOwnerAxios.post('/signup-verify', { email, phoneNumber });
 
@@ -100,7 +100,6 @@ export const verifiyOwnerSignup = async ({email, phoneNumber}:VerifiyOwnerSignup
 }
 
 export const ownerSignup = async ({ownerData, carDetails}: any)=>{
-  console.log(ownerData, carDetails);
   try {
     const response = await carOwnerAxios.post('/signup', {ownerData,carDetails })
     if (response.status === 200) {
