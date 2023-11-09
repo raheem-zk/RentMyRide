@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsFuelPump } from "react-icons/bs";
 import { TbManualGearbox } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { CarDetailsModel } from "../models/models";
 
 function CarCard({ data }) {
-  const [carsData] = useState<CarDetailsModel[] | []>(data);
+  const [carsData, setCarData] = useState<CarDetailsModel[] | []>(data);
+  
+  useEffect(()=>{
+    setCarData(data);
+  },[data])
 
   return (
     <div className="container mx-auto p-4">
