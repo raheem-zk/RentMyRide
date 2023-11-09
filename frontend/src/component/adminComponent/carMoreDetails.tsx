@@ -59,11 +59,22 @@ const CarMoreDetails = ({ car }) => {
               <p>Start Date: {new Date(car?.startDate).toLocaleDateString()}</p>
               <p>End Date: {new Date(car?.endDate).toLocaleDateString()}</p>
               <p>Status : { car?.status}</p>
+              <p>District : { car?.district?.name}</p>
               <p>Availabe : { car?.availability}</p>
-                    
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex m-3 p-2 overflow-auto">
+        {
+          car?.images.map((img)=>(
+            <img
+            src={img}
+            alt="Car"
+            className="w-screen h-48 object-cover p-2"
+          />
+          ))
+        }
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { MdArrowBack } from "react-icons/md";
 import {
   addBrand,
   addCategory,
+  addDistrict,
   addFueltype,
   addModel,
   addTransmission,
@@ -36,6 +37,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   const [model, setModel] = useState<Item[]>([]);
   const [transmission, setTransmission] = useState<Item[]>([]);
   const [fueltype, setFuelType] = useState<Item[]>([]);
+  const [district, setDistrict] = useState<Item[]>([]);
   const [uploadedImages, setUploadedImages] = useState<any[]>([]);
   const { ownerData } = useSelector((state: any) => state.carOwnerSignup);
   const { carOwner, success } = useSelector((state: any) => state.carOwnerAuth);
@@ -95,6 +97,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
     setModel(data?.model || []);
     setTransmission(data?.transmission || []);
     setFuelType(data?.fuelType || []);
+    setDistrict(data?.district || []);
   };
 
   const [carDetails, setCarDetails] = useState<CarDetailsModel>({
@@ -113,6 +116,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
     fuelType: "",
     startDate: "",
     endDate: "",
+    district: "",
   });
 
   const handleCarDetailsChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -132,6 +136,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
         images: editCarData.images || [],
         brand: editCarData.brand || "",
         model: editCarData.model || "",
+        district: editCarData.district || "",
         year: editCarData.year || "",
         licensePlate: editCarData.licensePlate || "",
         transmission: editCarData.transmission || "",
@@ -232,6 +237,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       endDate,
       perDayPrice,
       images,
+      district
     } = carDetails;
 
     if (
@@ -242,7 +248,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       description.trim() === "" ||
       fuelType === "add" ||
       startDate.trim() === "" ||
-      endDate.trim() === ""
+      endDate.trim() === "" 
     ) {
       return ErrorMessage("Please fill in all fields");
     }
@@ -257,7 +263,8 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       brand === "add" ||
       model === "add" ||
       fuelType === "add" ||
-      transmission === "add"
+      transmission === "add" ||
+      district === "add" 
     ) {
       return ErrorMessage("Please select required data");
     }
@@ -376,6 +383,18 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                     handleCarDetailsChange={handleCarDetailsChange}
                     HandleForm={addFueltype}
                     value={editCarData?.fuelType}
+                  />
+                </div>
+                <div>
+                  {/* District Type */}
+                  <Dropdown
+                    Reload={handleReload}
+                    data={district}
+                    title={"district"}
+                    AddingForm={AddingForm}
+                    handleCarDetailsChange={handleCarDetailsChange}
+                    HandleForm={addDistrict}
+                    value={editCarData?.district}
                   />
                 </div>
                 <div>

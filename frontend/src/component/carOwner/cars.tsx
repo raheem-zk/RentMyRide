@@ -5,38 +5,51 @@ import { FiEdit } from "react-icons/fi";
 import { AiOutlineFundView } from "react-icons/ai";
 import { addOwnerCars } from "../../redux/carOwner/carsSlice";
 import { getOwnerCarsAPI } from "../../api/carOwnerApi";
+import Loading from "../loading";
+import Pagination from "../pagination";
 
 const OwnerCars = () => {
   const [cars, setCars] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(1);
   const dispatch = useDispatch();
   const { carOwner } = useSelector((state: any) => state.carOwnerAuth);
   useEffect(() => {
-    getCars();
-  }, []);
+    getCars(page);
+  }, [page]);
 
-  const getCars = async () => {
+  const getCars = async (page) => {
     const ownerId: string = carOwner._id;
-    const carsData = await getOwnerCarsAPI(ownerId);
+    const { carsData, size } = await getOwnerCarsAPI(ownerId, page);
 
     dispatch(addOwnerCars(carsData));
     setCars(carsData);
+    setSize(size);
+  };
+
+  const filterPageination = (number) => {
+    setPage(number);
   };
 
   return !cars ? (
-    "Loading..."
+    <Loading />
   ) : (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-h-screen">
       <h2 className="text-3xl font-bold mb-4">My Cars</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {cars.map((car) => (
           <div key={car?._id} className="bg-white rounded shadow p-4">
-            <img src={car?.images[0]} alt="" className="w-full h-auto" />
+            <img
+              src={car?.images[0]}
+              alt=""
+              className="w-full h-48 object-cover"
+            />
             <h3 className="text-xl font-bold mb-2">
               {car?.brand?.name} {car?.model?.name}
             </h3>
             <p className="text-gray-600 mb-2">Year: {car?.year}</p>
             <p className="text-gray-600 mb-2">
-              availability: {car?.availability}
+              Availability: {car?.availability}
             </p>
             <p className="text-gray-600 mb-2">
               License Plate: {car?.licensePlate}
@@ -52,6 +65,11 @@ const OwnerCars = () => {
           </div>
         ))}
       </div>
+      <Pagination
+        currentPage={page}
+        size={size}
+        filterPagination={filterPageination}
+      />
     </div>
   );
 };

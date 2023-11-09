@@ -1,6 +1,7 @@
 import carsSchema from "../../models/carOwner/car.js";
 import { filterSloatValidation } from "../../utils/utils.js";
 import orderSchema from "../../models/order.js";
+import districtShema from "../../models/carOwner/district.js";
 
 const APPROVEL = "Approved";
 const AVAILABLE = "Available";
@@ -23,6 +24,7 @@ export const home = async (req, res) => {
       .populate("brand")
       .populate("model")
       .populate("category")
+      .populate("district")
       .sort({ _id: -1 })
       .limit(LIMIT);
 
@@ -48,7 +50,9 @@ export const filterData = async (req, res) => {
     filter.status = APPROVEL;
 
     const searchText = req?.query?.searchText;
-
+    if (req?.query?.district) {
+      filter.district = req?.query?.district;
+    }
     if (req?.query?.searchText) {
       filter.carName = { $regex: searchText, $options: "i" };
     }
@@ -83,7 +87,6 @@ export const filterData = async (req, res) => {
       endDate = new Date();
     }
     const sortOrder = req?.query?.sortOrder === "highToLow" ? -1 : 1;
-
     const filteredData = await carsSchema
       .find({
         $and: [
@@ -97,6 +100,7 @@ export const filterData = async (req, res) => {
       .populate("brand")
       .populate("model")
       .populate("category")
+      .populate("district")
       .sort({ perDayPrice: sortOrder })
       .skip(SKIP)
       .limit(LIMIT);
@@ -135,6 +139,16 @@ export const filterData = async (req, res) => {
     const TotalSize = await carsSchema.countDocuments(filter);
     const size = Math.ceil(TotalSize / LIMIT);
     return res.json({ message: "success", filteredData, size });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const district = async (req, res) => {
+  try {
+    const result = (await districtShema.find()) ?? [];
+    return res.json({ message: "success", result });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
