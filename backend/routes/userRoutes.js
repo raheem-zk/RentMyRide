@@ -8,7 +8,7 @@ import {
   verifyForgot,
   getUpdatedUserData,
 } from "../controller/user/AuthController.js";
-import { filterData, home } from "../controller/user/HomeController.js";
+import { district, filterData, home } from "../controller/user/HomeController.js";
 import VerifyToken from "../middleware/jwtUserVerification.js";
 import {
   bookingCheckoutSession,
@@ -34,6 +34,7 @@ router.get("/", home);
 router.get('/getupdatedData/:userId',VerifyToken, getUpdatedUserData)
 
 router.get('/filter',filterData)
+router.get('/district',district)
 
 router.post("/forgot-password", verifyForgot);
 router.post("/forgot-password/otp", otpVerification);
