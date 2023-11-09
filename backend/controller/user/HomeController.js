@@ -1,7 +1,7 @@
 import carsSchema from "../../models/carOwner/car.js";
 import { filterSloatValidation } from "../../utils/utils.js";
 import orderSchema from "../../models/order.js";
-import districtShema from '../../models/carOwner/district.js';
+import districtShema from "../../models/carOwner/district.js";
 
 const APPROVEL = "Approved";
 const AVAILABLE = "Available";
@@ -24,6 +24,7 @@ export const home = async (req, res) => {
       .populate("brand")
       .populate("model")
       .populate("category")
+      .populate("district")
       .sort({ _id: -1 })
       .limit(LIMIT);
 
@@ -98,6 +99,7 @@ export const filterData = async (req, res) => {
       .populate("brand")
       .populate("model")
       .populate("category")
+      .populate("district")
       .sort({ perDayPrice: sortOrder })
       .skip(SKIP)
       .limit(LIMIT);
@@ -142,12 +144,12 @@ export const filterData = async (req, res) => {
   }
 };
 
-export const district = async (req, res)=>{
+export const district = async (req, res) => {
   try {
-    const result = await districtShema.find() ?? [];
-    return res.json({message: 'success', result});
+    const result = (await districtShema.find()) ?? [];
+    return res.json({ message: "success", result });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};

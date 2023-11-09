@@ -390,7 +390,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
                   <Dropdown
                     Reload={handleReload}
                     data={district}
-                    title={"District"}
+                    title={"district"}
                     AddingForm={AddingForm}
                     handleCarDetailsChange={handleCarDetailsChange}
                     HandleForm={addDistrict}

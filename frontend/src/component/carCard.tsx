@@ -3,15 +3,18 @@ import { BsFuelPump } from "react-icons/bs";
 import { TbManualGearbox } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { CarDetailsModel } from "../models/models";
+import Loading from "./loading";
 
-function CarCard({ data }) {
+const CarCard = ({ data }) => {
   const [carsData, setCarData] = useState<CarDetailsModel[] | []>(data);
-  
-  useEffect(()=>{
-    setCarData(data);
-  },[data])
 
-  return (
+  useEffect(() => {
+    setCarData(data);
+  }, [data]);
+
+  return !carsData ? (
+    <Loading />
+  ) : (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Rental Cars</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -44,6 +47,6 @@ function CarCard({ data }) {
       </div>
     </div>
   );
-}
+};
 
 export default CarCard;
