@@ -59,6 +59,10 @@ const carSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "FuelType",
   },
+  district: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "District",
+  },
   availability: {
     type: String,
     default: 'Available', //[Available, Unavailable, Rented]
