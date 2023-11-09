@@ -5,25 +5,36 @@ import { FiEdit } from "react-icons/fi";
 import { AiOutlineFundView } from "react-icons/ai";
 import { addOwnerCars } from "../../redux/carOwner/carsSlice";
 import { getOwnerCarsAPI } from "../../api/carOwnerApi";
+import Loading from "../loading";
+import Pagination from "../pagination";
+
+const LIMIT = 3;
 
 const OwnerCars = () => {
   const [cars, setCars] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(1);
   const dispatch = useDispatch();
   const { carOwner } = useSelector((state: any) => state.carOwnerAuth);
   useEffect(() => {
-    getCars();
-  }, []);
+    getCars(page);
+  }, [page]);
 
-  const getCars = async () => {
+  const getCars = async (page) => {
     const ownerId: string = carOwner._id;
-    const carsData = await getOwnerCarsAPI(ownerId);
+    const { carsData, size } = await getOwnerCarsAPI(ownerId, page);
 
     dispatch(addOwnerCars(carsData));
     setCars(carsData);
+    setSize(size);
+  };
+
+  const filterPageination = (number) => {
+    setPage(number);
   };
 
   return !cars ? (
-    "Loading..."
+    <Loading />
   ) : (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-4">My Cars</h2>
@@ -52,6 +63,11 @@ const OwnerCars = () => {
           </div>
         ))}
       </div>
+      <Pagination
+        currentPage={page}
+        size={size}
+        filterPagination={filterPageination}
+      />
     </div>
   );
 };

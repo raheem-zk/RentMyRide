@@ -67,7 +67,11 @@ export const uploadLoginData = async (email, password)=>{
   return response.data.ownerData;
 }
 
-export const getOwnerCarsAPI = async (ownerId)=>{
-  const response = await carOwnerAxios.get(`/cars/${ownerId}`);
-  return response.data.carsData;
+export const getOwnerCarsAPI = async (ownerId, page)=>{
+  const response = await carOwnerAxios.get(`/cars/${ownerId}`,{
+    params: {
+      page,
+    },
+  });
+  return {carsData :response.data.carsData, size:response.data?.size } ;
 }
