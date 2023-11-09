@@ -55,6 +55,7 @@ export const cars = async (req, res) => {
         ? req.query.page
         : 1
       : 1;
+      
     const SKIP = (PAGE - 1) * LIMIT;
     const carsData = await carSchema
       .find({ ownerId })
@@ -65,7 +66,8 @@ export const cars = async (req, res) => {
       .populate("transmission")
       .populate("brand")
       .populate("model")
-      .populate("category");
+      .populate("category")
+      .populate("district");
 
     const TotalSize = await carSchema.countDocuments({ ownerId });
     const size = Math.ceil(TotalSize / LIMIT);
@@ -85,7 +87,7 @@ export const editCar = async (req, res) => {
       licensePlate: data.licensePlate,
     });
     if (response) {
-      if (response._id !== data._id) {
+      if (response._id != data._id) {
         return res.status(404).json({
           message: "Car with the provided license plate already exists.",
           error: true,

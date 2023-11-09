@@ -20,6 +20,7 @@ export const carList = async (req, res) => {
         .populate("brand")
         .populate("model")
         .populate("category")
+        .populate("district")
         .sort({ _id: -1 })
         .skip(SKIP)
         .limit(LIMIT)) ?? [];
