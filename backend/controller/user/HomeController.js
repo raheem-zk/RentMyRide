@@ -50,7 +50,9 @@ export const filterData = async (req, res) => {
     filter.status = APPROVEL;
 
     const searchText = req?.query?.searchText;
-
+    if (req?.query?.district) {
+      filter.district = req?.query?.district;
+    }
     if (req?.query?.searchText) {
       filter.carName = { $regex: searchText, $options: "i" };
     }
@@ -85,7 +87,6 @@ export const filterData = async (req, res) => {
       endDate = new Date();
     }
     const sortOrder = req?.query?.sortOrder === "highToLow" ? -1 : 1;
-
     const filteredData = await carsSchema
       .find({
         $and: [
