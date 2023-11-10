@@ -3,6 +3,7 @@ import TabelFrame from "./tabelFrame";
 import { useDispatch } from "react-redux";
 import { addAllCars } from "../../redux/admin/carsSlice";
 import { carActionAPI, carsDataAPI } from "../../api/adminApi";
+import Loading from "../loading";
 
 const Cars = () => {
   const [carsData, setCarsData] = useState([]);
@@ -10,6 +11,7 @@ const Cars = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(1);
+  const [load, setLoad] = useState(true);
 
   useEffect(() => {
     getCarDatas();
@@ -22,6 +24,7 @@ const Cars = () => {
     dispatch(addAllCars(carsData));
     setCarsData(carsData);
     setUpdate("");
+    setLoad(false);
   };
 
   const handleAction = async (id: string, action: string, message: string) => {
@@ -33,7 +36,9 @@ const Cars = () => {
     setPage(value);
   };
 
-  return (
+  return load ? (
+    <Loading />
+  ) : (
     <TabelFrame
       heading={"Cars"}
       data={carsData}

@@ -5,7 +5,6 @@ import { ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { userLoggedIn } from "../redux/user/authSlice";
 import { ErrorMessage, validateEmail } from "../utils/utils";
-import { userAxios } from "../axios/axios";
 import { userLoginApi } from "../api/userApi";
 
 function UserLogin() {

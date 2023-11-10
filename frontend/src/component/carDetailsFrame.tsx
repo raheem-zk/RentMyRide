@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { CarDetailsModel } from "../models/models";
 import Loading from "./loading";
 import { createChatAPI } from "../api/chatApi";
+import ZeroDataComponent from "./zeroData";
 
 const CarDetailsFrame = () => {
   const { user } = useSelector((state: any) => state.userAuth);
@@ -11,32 +12,36 @@ const CarDetailsFrame = () => {
   const { cars } = useSelector((state: any) => state.carsDatas);
   const [car, setCar] = useState<CarDetailsModel | null | any>(null);
   const [image, setImage] = useState<string | null | undefined>("");
+  const [load, setLoad] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const data: CarDetailsModel = cars.find((x) => x._id === carId);
-    setCar(data);
-    setImage(data.images[0]);
+    if (data) {
+      setCar(data);
+      setImage(data?.images[0]);
+    }
+    setLoad(false);
   }, [cars, carId]);
 
   const ChengeImage = (img: string) => {
     setImage(img);
   };
-  
-  const handleChat = async ()=>{
-    if(user){
+
+  const handleChat = async () => {
+    if (user) {
       await createChatAPI(user._id, car.ownerId);
-      navigate('/chat');
-    }else{
-      navigate('/login')
+      navigate("/chat");
+    } else {
+      navigate("/login");
     }
-  }
+  };
 
-  if (!car) {
-    return <Loading />;
-  }
-
-  return (
+  return load ? (
+    <Loading />
+  ) : !car ? (
+    <ZeroDataComponent />
+  ) : (
     <div className="container mx-auto p-4">
       <div className="flex flex-col lg:flex-row">
         <div className="lg:w-1/2 pr-4">
@@ -48,15 +53,16 @@ const CarDetailsFrame = () => {
             />
           </div>
           <div className="grid grid-cols-4 gap-3">
-            {car?.images.map((x, index) => (
-              <img
-                onClick={() => ChengeImage(x)}
-                key={index}
-                src={x}
-                alt="Car"
-                className="w-full h-full rounded-lg object-cover"
-              />
-            ))}
+            {car &&
+              car?.images.map((x, index) => (
+                <img
+                  onClick={() => ChengeImage(x)}
+                  key={index}
+                  src={x}
+                  alt="Car"
+                  className="w-full h-full rounded-lg object-cover"
+                />
+              ))}
           </div>
         </div>
         <div className="lg:w-1/2 bg-white p-4 rounded-lg shadow-md">

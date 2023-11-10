@@ -3,6 +3,7 @@ import TabelFrame from "./tabelFrame";
 import { useDispatch } from "react-redux";
 import { addOwners } from "../../redux/admin/carownersSlice";
 import { carOwnerActionAPI, carownersDataAPI } from "../../api/adminApi";
+import Loading from "../loading";
 
 const OwnerList = () => {
   const [ownersData, setOwnersData] = useState([]);
@@ -10,6 +11,7 @@ const OwnerList = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(1);
+  const [load, setLoad] = useState(true);
 
   useEffect(() => {
     getOwnersData();
@@ -21,6 +23,7 @@ const OwnerList = () => {
     setOwnersData(carownersData);
     setSize(size);
     setUpdate("");
+    setLoad(false);
   };
 
   const handleAction = async (id: string, action: string, message: string) => {
@@ -34,7 +37,9 @@ const OwnerList = () => {
     setPage(value);
   };
 
-  return (
+  return load ? (
+    <Loading />
+  ) : (
     <TabelFrame
       heading={"Car Owners"}
       data={ownersData}

@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import TabelFrame from "./tabelFrame";
 import { handleAction } from "../../utils/carIteams";
+import Loading from "../loading";
 
 const OwnerMoreDetails = () => {
+  const [load, setLoad] = useState(true);
   const { ownerId } = useParams();
   const { owner } = useSelector((state: any) => state.carownersList);
   const data = owner.find((owner) => owner._id === ownerId);
 
-  if (!data) {
-    return <div>Owner not found</div>;
-  }
+  useLayoutEffect(() => {
+    if (data) {
+      setLoad(false);
+    }
+  }, [data]);
 
-  return (
+  return load ? (
+    <Loading />
+  ) : (
     <>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Owner Details</h1>
@@ -68,7 +74,7 @@ const OwnerMoreDetails = () => {
           data={data.carId}
           handleAction={handleAction}
           role="cars"
-          filterPagination={(val)=>val }
+          filterPagination={(val) => val}
           currentPage={1}
           size={1}
         />
