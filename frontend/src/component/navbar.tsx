@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Navbar =()=> {
   const { success } = useSelector((state: any)=>state.userAuth);
   return (
- <div className="md:my-5   bg-white p-3  top-0 sticky z-50 shadow shadow-gray-200"> 
+ <div className="md:mt-5   bg-white p-3  top-0 sticky z-50 shadow shadow-gray-200"> 
   <div className="container mx-auto my-3 flex items-center justify-between">
       <div id="logo" className="text-gray-950 text-2xl font-bold">
         RMR
