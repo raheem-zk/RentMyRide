@@ -82,6 +82,7 @@ export const filteredData = async (data) => {
       sortOrder: data?.sortOrder,
       startDate: data?.startDate,
       endDate: data?.endDate,
+      district: data?.district
     },
   });
   return { data: response?.data?.filteredData, size: response?.data?.size };
