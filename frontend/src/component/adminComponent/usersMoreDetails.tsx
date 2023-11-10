@@ -1,17 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-
+import Loading from "../loading";
 const UserMoreDetails = () => {
   const { userId } = useParams();
   const { users } = useSelector((state: any) => state.usersList);
 
   const user = users.find((user) => user._id === userId);
 
-  if (!user) {
-    return <div>User not found</div>;
-  }
-  return (
+  return !user ? (
+    <Loading />
+  ) : (
     <div className="md:m-5 bg-white p-4 rounded-lg shadow-lg">
       <h1 className="text-3xl font-semibold text-center mb-4 text-indigo-600">
         User Details
@@ -22,12 +21,11 @@ const UserMoreDetails = () => {
             <div className="flex justify-center items-center">
               <img
                 src={
-                  user?.profilePicture
-                    ? user.profilePicture
-                    : "https://thumbs.dreamstime.com/b/flat-male-avatar-image-beard-hairstyle-businessman-profile-icon-vector-179285629.jpg"
+                  user?.profilePicture ||
+                  "https://thumbs.dreamstime.com/b/flat-male-avatar-image-beard-hairstyle-businessman-profile-icon-vector-179285629.jpg"
                 }
-                alt="Car"
-                className="h-auto"
+                alt="User"
+                className="h-auto w-40 md:w-auto rounded-full"
               />
             </div>
             <div className="flex-col justify-center my-5">
@@ -45,7 +43,7 @@ const UserMoreDetails = () => {
                 <span className="font-semibold">{user?.phoneNumber}</span>
               </p>
               <p className="text-lg mb-2">
-                Licence Number:{" "}
+                License Number:{" "}
                 <span className="font-semibold">{user?.license}</span>
               </p>
               <p className="text-lg mb-2">
@@ -54,12 +52,17 @@ const UserMoreDetails = () => {
               <p className="text-lg mb-2">
                 Age:{" "}
                 <span className="font-semibold">
-                  {user?.age ? user?.age : "not Updated"}
+                  {user?.age ? user?.age : "Not Updated"}
                 </span>
               </p>
             </div>
             <div className="flex-col justify-center my-5">
-              <p>CreateAt: {user?.createdAt}</p>
+              <p className="text-lg mb-2">
+                Created At:{" "}
+                {user?.createdAt
+                  ? new Date(user?.createdAt).toLocaleDateString()
+                  : ""}
+              </p>
             </div>
           </div>
         </div>
