@@ -8,6 +8,8 @@ const DateBasedFilter = ({ handleDateSearch }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [district, setDistrict] = useState<Spec[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+
   const handleSearch = () => {
     const currentDate = new Date();
     const selectedEndDate = new Date(endDate);
@@ -18,10 +20,10 @@ const DateBasedFilter = ({ handleDateSearch }) => {
       ErrorMessage("End date cannot be before start date.");
     } else {
       // Perform search
-      handleDateSearch(startDate, endDate, district);
+      handleDateSearch(startDate, endDate, selectedDistrict);
     }
   };
-  
+
   const getDistrict = async () => {
     const data = await getDistrictAPI();
     setDistrict(data);
@@ -60,9 +62,11 @@ const DateBasedFilter = ({ handleDateSearch }) => {
             <select
               className="form-select block w-full rounded-md border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
               name="state"
+              value={selectedDistrict}
+              onChange={(e) => setSelectedDistrict(e.target.value)}
             >
-              <option value="" disabled selected>
-                Select a state
+              <option value="" disabled>
+                Select a district
               </option>
               {district &&
                 district.map((data) => (

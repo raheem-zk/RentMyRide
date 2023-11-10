@@ -15,6 +15,7 @@ import OwnerMoreDetails from "../page/admin/ownerMoreDetails";
 import { ToastContainer } from "react-toastify";
 import Orders from "../page/admin/orders";
 import OrderMoreDetails from "../page/admin/orderMoreDetaisl";
+import ErrorPage from "../component/error";
 
 const AdminAppLayout = () => {
   return (
@@ -31,8 +32,8 @@ const AdminLoginLayout = () => {
 
 const AdminRoute = {
   path: "/admin",
+  errorElement: <ErrorPage path={'/admin'}/>,
   element: <AdminLoginLayout />,
-  errorElement: <h1>Error</h1>,
   children: [
     {
       path: "login",

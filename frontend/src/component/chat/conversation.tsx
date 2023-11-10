@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 const PROFILE =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1nXLwXy9EcTEeouOXhDl6Ma2ZaKs899xpHg&usqp=CAU";
 
-  const Conversation = ({ data, role }) => {
+  const Conversation = ({ data, role , online}) => {
 
   const ownerProfilePicture = data?.ownerId?.profilePicture;
   const userProfilePicture = data?.userId?.profilePicture;
@@ -16,7 +16,7 @@ const PROFILE =
 
   return (
     <>
-      <div key={data._id} className="flex items-center p-2 hover:bg-gray-200">
+      <div key={data._id} className="flex items-center p-2 hover:bg-gray-200 cursor-pointer">
         <img
           src={src}
           alt="User Avatar"
@@ -24,7 +24,7 @@ const PROFILE =
         />
         <div>
           <span className="text-lg font-semibold">{name}</span>
-          <span className="text-sm text-gray-400">Online</span>
+          <span className="text-sm text-gray-400">{online ?"Online" : "Offline"}</span>
         </div>
       </div>
       <hr />

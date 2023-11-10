@@ -3,15 +3,14 @@ import Statistics from "./statusBar";
 import { dashboardAPI } from "../../api/adminApi";
 
 const DashboardPage = () => {
-    const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState<any>(null);
   const getDashboardData = async () => {
-      const {statusData} = await dashboardAPI();
-      setStatus(statusData)
-      console.log(statusData)
+    const { statusData } = await dashboardAPI();
+    setStatus(statusData);
   };
-  useEffect(()=>{
-    getDashboardData()
-  },[])
+  useEffect(() => {
+    getDashboardData();
+  }, []);
 
   return (
     <div>
@@ -20,6 +19,7 @@ const DashboardPage = () => {
         totalUser={status?.totalUser}
         totalCar={status?.totalCar}
         totalCarOwner={status?.totalCarOwner}
+        newOrder={status?.newOrder}
       />
     </div>
   );

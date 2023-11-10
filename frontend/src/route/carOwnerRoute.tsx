@@ -15,6 +15,7 @@ import EditCar from "../page/carOwner/editCar";
 import CarDetails from "../page/carOwner/carDetails";
 import OrderMoreDetails from "../page/carOwner/orderMoreDetails";
 import Chat from "../component/chat/chat";
+import ErrorPage from "../component/error";
 
 const CarAppLayout = () => {
   return <Outlet />;
@@ -31,6 +32,7 @@ const CarOwnerLayout = () => {
 
 const CarOwnerRoute = {
   path: "/car-owner",
+  errorElement: <ErrorPage path={'/car-owner'}/>,
   element: <CarAppLayout />,
   children: [
     {

@@ -75,3 +75,8 @@ export const getOwnerCarsAPI = async (ownerId, page)=>{
   });
   return {carsData :response.data.carsData, size:response.data?.size } ;
 }
+
+export const dashboardAPI = async (ownerId)=>{
+  const response = await carOwnerAxios.get(`/dashboard/${ownerId}`);
+  return { statusData : response.data.statusData };
+}

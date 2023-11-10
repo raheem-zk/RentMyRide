@@ -1,8 +1,9 @@
 import React from 'react'
+import DashboardPage from '../../component/carOwner/dashboard'
 
 const Dashboard = () => {
   return (
-    <>dashboard</>
+    <DashboardPage/>
   )
 }
 

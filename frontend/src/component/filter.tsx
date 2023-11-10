@@ -11,7 +11,7 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     model: [],
     transmission: [],
     fuelType: [],
-    district :[],
+    district: [],
   });
   const getFilterOptions = async () => {
     const data = await getFilterOptionsData();
@@ -33,7 +33,7 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     sortOrder: "",
     startDate: "",
     endDate: "",
-    district:""
+    district: "",
   });
 
   const handleFilter = (key, value) => {
@@ -67,15 +67,12 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
     getFilterData();
   }, [filterData]);
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-  const handleDateSearch = (startDate, endDate, districtt) => {
+  const handleDateSearch = (startDate, endDate, district) => {
     const updatedFilterData = {
       ...filterData,
       startDate: startDate,
       endDate: endDate,
-      districtt: districtt
+      district: district,
     };
     setFilterData(updatedFilterData);
   };
@@ -94,41 +91,8 @@ const Filter = ({ filteredCars, handlePagenation, handleSize }) => {
           onChange={handleSearch}
         />
       </div>
-      <DateBasedFilter handleDateSearch={handleDateSearch}/>
 
-      <div className="max-w-md mx-auto p-4">
-        <div className="bg-white rounded-md shadow-md p-6">
-          <label className="block text-gray-600 mb-2 font-medium">
-            Search by Date Range:
-          </label>
-          <div className=" ">
-            <div className="py-2">
-              <input
-                type="date"
-                className="flex-1 form-input rounded-md border focus:outline-none focus:ring focus:border-blue-300 py-1"
-                placeholder="Start Date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-            <div className="py-2">
-              <input
-                type="date"
-                className="flex-1 form-input rounded-md border focus:outline-none focus:ring focus:border-blue-300 py-1"
-                placeholder="End Date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none "
-              onClick={handleDateSearch}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
+      <DateBasedFilter handleDateSearch={handleDateSearch} />
 
       <div>
         <label className="m-2 flex items-center">
