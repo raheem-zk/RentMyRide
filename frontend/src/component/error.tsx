@@ -1,10 +1,8 @@
 import React from "react";
 import { Link, useRouteError } from "react-router-dom";
 
-const ErrorPage = () => {
+const ErrorPage = ({path}) => {
   const error = useRouteError();
-  console.error(error);
-
   return (
     <>
       <div className="flex justify-center items-center h-screen bg-purple-600">
@@ -18,7 +16,7 @@ const ErrorPage = () => {
           </p>
           <div className="mt-4">
             <Link
-              to="/"
+              to={path}
               className="px-5 py-2 bg-white rounded-md hover:bg-gray-100"
             >
               Home
