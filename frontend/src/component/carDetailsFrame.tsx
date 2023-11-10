@@ -24,8 +24,12 @@ const CarDetailsFrame = () => {
   };
   
   const handleChat = async ()=>{
-    await createChatAPI(user._id, car.ownerId);
-    navigate('/chat');
+    if(user){
+      await createChatAPI(user._id, car.ownerId);
+      navigate('/chat');
+    }else{
+      navigate('/login')
+    }
   }
 
   if (!car) {
