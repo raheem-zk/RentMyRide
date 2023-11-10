@@ -80,3 +80,7 @@ export const dashboardAPI = async (ownerId)=>{
   const response = await carOwnerAxios.get(`/dashboard/${ownerId}`);
   return { statusData : response.data.statusData };
 }
+
+export const updateAvailability = async (data)=>{
+  await carOwnerAxios.patch('/updateAvailability',{ availability : data.newAvailability, carId: data.carId})
+}

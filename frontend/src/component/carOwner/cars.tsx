@@ -7,11 +7,13 @@ import { addOwnerCars } from "../../redux/carOwner/carsSlice";
 import { getOwnerCarsAPI } from "../../api/carOwnerApi";
 import Loading from "../loading";
 import Pagination from "../pagination";
+import AvailabilityDropdown from "./availabilityDropdown";
 
 const OwnerCars = () => {
   const [cars, setCars] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(1);
+  const [load, setLoad] = useState(true);
   const dispatch = useDispatch();
   const { carOwner } = useSelector((state: any) => state.carOwnerAuth);
   useEffect(() => {
@@ -25,13 +27,14 @@ const OwnerCars = () => {
     dispatch(addOwnerCars(carsData));
     setCars(carsData);
     setSize(size);
+    setLoad(false);
   };
 
   const filterPageination = (number) => {
     setPage(number);
   };
 
-  return !cars ? (
+  return load ? (
     <Loading />
   ) : (
     <div className="container mx-auto px-4 py-8 max-h-screen">
@@ -48,9 +51,9 @@ const OwnerCars = () => {
               {car?.brand?.name} {car?.model?.name}
             </h3>
             <p className="text-gray-600 mb-2">Year: {car?.year}</p>
-            <p className="text-gray-600 mb-2">
-              Availability: {car?.availability}
-            </p>
+            <div className="mb-2">
+              <AvailabilityDropdown carId={car?._id} currentStatus={car?.availability} />
+            </div>
             <p className="text-gray-600 mb-2">
               License Plate: {car?.licensePlate}
             </p>
