@@ -1,5 +1,5 @@
 import express from 'express'
-import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/AuthController.js';
+import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/authController.js';
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCategory, addDistrict, addFuelType, addModel, addTransmission, getCarModels } from '../controller/carOwner/carSpecController.js';
 import { cars, editCar, uploadCar } from '../controller/carOwner/carController.js';
