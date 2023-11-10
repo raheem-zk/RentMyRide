@@ -32,7 +32,7 @@ const Chat = ({ role }) => {
       setCurrentUserId(carOwner._id);
     }
   }, []);
-  
+
   const handleGetUsers = (users) => {
     setOnlineUsers(users);
   };
@@ -75,7 +75,7 @@ const Chat = ({ role }) => {
         <div className="p-2 m-2 bg-gray-100">
           <h2 className="text-center font-bold text-2xl p-3">Chats</h2>
           <div className="Chat-list max-h-80 overflow-x-auto">
-            {chats.length == 0 ? (
+            {chats && chats.length == 0 ? (
               <img
                 src={
                   "https://i.pinimg.com/originals/ee/ca/de/eecaded3764dd35d75fbab79afbec91b.gif"
@@ -83,6 +83,7 @@ const Chat = ({ role }) => {
                 alt=""
               />
             ) : (
+              chats &&
               chats.map((chat) => (
                 <div key={chat?._id} onClick={() => setCurrentChat(chat)}>
                   <Conversation

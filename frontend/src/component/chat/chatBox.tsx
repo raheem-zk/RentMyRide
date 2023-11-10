@@ -6,7 +6,13 @@ import InputEmoji from "react-input-emoji";
 const PROFILE =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1nXLwXy9EcTEeouOXhDl6Ma2ZaKs899xpHg&usqp=CAU";
 
-const ChatBox = ({ chat, currentUserId, role, setSendMessage , recieveMessage}) => {
+const ChatBox = ({
+  chat,
+  currentUserId,
+  role,
+  setSendMessage,
+  recieveMessage,
+}) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const chatBodyRef = useRef(null);
@@ -15,16 +21,16 @@ const ChatBox = ({ chat, currentUserId, role, setSendMessage , recieveMessage}) 
     const data = await getMessageAPI(chatId);
     setMessages([...data]);
   };
-  useEffect(()=>{
-    if(recieveMessage!== null && recieveMessage?.chatId == chat?._id){
-      setMessages([...messages, recieveMessage])
+  useEffect(() => {
+    if (recieveMessage !== null && recieveMessage?.chatId == chat?._id) {
+      setMessages([...messages, recieveMessage]);
     }
-  },[recieveMessage])
+  }, [recieveMessage]);
 
   useEffect(() => {
     if (chat) getMessage(chat?._id);
   }, [chat]);
-  
+
   useLayoutEffect(() => {
     if (chatBodyRef.current && chat) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
@@ -35,13 +41,13 @@ const ChatBox = ({ chat, currentUserId, role, setSendMessage , recieveMessage}) 
     setNewMessage(text);
   };
   const handelSendMessage = async () => {
-
-    if (newMessage.length != 0) {
+    if (newMessage && newMessage.length != 0) {
       const data = await sendMessage(chat._id, currentUserId, newMessage);
       setMessages([...messages, data]);
       setNewMessage("");
-      const receiverId = chat.userId == currentUserId ? chat.ownerId : chat.userId ; 
-      setSendMessage({...data , receiverId:receiverId._id})
+      const receiverId =
+        chat.userId == currentUserId ? chat.ownerId : chat.userId;
+      setSendMessage({ ...data, receiverId: receiverId._id });
     }
   };
   const ownerProfilePicture = chat?.ownerId?.profilePicture;
@@ -73,10 +79,12 @@ const ChatBox = ({ chat, currentUserId, role, setSendMessage , recieveMessage}) 
               </div>
             </div>
             {/* chat box message */}
-            <div className="chat-body p-4 flex-row min-h-40 max-h-80 overflow-x-auto h-screen"
-             ref={chatBodyRef}>
+            <div
+              className="chat-body p-4 flex-row min-h-40 max-h-80 overflow-x-auto h-screen"
+              ref={chatBodyRef}
+            >
               {messages &&
-                messages.map((message,index) => (
+                messages.map((message, index) => (
                   <div
                     key={message._id}
                     className={`message ${
@@ -89,7 +97,9 @@ const ChatBox = ({ chat, currentUserId, role, setSendMessage , recieveMessage}) 
                       {message?.text}
                     </span>
                     <p className="text-gray-400 mt-1">
-                      {index == messages.length-1 ?format(message?.createdAt) : ""}
+                      {index == messages.length - 1
+                        ? format(message?.createdAt)
+                        : ""}
                     </p>
                   </div>
                 ))}
