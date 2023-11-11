@@ -102,7 +102,7 @@ const carAvailabilityVerification = async () => {
   });
 };
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("0 0/12 * * *", async () => {
   await orderVerification();
   await carAvailabilityVerification();
 });
