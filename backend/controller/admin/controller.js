@@ -3,7 +3,7 @@ import userShema from "../../models/user.js";
 import carOwnerShema from "../../models/carOwner/carOwner.js";
 import carShema from "../../models/carOwner/car.js";
 
-const LIMIT = 10;
+const LIMIT = 5;
 
 export const getOrders = async (req, res) => {
   try {
@@ -54,7 +54,20 @@ export const dashboard = async (req, res) => {
     statusData.totalCarOwner = await carOwnerShema.countDocuments();
     statusData.totalCar = await carShema.countDocuments();
 
-    return res.json({ message: "success", statusData });
+    const blockedUser = await userShema.countDocuments({status: false});
+    const blockedCarOwnerData = await carOwnerShema.countDocuments({status: false});
+    const newOrders = await orderShema.countDocuments({paymentStatus: 'Paid',status: 'pending' })
+    const totalOrders = await orderShema.countDocuments({paymentStatus: 'Paid'})
+    
+    const barData ={
+      user : statusData.totalUser,
+      blockedUser,
+      carOwnerData: statusData.totalCarOwner,
+      blockedCarOwnerData ,
+      newOrders,
+      totalOrders,
+    }
+    return res.json({ message: "success", statusData, barData});
   } catch (error) {
     console.error(error);
     return res

@@ -1,7 +1,7 @@
 import carSchema from "../../models/carOwner/car.js";
 import { transporter } from "../../utils/utils.js";
 
-const LIMIT = 10;
+const LIMIT = 5;
 
 export const carList = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ export const carList = async (req, res) => {
         .sort({ _id: -1 })
         .skip(SKIP)
         .limit(LIMIT)) ?? [];
-        
+
     const TotalSize = await carSchema.countDocuments();
     const size = Math.ceil(TotalSize / LIMIT);
 

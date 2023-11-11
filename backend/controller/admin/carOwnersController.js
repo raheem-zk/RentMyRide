@@ -1,7 +1,7 @@
 import carOwnerSchema from "../../models/carOwner/carOwner.js";
 import carSchema from "../../models/carOwner/car.js";
 
-const LIMIT = 10;
+const LIMIT = 5;
 
 export const carOwnersList = async (req, res) => {
   try {
