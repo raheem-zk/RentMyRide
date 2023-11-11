@@ -6,10 +6,10 @@ import {
 } from "react-icons/md";
 import { PiCarSimpleBold } from "react-icons/pi";
 import { CiCircleList } from "react-icons/ci";
-import { AiOutlineLogout } from "react-icons/ai"; 
-import { BsChatDots } from "react-icons/bs"; 
+import { AiOutlineLogout } from "react-icons/ai";
+import { BsChatDots } from "react-icons/bs";
 
-function OwnerSidebarIteam() {
+const OwnerSidebarIteam = () => {
   return (
     <>
       <div className="mt-5 md:block hidden">
@@ -79,6 +79,6 @@ function OwnerSidebarIteam() {
       </nav>
     </>
   );
-}
+};
 
 export default OwnerSidebarIteam;

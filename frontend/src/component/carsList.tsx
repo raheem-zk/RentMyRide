@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsFuelPumpDiesel } from "react-icons/bs";
 import { GiGearStickPattern } from "react-icons/gi";
 import { CarDetailsModel } from "../models/models";
@@ -8,11 +8,13 @@ import NoCar from "./notCar";
 import Pagination from "./pagination";
 import { useDispatch } from "react-redux";
 import { addCarsData } from "../redux/user/carsSlice";
+import Loading from "./loading";
 
 const CarListingPage = ({ data }) => {
   const [cars, setCars] = useState<CarDetailsModel[]>(data);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(1);
+  const [load, setLoad] = useState(true);
   const dispatch = useDispatch();
 
   const handleFilter = (data) => {
@@ -27,7 +29,12 @@ const CarListingPage = ({ data }) => {
   const handleSize = (data) => {
     setSize(data);
   };
-  return (
+  useEffect(()=>{
+    setLoad(false);
+  },[])
+  return load ? (
+    <Loading />
+  ) : (
     <div className="flex p-3">
       <div className="bg-amber-400 w-1/5 h-fit py-3 rounded mb-2">
         <Filter
@@ -43,6 +50,7 @@ const CarListingPage = ({ data }) => {
           {cars.length == 0 ? (
             <NoCar />
           ) : (
+            cars &&
             cars.map((car) => (
               <div
                 key={car?._id}
@@ -87,7 +95,11 @@ const CarListingPage = ({ data }) => {
               </div>
             ))
           )}
-          <Pagination currentPage={page} size={size} filterPagination={filterPageination} />
+          <Pagination
+            currentPage={page}
+            size={size}
+            filterPagination={filterPageination}
+          />
         </div>
       </div>
     </div>

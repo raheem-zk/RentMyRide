@@ -6,30 +6,34 @@ import { addOrders } from "../../redux/admin/ordersSlice";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import { ordersMoreData } from "../../models/models";
+import Loading from "../loading";
+import ZeroDataComponent from "../zeroData";
 
 const OrdersList = () => {
   const dispatch = useDispatch();
   const [orders, setOrders] = useState<ordersMoreData[]>([]);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(1);
+  const [load, setLoad] = useState(true);
 
   useEffect(() => {
     getData();
   }, [page]);
 
   const getData = async () => {
-    const {data, size} = await getOrders(page);
+    const { data, size } = await getOrders(page);
     dispatch(addOrders(data));
     setSize(size);
     setOrders(data);
+    setLoad(false);
   };
 
-  const filterPagination = (value)=>{
+  const filterPagination = (value) => {
     setPage(value);
-  }
+  };
 
-  return !orders ? (
-    "orders not found"
+  return load ? (
+    <Loading />
   ) : (
     <div className="overflow-x-auto">
       <table className="min-w-full border-collapse w-full">
@@ -62,43 +66,51 @@ const OrdersList = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order: ordersMoreData) => (
-            <tr key={order._id}>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                {order?.orderId}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                {order?.carId?.carName}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                {order?.userId?.firstName} {order?.userId?.lastName}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                {order?.pickupDate
-                  ? new Date(order.pickupDate).toLocaleDateString()
-                  : ""}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                {order?.dropoffDate
-                  ? new Date(order.dropoffDate).toLocaleDateString()
-                  : ""}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                {order?.totalPrice}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2 text-green-500 font-semibold">
-                {order?.status}
-              </td>
-              <td className="border-t-2 border-gray-200 px-4 py-2">
-                <Link to={`/admin/orders/${order?._id}/more-details`}>
-                  <MdOutlineReadMore size={25} />
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {orders &&
+            orders.map((order: ordersMoreData) => (
+              <tr key={order._id}>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  {order?.orderId}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  {order?.carId?.carName}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  {order?.userId?.firstName} {order?.userId?.lastName}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  {order?.pickupDate
+                    ? new Date(order.pickupDate).toLocaleDateString()
+                    : ""}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  {order?.dropoffDate
+                    ? new Date(order.dropoffDate).toLocaleDateString()
+                    : ""}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  {order?.totalPrice}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2 text-green-500 font-semibold">
+                  {order?.status}
+                </td>
+                <td className="border-t-2 border-gray-200 px-4 py-2">
+                  <Link to={`/admin/orders/${order?._id}/more-details`}>
+                    <MdOutlineReadMore size={25} />
+                  </Link>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
-      <Pagination currentPage={page} filterPagination={filterPagination} size={size}/>
+      
+      {orders?.length == 0 && <ZeroDataComponent />}
+
+      <Pagination
+        currentPage={page}
+        filterPagination={filterPagination}
+        size={size}
+      />
     </div>
   );
 };

@@ -229,3 +229,12 @@ export interface ordersMoreData {
   totalPrice : number ;
   status : string;
 }
+
+export interface BarDataProps {
+  user: number; 
+  blockedUser: number;
+  carOwnerData: number;
+  blockedCarOwnerData: number;
+  newOrders: number;
+  totalOrders: number;
+}

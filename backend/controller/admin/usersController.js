@@ -1,6 +1,6 @@
 import userModel from "../../models/user.js";
 
-const LIMIT = 10;
+const LIMIT = 5;
 
 export const userList = async (req, res) => {
   try {
@@ -16,7 +16,7 @@ export const userList = async (req, res) => {
       .sort({ _id: -1 })
       .skip(SKIP)
       .limit(LIMIT);
-      
+
     const TotalSize = await userModel.countDocuments();
     const size = Math.ceil(TotalSize / LIMIT);
 

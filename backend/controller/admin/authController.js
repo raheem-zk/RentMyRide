@@ -1,6 +1,6 @@
 import adminModel from "../../models/admin.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export const login = async (req, res) => {
   try {
@@ -25,6 +25,8 @@ export const login = async (req, res) => {
     return res.json({ message: "success", token, adminData });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error", error: true });
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: true });
   }
 };

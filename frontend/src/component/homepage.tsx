@@ -8,7 +8,9 @@ import Loading from "./loading";
 
 const Homepage = () => {
   const [data, setData] = useState();
+  const [load, setLoad] = useState(true);
   const dispatch = useDispatch();
+
   useEffect(() => {
     getCardData();
   }, []);
@@ -17,12 +19,13 @@ const Homepage = () => {
     const response = await getHomeCardIteams();
     dispatch(addCarsData(response));
     setData(response);
+    setLoad(false);
   };
   const filterData = (data) => {
     setData(data);
   };
 
-  return !data ? (
+  return load ? (
     <Loading />
   ) : (
     <>

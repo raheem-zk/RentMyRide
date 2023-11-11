@@ -6,6 +6,7 @@ import {
   AdminSideOwnerModel,
   AdminSideTabelFrameProps,
 } from "../../models/models";
+import ZeroDataComponent from "../zeroData";
 
 function TabelFrame({
   heading,
@@ -43,7 +44,6 @@ function TabelFrame({
     handleClick(id, status, rejectedMessage);
     handleModal();
   };
-
   return (
     <div className="h-fit w-full">
       <div className="m-4 p-3 shadow-md shadow-gray-300">
@@ -169,6 +169,9 @@ function TabelFrame({
               ))}
           </tbody>
         </table>
+
+        {data?.length == 0 && <ZeroDataComponent />}
+        
         <Pagination
           currentPage={currentPage}
           filterPagination={filterPagination}

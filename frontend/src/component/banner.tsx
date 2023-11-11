@@ -7,7 +7,6 @@ const bannerImg =
 const Banner = ({ handleFilter }) => {
   const handleDateSearch = async (startDate, endDate, district) => {
     const { data } = await filteredData({ startDate, endDate, district });
-    console.log(data);
     handleFilter(data);
   };
 

@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Loading from "../loading";
 const UserMoreDetails = () => {
   const { userId } = useParams();
+  const [load, setLoad] = useState(true);
   const { users } = useSelector((state: any) => state.usersList);
 
   const user = users.find((user) => user._id === userId);
-
-  return !user ? (
+  useLayoutEffect(() => {
+    if (user) {
+      setLoad(false);
+    }
+  }, [user]);
+  return load ? (
     <Loading />
   ) : (
     <div className="md:m-5 bg-white p-4 rounded-lg shadow-lg">

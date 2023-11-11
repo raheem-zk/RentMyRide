@@ -7,12 +7,14 @@ import Loading from "./loading";
 
 const CarCard = ({ data }) => {
   const [carsData, setCarData] = useState<CarDetailsModel[] | []>(data);
+  const [load, setLoad] = useState(true);
 
   useEffect(() => {
     setCarData(data);
+    setLoad(false);
   }, [data]);
 
-  return !carsData ? (
+  return load ? (
     <Loading />
   ) : (
     <div className="container mx-auto p-4">

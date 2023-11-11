@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Conversation from "./conversation";
 import ChatBox from "./chatBox";
 import { io } from "socket.io-client";
+import Loading from "../loading";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const socket = io(BACKEND_URL);
@@ -17,10 +18,12 @@ const Chat = ({ role }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [sendMessage, setSendMessage] = useState(null);
   const [recieveMessage, setRecieveMessage] = useState(null);
+  const [load, setLoad] = useState(true);
 
   const getChats = async (id) => {
     const data = await getChatsAPI(id);
     setChats(data);
+    setLoad(false);
   };
 
   useEffect(() => {
@@ -68,7 +71,9 @@ const Chat = ({ role }) => {
     return !!online;
   };
 
-  return (
+  return load ? (
+    <Loading />
+  ) : (
     <div className="Chat w-full flex bg-gray-50">
       <div className="Left-side-chat w-2/6">
         {/* search logo */}
