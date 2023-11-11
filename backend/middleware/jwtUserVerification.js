@@ -19,9 +19,7 @@ const VerifyToken = async (req, res, next)=>{
             if(!decoded.role ==='user'){
                 return res.status(401).json({ message: 'Unauthorized' });
             }
-            console.log(decoded.user)
             const userData = await userSchema.findOne({_id:decoded.user, status: true} );
-            console.log(decoded.user, 'usss', userData)
             if(!userData){
                 return res.status(401).json({ message: 'Access Denied: Your account has been temporarily blocked' });
             }
