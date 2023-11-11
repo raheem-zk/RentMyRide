@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { dashboardAPI } from "../../api/carOwnerApi";
 import Statistics from "../adminComponent/statusBar";
 import Loading from "../loading";
+import PieChart from "../chart/pieChart";
 
 const DashboardPage = () => {
   const { carOwner } = useSelector((state: any) => state.carOwnerAuth);
@@ -16,6 +17,7 @@ const DashboardPage = () => {
   useEffect(() => {
     getDashboardData();
   }, []);
+
   return load ? (
     <Loading />
   ) : (
@@ -27,6 +29,16 @@ const DashboardPage = () => {
         totalCarOwner={status?.totalCarOwner}
         newOrder={status?.newOrder}
       />
+
+      <div className="flex items-center justify-center  bg-gray-100">
+        <PieChart
+          width={300}
+          height={300}
+          totalRevenue={status?.totalRevenue}
+          newOrder={status?.newOrder}
+          totalCars={status?.totalCar}
+        />
+      </div>
     </div>
   );
 };

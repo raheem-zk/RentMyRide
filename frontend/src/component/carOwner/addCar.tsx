@@ -25,6 +25,7 @@ import {
   uploadeEditCar,
 } from "../../api/carOwnerApi";
 import dayjs from "dayjs";
+import Loading from "../loading";
 
 interface Item {
   name: string;
@@ -43,6 +44,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   const { carOwner, success } = useSelector((state: any) => state.carOwnerAuth);
   const [files, setFiles] = useState<any[] | any>([]);
   const [submit, setSubmit] = useState(false);
+  const [load, setLoad] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
   const deleteImage = (imageToDelete) => {
     const updatedFiles = files.filter((image) => image !== imageToDelete);
     setFiles(updatedFiles);
-    successMessage('Image has been successfully deleted')
+    successMessage("Image has been successfully deleted");
   };
 
   const deleteEditImage = (imageToDelete) => {
@@ -74,7 +76,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       ...carDetails,
       images: [...updatedFiles],
     });
-    successMessage('Image has been successfully deleted')
+    successMessage("Image has been successfully deleted");
   };
 
   const uploadImages = async (images: any) => {
@@ -237,7 +239,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       endDate,
       perDayPrice,
       images,
-      district
+      district,
     } = carDetails;
 
     if (
@@ -248,7 +250,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       description.trim() === "" ||
       fuelType === "add" ||
       startDate.trim() === "" ||
-      endDate.trim() === "" 
+      endDate.trim() === ""
     ) {
       return ErrorMessage("Please fill in all fields");
     }
@@ -264,7 +266,7 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
       model === "add" ||
       fuelType === "add" ||
       transmission === "add" ||
-      district === "add" 
+      district === "add"
     ) {
       return ErrorMessage("Please select required data");
     }
@@ -284,16 +286,21 @@ const AddCar = ({ next, HandlePage, header, editCarData }: any) => {
     }
 
     const uploadedUrls = files.length !== 0 ? await uploadImages(files) : null;
+    setLoad(true);
+
     if (uploadedUrls) {
       setUploadedImages(uploadedUrls);
+      setLoad(false);
     } else {
       setSubmit(true);
+      setLoad(false);
     }
   };
 
   return (
     <div className="flex-1 flex items-center justify-center p-5">
       <ToastContainer />
+      {load && <Loading />}
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="text-4xl font-extrabold">
