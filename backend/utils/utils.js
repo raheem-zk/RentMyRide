@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import orderSchema from "../models/order.js";
 import carSchema from "../models/carOwner/car.js";
 import cron from "node-cron";
+import { updateOrderRejectionStatus } from "../controller/carOwner/orderController.js";
 
 const AVAILABLE = "Available";
 const UNAVAILABLE = "Unavailable";
@@ -26,9 +27,12 @@ export const transporter = nodemailer.createTransport({
   },
 });
 
-const rentCarRented = async (carId) => {
+const rentCarRented = async (carId, orderId) => {
   const car = await carSchema.findOne({ _id: carId });
-
+  const order = await orderSchema.findOne({orderId});
+  if(order?.status=='approved'){
+    orderSchema.updateOne({orderId}, {$set: {status: "Rented"}})
+  }
   if (car.availability === AVAILABLE) {
     await carSchema.updateOne(
       { _id: carId },
@@ -73,7 +77,7 @@ export const orderVerification = async () => {
       startDate.toISOString().split("T")[0] ===
       currentDate.toISOString().split("T")[0]
     ) {
-      await rentCarRented(order?.carId);
+      await rentCarRented(order?.carId, order?.orderId);
     }
     if (endDate <= currentDate) {
       await rentCarAvailable(order.carId, endDate, data.orderId);
@@ -102,9 +106,28 @@ const carAvailabilityVerification = async () => {
   });
 };
 
+export const checkAndRejectUnapprovedOrders = async ()=>{
+  const data = await orderSchema.find({
+    status: "pending",
+    paymentStatus: "Paid",
+  });
+
+  const currentDate = new Date();
+  data.forEach(async (order) => {
+    const startDate = new Date(order.pickupDate);
+    if (
+      startDate.toISOString().split("T")[0] <
+      currentDate.toISOString().split("T")[0]
+    ) {
+      await updateOrderRejectionStatus(order?.carId);
+    }
+  });
+}
+
 cron.schedule("0 0/12 * * *", async () => {
   await orderVerification();
   await carAvailabilityVerification();
+  await checkAndRejectUnapprovedOrders();
 });
 
 export const orderDateValidation = (orderData, pickupDate, dropoffDate) => {
