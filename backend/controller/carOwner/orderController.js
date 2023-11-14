@@ -60,9 +60,9 @@ export const approveOrder = async (req, res) => {
   }
 };
 
-export const rejectOrder = async (req, res) => {
+
+export const updateOrderRejectionStatus = async (orderId) =>{
   try {
-    const { orderId } = req.params;
     await ordersSchema.updateOne(
       {
         _id: orderId,
@@ -90,6 +90,15 @@ export const rejectOrder = async (req, res) => {
       }
     );
     
+  } catch (error) {
+    console.error(error);
+  }
+} 
+
+export const rejectOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    await updateOrderRejectionStatus(orderId)
     return res.json({ message: "success" });
   } catch (error) {
     console.error(error);
