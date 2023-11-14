@@ -29,9 +29,9 @@ export const transporter = nodemailer.createTransport({
 
 const rentCarRented = async (carId, orderId) => {
   const car = await carSchema.findOne({ _id: carId });
-  const order = await orderSchema.findOne({orderId});
-  if(order?.status=='approved'){
-    orderSchema.updateOne({orderId}, {$set: {status: "Rented"}})
+  const order = await orderSchema.findOne({ orderId });
+  if (order?.status == "approved") {
+    orderSchema.updateOne({ orderId }, { $set: { status: "Rented" } });
   }
   if (car.availability === AVAILABLE) {
     await carSchema.updateOne(
@@ -106,7 +106,7 @@ const carAvailabilityVerification = async () => {
   });
 };
 
-export const checkAndRejectUnapprovedOrders = async ()=>{
+export const checkAndRejectUnapprovedOrders = async () => {
   const data = await orderSchema.find({
     status: "pending",
     paymentStatus: "Paid",
@@ -122,12 +122,17 @@ export const checkAndRejectUnapprovedOrders = async ()=>{
       await updateOrderRejectionStatus(order?.carId);
     }
   });
-}
+};
+
+const deleteUnpaidOrders = async () => {
+  const data = await orderSchema.deleteMany({ paymentStatus: "Pending" });
+};
 
 cron.schedule("0 0/12 * * *", async () => {
   await orderVerification();
   await carAvailabilityVerification();
   await checkAndRejectUnapprovedOrders();
+  await deleteUnpaidOrders();
 });
 
 export const orderDateValidation = (orderData, pickupDate, dropoffDate) => {
@@ -142,9 +147,8 @@ export const orderDateValidation = (orderData, pickupDate, dropoffDate) => {
     }
     return true;
   });
-  return isConflict.some((value)=>value ===true);
+  return isConflict.some((value) => value === true);
 };
-
 
 export const filterSloatValidation = (start, end, orderData, car) => {
   const order = orderData.find((order) => {
