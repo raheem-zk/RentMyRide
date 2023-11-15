@@ -59,19 +59,46 @@ export const adminLoginAPI = async (email, password) => {
   return response.data.adminData;
 };
 
-export const userActionAPI = async (id, action)=>{
-      await adminAxios.patch(`/users/${id}/${action}`);
-}
+export const userActionAPI = async (id, action) => {
+  await adminAxios.patch(`/users/${id}/${action}`);
+};
 
-export const carActionAPI = async (id, action, message)=>{
+export const carActionAPI = async (id, action, message) => {
   await adminAxios.patch(`/cars/${id}/${action}/${message}`);
-}
+};
 
-export const carOwnerActionAPI = async (id, action)=>{
+export const carOwnerActionAPI = async (id, action) => {
   await adminAxios.patch(`/car-owners/${id}/${action}`);
-}
+};
 
-export const dashboardAPI = async ()=>{
-  const response = await adminAxios.get('/dashboard')
+export const dashboardAPI = async () => {
+  const response = await adminAxios.get("/dashboard");
   return response.data;
-}
+};
+
+export const getCategoryDataAPI = async () => {
+  try {
+    const response = await adminAxios.get("/category");
+    return response.data.categoryData;
+  } catch (error) {}
+};
+
+export const updateCategoryAPI = async (id, value) => {
+  try {
+    const response = await adminAxios.patch("/updateCategory", {
+      id,
+      name: value,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
+
+export const updateCategoryStatusAPI = async (id, status) => {
+  try {
+    const response = await adminAxios.patch("/updateCategoryStatus", {
+      id,
+      status,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
