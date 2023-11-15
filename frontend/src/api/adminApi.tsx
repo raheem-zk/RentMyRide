@@ -156,3 +156,30 @@ export const updateModelStatusAPI = async (id, status) => {
     return response.data.message == "success" ? true : false;
   } catch (error) {}
 };
+
+export const getFuelTypeDataAPI = async () => {
+  try {
+    const response = await adminAxios.get("/fuel-type");
+    return response.data.transmissionData;
+  } catch (error) {}
+};
+
+export const updateFuelTypeAPI = async (id, value) => {
+  try {
+    const response = await adminAxios.patch("/updateFuel-type", {
+      id,
+      name: value,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
+
+export const updateFuelTypeStatusAPI = async (id, status) => {
+  try {
+    const response = await adminAxios.patch("/updateFuel-typeStatus", {
+      id,
+      status,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
