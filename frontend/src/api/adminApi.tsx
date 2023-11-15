@@ -210,3 +210,30 @@ export const updateDistrictStatusAPI = async (id, status) => {
     return response.data.message == "success" ? true : false;
   } catch (error) {}
 };
+
+export const getBrandDataAPI = async () => {
+  try {
+    const response = await adminAxios.get("/brand");
+    return response.data.transmissionData;
+  } catch (error) {}
+};
+
+export const updateBrandAPI = async (id, value) => {
+  try {
+    const response = await adminAxios.patch("/updateBrand", {
+      id,
+      name: value,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
+
+export const updateBrandStatusAPI = async (id, status) => {
+  try {
+    const response = await adminAxios.patch("/updateBrandStatus", {
+      id,
+      status,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
