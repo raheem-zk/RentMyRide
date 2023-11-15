@@ -22,6 +22,11 @@ import {
   updateCategoryName,
   updateCategoryStatus,
 } from "../controller/admin/categoryController.js";
+import {
+  getBrand,
+  updateBrandName,
+  updateBrandStatus,
+} from "../controller/admin/brandController.js";
 
 const router = express();
 
@@ -51,5 +56,10 @@ router.get("/orders", VerifyToken, getOrders);
 router.get("/category", VerifyToken, getCategory);
 router.patch("/updateCategory", VerifyToken, updateCategoryName);
 router.patch("/updateCategoryStatus", VerifyToken, updateCategoryStatus);
+
+// brand
+router.get("/brandh", VerifyToken, getBrand);
+router.path("/updateBrand", VerifyToken, updateBrandName);
+router.path("/updateBrandStatus", VerifyToken, updateBrandStatus);
 
 export default router;
