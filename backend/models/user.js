@@ -22,36 +22,30 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     trim: true,
-    require: true,
     minlength: 7,
   },
   phoneNumber: {
     type: Number,
     trim: true,
-    require: true,
     unique: true,
   },
   place: {
     type: String,
     trim: true,
-    require: true,
     maxlength: 32,
   },
   age: {
     type: Number,
     trim: true,
-    require: true,
     max: 80,
   },
   address: {
     type: String,
     trim: true,
-    require: true,
   },
   license: {
     type: String,
     trim: true,
-    require: true,
   },
   profilePicture: {
     type: String,

@@ -8,14 +8,16 @@ import { useSelector } from "react-redux";
 
 const OrderMoreDetails = () => {
   const { orderId } = useParams();
-  const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState<any>(null);
   const [modal, setModal] = useState(false);
+  const [load, setLoad] = useState(true);
   const { user } = useSelector((state: any) => state.userAuth);
   const [cancellationReason, setCancellationReason] = useState("");
 
   const getOrderData = async () => {
     const data = await getSpesificOrderDetails(orderId);
     setOrder(data);
+    setLoad(false);
   };
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const OrderMoreDetails = () => {
     } catch (error) {}
   };
 
-  return !order ? (
+  return load ? (
     <Loading />
   ) : (
     <div>
@@ -123,7 +125,7 @@ const OrderMoreDetails = () => {
                 Order Status:{" "}
                 <span className="font-semibold">{order?.status}</span>
               </p>
-              {order?.status === "approved" ? (
+              {order?.status === "approved" || order?.status === "pending" ? (
                 <button
                   onClick={cancellationModal}
                   className="bg-red-500 text-white px-4 py-2 rounded-md inline-block"
