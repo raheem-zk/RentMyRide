@@ -183,3 +183,30 @@ export const updateFuelTypeStatusAPI = async (id, status) => {
     return response.data.message == "success" ? true : false;
   } catch (error) {}
 };
+
+export const getDistrictDataAPI = async () => {
+  try {
+    const response = await adminAxios.get("/district");
+    return response.data.transmissionData;
+  } catch (error) {}
+};
+
+export const updateDistrictAPI = async (id, value) => {
+  try {
+    const response = await adminAxios.patch("/updateDistrict", {
+      id,
+      name: value,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
+
+export const updateDistrictStatusAPI = async (id, status) => {
+  try {
+    const response = await adminAxios.patch("/updateDistrictStatus", {
+      id,
+      status,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
