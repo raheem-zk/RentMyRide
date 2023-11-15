@@ -28,6 +28,7 @@ import {
   updateBrandStatus,
 } from "../controller/admin/brandController.js";
 import { getDistrict, updateDistrictName, updateDistrictStatus } from "../controller/admin/districtController.js";
+import { getModel, updateModelName, updateModelStatus } from "../controller/admin/modelController.js";
 
 const router = express();
 
@@ -67,5 +68,10 @@ router.path("/updateBrandStatus", VerifyToken, updateBrandStatus);
 router.get("/district", VerifyToken, getDistrict);
 router.path("/updateDistrict", VerifyToken, updateDistrictName);
 router.path("/updateDistrictStatus", VerifyToken, updateDistrictStatus);
+
+// model
+router.get("/model", VerifyToken, getModel);
+router.path("/updateModel", VerifyToken, updateModelName);
+router.path("/updateModelStatus", VerifyToken, updateModelStatus);
 
 export default router;
