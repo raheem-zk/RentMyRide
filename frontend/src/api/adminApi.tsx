@@ -102,3 +102,30 @@ export const updateCategoryStatusAPI = async (id, status) => {
     return response.data.message == "success" ? true : false;
   } catch (error) {}
 };
+
+export const getTransmissionDataAPI = async () => {
+  try {
+    const response = await adminAxios.get("/transmission");
+    return response.data.transmissionData;
+  } catch (error) {}
+};
+
+export const updateTransmissionAPI = async (id, value) => {
+  try {
+    const response = await adminAxios.patch("/updateTransmission", {
+      id,
+      name: value,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
+
+export const updateTransmissionStatus = async (id, status) => {
+  try {
+    const response = await adminAxios.patch("/updateTransmissionStatus", {
+      id,
+      status,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
