@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ErrorMessage, successMessage, validateEmail } from "../utils/utils";
 import OtpComponent from "./otpForm";
-import { otpVerification } from "../utils/userUtils";
-import { signupAPI, signupVerify } from "../api/userApi";
-
+import { signupAPI, otpVerification, signupVerify } from "../api/userApi";
 
 const SignupPage: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
-  const [age, setAge] = useState<number | string>('');
-  const [phoneNumber, setPhoneNumber] = useState<number| string>('');
+  const [age, setAge] = useState<number | string>("");
+  const [phoneNumber, setPhoneNumber] = useState<number | string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
@@ -48,13 +46,14 @@ const SignupPage: React.FC = () => {
       return ErrorMessage("Password must be at least 7 characters long.");
     }
 
-    const result = await signupVerify(email,phoneNumber)
-    if(result){
-      handleOtpComponet()
+    const result = await signupVerify(email, phoneNumber);
+    if (result) {
+      handleOtpComponet();
     }
   };
 
-  const sendSignupData = async ()=>{
+  const sendSignupData = async () => {
+    setOtpComponent(false);
     const userData = {
       firstName,
       lastName,
@@ -64,12 +63,12 @@ const SignupPage: React.FC = () => {
       password,
     };
 
-    const response = await signupAPI(userData)
-    if(response.data.message=='success'){
-      successMessage('Signup Successful')
-      return navigate('/login');
+    const response = await signupAPI(userData);
+    if (response.data.message == "success") {
+      successMessage("Signup Successful");
+      return navigate("/login");
     }
-  }
+  };
 
   return (
     <div className="flex-1 flex items-center justify-center p-5">
@@ -81,13 +80,13 @@ const SignupPage: React.FC = () => {
         </div>
         {/* otp */}
         {optComponent && (
-        <OtpComponent
-          title={"Car Owner Signup Otp Verification"}
-          handleOtp={otpVerification}
-          toggleModal={handleOtpComponet}
-          sendSignupData={sendSignupData}
-        />
-      )}
+          <OtpComponent
+            title={"Car Owner Signup Otp Verification"}
+            handleOtp={otpVerification}
+            toggleModal={handleOtpComponet}
+            sendSignupData={sendSignupData}
+          />
+        )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">

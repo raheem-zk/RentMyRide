@@ -31,7 +31,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { user: userData._id , role: "user" },
+      { user: userData._id, role: "user" },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -140,11 +140,11 @@ export const verifySignup = async (req, res) => {
 export const otpVerification = async (req, res) => {
   try {
     const { otp } = req.body;
-    if (!otp == copyOtp) {
+    if (otp != copyOtp) {
       return res.status(401).json({ message: "OTP is not Valied" });
+    } else if (otp == copyOtp) {
+      return res.json({ message: "success" });
     }
-
-    return res.json({ message: "success" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -154,7 +154,7 @@ export const otpVerification = async (req, res) => {
 export const googleSigning = async (req, res) => {
   try {
     const { email, family_name, given_name } = req.body;
-    const result = await userModel.findOne({ email: email }).populate('wallet');
+    const result = await userModel.findOne({ email: email }).populate("wallet");
     if (result) {
       if (result.status === false) {
         return res.status(400).json({
@@ -163,7 +163,7 @@ export const googleSigning = async (req, res) => {
           error: true,
         });
       }
-      
+
       const token = jwt.sign(
         { user: result._id, role: "user" },
         process.env.JWT_SECRET,
@@ -249,7 +249,9 @@ export const verifyForgot = async (req, res) => {
 export const getUpdatedUserData = async (req, res) => {
   try {
     const { userId } = req.params;
-    const userData = await userModel.findOne({ _id: userId }).populate("wallet");
+    const userData = await userModel
+      .findOne({ _id: userId })
+      .populate("wallet");
     if (!userData) {
       return res.status(404).json({
         message:

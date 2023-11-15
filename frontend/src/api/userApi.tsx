@@ -1,6 +1,6 @@
 import axios from "axios";
 import { carOwnerAxios, userAxios } from "../axios/axios";
-import { ErrorMessage } from "../utils/utils";
+import { ErrorMessage, successMessage } from "../utils/utils";
 
 export const booking = async (data) => {
   await userAxios.post("/rent-booking/confirm", data);
@@ -146,4 +146,18 @@ export const orderCancelAPI = async (orderId, userId, cancellationReason)=>{
 export const getDistrictAPI = async ()=>{
   const response = await userAxios.get('/district');
   return response.data?.result;
+}
+
+export const otpVerification = async (otp)=>{
+  try {
+      const response = await userAxios.post('/otp-verification',{otp});
+      if(response.data.message =='success'){
+        successMessage("Otp Verification success")
+        return true
+      } else {
+        return false
+      }
+  } catch (error) {
+      return false;
+  }
 }
