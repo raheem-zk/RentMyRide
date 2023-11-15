@@ -129,3 +129,30 @@ export const updateTransmissionStatus = async (id, status) => {
     return response.data.message == "success" ? true : false;
   } catch (error) {}
 };
+
+export const getModelDataAPI = async () => {
+  try {
+    const response = await adminAxios.get("/model");
+    return response.data.transmissionData;
+  } catch (error) {}
+};
+
+export const updateModelAPI = async (id, value) => {
+  try {
+    const response = await adminAxios.patch("/updateModel", {
+      id,
+      name: value,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
+
+export const updateModelStatusAPI = async (id, status) => {
+  try {
+    const response = await adminAxios.patch("/updateModalStatus", {
+      id,
+      status,
+    });
+    return response.data.message == "success" ? true : false;
+  } catch (error) {}
+};
