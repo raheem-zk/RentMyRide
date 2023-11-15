@@ -16,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 import Orders from "../page/admin/orders";
 import OrderMoreDetails from "../page/admin/orderMoreDetaisl";
 import ErrorPage from "../component/error";
+import CategoryManagement from "../page/admin/categoryManagement";
 
 const AdminAppLayout = () => {
   return (
@@ -126,6 +127,15 @@ const AdminRoute = {
             <>
               <IsLogged />
               <OrderMoreDetails />
+            </>
+          ),
+        },
+        {
+          path: "category-management",
+          element: (
+            <>
+              <IsLogged />
+              <CategoryManagement />
             </>
           ),
         },

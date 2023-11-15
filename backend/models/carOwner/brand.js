@@ -6,6 +6,10 @@ const brandSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
+  status: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const Brand = mongoose.model("Brand", brandSchema);

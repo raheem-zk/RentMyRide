@@ -238,3 +238,15 @@ export interface BarDataProps {
   newOrders: number;
   totalOrders: number;
 }
+
+export interface Resource {
+  _id: number;
+  name: string;
+  status: boolean;    
+}
+export interface ResourcesProps {
+  data: Resource[];
+  title: string;
+  handleBlockToggle: (id: string, status: boolean) => void;
+  handleUpdate: (id: string, value: string) => void;
+}
