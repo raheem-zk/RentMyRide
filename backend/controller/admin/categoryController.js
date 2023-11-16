@@ -1,8 +1,9 @@
-import categoryShema from "../../models/carOwner/category.js";
+import categorySchema from "../../models/carOwner/category.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getCategory = async (req, res) => {
   try {
-    const categoryData = await categoryShema.find().sort({ _id: -1 }) ?? [];
+    const categoryData = await categorySchema.find().sort({ _id: -1 }) ?? [];
 
     if (categoryData) {
       return res.json({ message: "success", categoryData });
@@ -17,7 +18,7 @@ export const getCategory = async (req, res) => {
 export const updateCategoryName = async (req, res) => {
   try {
     const { id, name } = req.body;
-    const result = await categoryShema.updateOne(
+    const result = await categorySchema.updateOne(
       { _id: id },
       { $set: { name: name } }
     );
@@ -35,7 +36,7 @@ export const updateCategoryName = async (req, res) => {
 export const updateCategoryStatus = async (req, res) => {
   try {
     const { id, status } = req.body;
-    const result = await categoryShema.updateOne(
+    const result = await categorySchema.updateOne(
       { _id: id },
       { $set: { status: !status } },
       {
@@ -43,6 +44,7 @@ export const updateCategoryStatus = async (req, res) => {
         new: true,
       }
     );
+    await updateCarResourceStatus("category", id, !status)
 
     if (result) {
       return res.json({ message: "success" });

@@ -7,6 +7,15 @@ const APPROVEL = "Approved";
 const AVAILABLE = "Available";
 const LIMIT = 12;
 
+const RESOURCESTATUS = [
+  { 'resourceStatuses.model': true },
+  { 'resourceStatuses.transmission': true },
+  { 'resourceStatuses.category': true },
+  { 'resourceStatuses.brand': true },
+  { 'resourceStatuses.fuelType': true },
+  { 'resourceStatuses.district': true },
+]
+
 export const home = async (req, res) => {
   try {
     const startDate = new Date();
@@ -18,6 +27,7 @@ export const home = async (req, res) => {
         availability: AVAILABLE,
         startDate: { $lte: startDate },
         endDate: { $gte: endDate },
+        $and : RESOURCESTATUS,
       })
       .populate("fuelType")
       .populate("transmission")
@@ -89,6 +99,7 @@ export const filterData = async (req, res) => {
     const sortOrder = req?.query?.sortOrder === "highToLow" ? -1 : 1;
     const filteredData = await carsSchema
       .find({
+        $and : RESOURCESTATUS,
         $and: [
           filter,
           { startDate: { $lte: startDate } },
@@ -147,7 +158,7 @@ export const filterData = async (req, res) => {
 
 export const district = async (req, res) => {
   try {
-    const result = (await districtShema.find()) ?? [];
+    const result = (await districtShema.find({status: true})) ?? [];
     return res.json({ message: "success", result });
   } catch (error) {
     console.error(error);

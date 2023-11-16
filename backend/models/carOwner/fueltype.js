@@ -6,6 +6,10 @@ const fuelTypeSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
+  status: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const FuelType = mongoose.model("FuelType", fuelTypeSchema);

@@ -29,6 +29,8 @@ import {
 } from "../controller/admin/brandController.js";
 import { getDistrict, updateDistrictName, updateDistrictStatus } from "../controller/admin/districtController.js";
 import { getModel, updateModelName, updateModelStatus } from "../controller/admin/modelController.js";
+import { getFuelType, updateFuelTypeName, updateFuelTypeStatus } from "../controller/admin/fuelTypeController.js";
+import { getTransmission, updateTransmissionName, updateTransmissionStatus } from "../controller/admin/transmissionController.js";
 
 const router = express();
 
@@ -60,18 +62,27 @@ router.patch("/updateCategory", VerifyToken, updateCategoryName);
 router.patch("/updateCategoryStatus", VerifyToken, updateCategoryStatus);
 
 // brand
-router.get("/brandh", VerifyToken, getBrand);
-router.path("/updateBrand", VerifyToken, updateBrandName);
-router.path("/updateBrandStatus", VerifyToken, updateBrandStatus);
+router.get("/brand", VerifyToken, getBrand);
+router.patch("/updateBrand", VerifyToken, updateBrandName);
+router.patch("/updateBrandStatus", VerifyToken, updateBrandStatus);
 
 // district
 router.get("/district", VerifyToken, getDistrict);
-router.path("/updateDistrict", VerifyToken, updateDistrictName);
-router.path("/updateDistrictStatus", VerifyToken, updateDistrictStatus);
+router.patch("/updateDistrict", VerifyToken, updateDistrictName);
+router.patch("/updateDistrictStatus", VerifyToken, updateDistrictStatus);
 
 // model
 router.get("/model", VerifyToken, getModel);
-router.path("/updateModel", VerifyToken, updateModelName);
-router.path("/updateModelStatus", VerifyToken, updateModelStatus);
+router.patch("/updateModel", VerifyToken, updateModelName);
+router.patch("/updateModelStatus", VerifyToken, updateModelStatus);
 
+// fuelType
+router.get("/fuel-type", VerifyToken, getFuelType);
+router.patch("/updateFuel-type", VerifyToken, updateFuelTypeName);
+router.patch("/updateFuel-typeStatus", VerifyToken, updateFuelTypeStatus);
+
+// transmission
+router.get('/transmission', VerifyToken, getTransmission);
+router.patch("/updateTransmission", VerifyToken, updateTransmissionName);
+router.patch("/updateTransmissionStatus", VerifyToken, updateTransmissionStatus);
 export default router;

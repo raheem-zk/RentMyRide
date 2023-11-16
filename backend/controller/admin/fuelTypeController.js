@@ -1,12 +1,12 @@
-import districtSchema from "../../models/carOwner/district.js";
+import fuelTypeSchema from "../../models/carOwner/fueltype.js";
 import { updateCarResourceStatus } from "../../utils/utils.js";
 
-export const getDistrict = async (req, res) => {
+export const getFuelType = async (req, res) => {
   try {
-    const districtData = await districtSchema.find().sort({ _id: -1 }) ?? [];
+    const fuelTypeData = await fuelTypeSchema.find().sort({ _id: -1 }) ?? [];
 
-    if (districtData) {
-      return res.json({ message: "success", districtData });
+    if (fuelTypeData) {
+      return res.json({ message: "success", fuelTypeData });
     }
   } catch (error) {
     return res
@@ -15,10 +15,10 @@ export const getDistrict = async (req, res) => {
   }
 };
 
-export const updateDistrictName = async (req, res) => {
+export const updateFuelTypeName = async (req, res) => {
   try {
     const { id, name } = req.body;
-    const result = await districtSchema.updateOne(
+    const result = await fuelTypeSchema.updateOne(
       { _id: id },
       { $set: { name: name } }
     );
@@ -33,10 +33,10 @@ export const updateDistrictName = async (req, res) => {
   }
 };
 
-export const updateDistrictStatus = async (req, res) => {
+export const updateFuelTypeStatus = async (req, res) => {
   try {
     const { id, status } = req.body;
-    const result = await districtSchema.updateOne(
+    const result = await fuelTypeSchema.updateOne(
       { _id: id },
       { $set: { status: !status } },
       {
@@ -44,7 +44,7 @@ export const updateDistrictStatus = async (req, res) => {
         new: true,
       }
     );
-    await updateCarResourceStatus("district", id, !status)
+    await updateCarResourceStatus("fuelType", id, !status)
 
     if (result) {
       return res.json({ message: "success" });

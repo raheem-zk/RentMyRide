@@ -71,6 +71,32 @@ const carSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  resourceStatuses: {
+    model : {
+      type: Boolean,
+      default: true,
+    },
+    transmission : {
+      type: Boolean,
+      default: true,
+    },
+    category : {
+      type: Boolean,
+      default: true,
+    },
+    brand: {
+      type: Boolean,
+      default: true,
+    },
+    fuelType : {
+      type: Boolean,
+      default: true,
+    },
+    district: {
+      type: Boolean,
+      default: true,
+    },
+  },
   startDate: {
     type: Date,
     default: Date.now,

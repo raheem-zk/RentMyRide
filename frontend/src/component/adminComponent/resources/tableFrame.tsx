@@ -90,7 +90,7 @@ const ResourcesTable = ({
                     } hover:underline`}
                     onClick={() => handleBlockToggle(item?._id, item?.status)}
                   >
-                    {item?.status ? "Unblock" : "Block"}
+                    {item?.status ? "Block" : "Unblock"}
                   </button>
                 </td>
               </tr>
