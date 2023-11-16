@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { generateOTP, transporter } from "../../utils/utils.js";
 import walletSchema from "../../models/wallet.js";
+import userSchema from "../../models/user.js";
 let copyOtp;
 
 export const login = async (req, res) => {
@@ -213,6 +214,14 @@ export const verifyForgot = async (req, res) => {
 
     if (!result) {
       return res.status(404).json({ message: "Email is not matched" });
+    }
+    
+    if (result.status === false) {
+      return res.status(400).json({
+        message:
+          "User Account Blocked: Please contact customer support for further assistance",
+        error: true,
+      });
     }
 
     const otp = generateOTP();
