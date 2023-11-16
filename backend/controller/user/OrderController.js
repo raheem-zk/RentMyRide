@@ -40,8 +40,6 @@ export const getUserOrderMoredetailsData = async (req, res) => {
       .populate("carId")
       .populate("userId");
 
-    console.log(data);
-
     if (!data) {
       return res.status(404).json({ message: "Order data not fouded!" });
     }
@@ -54,11 +52,9 @@ export const getUserOrderMoredetailsData = async (req, res) => {
 
 export const orderCancel = async (req, res)=>{
   try {
-    console.log('fff', req.body)
     const { orderId , userId , cancellationReason} = req.body;
 
     const response = await orderSchema.updateOne({ orderId, userId }, { $set: { status: "cancel-request", cancellationReason } });
-    console.log(response );
     return res.json({ message: "Success" });
   
   } catch (error) {

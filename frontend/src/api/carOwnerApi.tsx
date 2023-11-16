@@ -28,7 +28,6 @@ export const uploadCarImage = async (img) => {
     import.meta.env.VITE_CLOUDINERY_API,
     formData
   );
-  console.log("test images url", response.data.url);
   if (response.status === 200) {
     return response.data.url;
   } else {

@@ -9,12 +9,12 @@ const STATUS = { status: true};
 
 export const getCarModels = async (req, res) => {
   try {
-    const brand = (await brandSchema.find(STATUS)) ?? [];
-    const category = (await categorySchema.find(STATUS)) ?? [];
-    const model = (await modelSchema.find(STATUS)) ?? [];
-    const transmission = (await transmissionSchema.find(STATUS)) ?? [];
-    const fuelType = (await fuelSchema.find(STATUS)) ?? [];
-    const district = (await districtShema.find(STATUS)) ?? [];
+    const brand = (await brandSchema.find(STATUS).sort({_id: -1})) ?? [];
+    const category = (await categorySchema.find(STATUS).sort({_id: -1})) ?? [];
+    const model = (await modelSchema.find(STATUS).sort({_id: -1})) ?? [];
+    const transmission = (await transmissionSchema.find(STATUS).sort({_id: -1})) ?? [];
+    const fuelType = (await fuelSchema.find(STATUS).sort({_id: -1})) ?? [];
+    const district = (await districtShema.find(STATUS).sort({_id: -1})) ?? [];
     return res.json({
       message: "success",
       brand,
