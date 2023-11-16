@@ -12,7 +12,7 @@ const AddingForm: React.FC<AddingFunction> = ({ title, handleAdding, Reload ,act
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = handleAdding(newValue);
+    const success = await handleAdding(newValue);
     if (success) {
       Reload();
       toggleModal();

@@ -1,94 +1,123 @@
-import { adminAxios, carOwnerAxios } from "../axios/axios"
-import { ErrorMessage } from "./utils"
+import { adminAxios, carOwnerAxios } from "../axios/axios";
+import { ErrorMessage, successMessage } from "./utils";
 
-const emptyErrorMessage = 'Invalid input. Please provide a valid value'
-export const addBrand = async (data)=>{
-    try {
-      if(data.trim()==''){
-        ErrorMessage(emptyErrorMessage);
-        return false
-      }
-        const response = await carOwnerAxios.post('/add-brand', {name: data});
-        return true;
-      } catch (error) {
-        return false;
-      }
-}
+const emptyErrorMessage = "Invalid input. Please provide a valid value";
 
-export const addCategory = async (data)=>{
+export const addBrand = async (data) => {
   try {
-    if(data.trim()==''){
+    if (data.trim() == "") {
       ErrorMessage(emptyErrorMessage);
-      return false
+      return false;
     }
-    const response = await carOwnerAxios.post('/add-category', {name: data});
-    return true;
+    const response = await carOwnerAxios.post("/add-brand", { name: data });
+    if (response) {
+      successMessage(response.data?.message);
+      return true;
+    }
   } catch (error) {
     return false;
   }
-}
+};
 
-export const addModel = async (data)=>{
+export const addCategory = async (data) => {
   try {
-    if(data.trim()==''){
+    if (data.trim() == "") {
       ErrorMessage(emptyErrorMessage);
-      return false
+      return false;
     }
-    const response = await carOwnerAxios.post('/add-model', {name: data});
-    return true;
+    const response = await carOwnerAxios.post("/add-category", { name: data });
+    if (response) {
+      successMessage(response.data?.message);
+      return true;
+    }
   } catch (error) {
     return false;
   }
-}
+};
 
-export const addTransmission = async (data)=>{
+export const addModel = async (data) => {
   try {
-    if(data.trim()==''){
+    if (data.trim() == "") {
       ErrorMessage(emptyErrorMessage);
-      return false
+      return false;
     }
-    const response = await carOwnerAxios.post('/add-transmission', {name: data});
-    return true;
+    const response = await carOwnerAxios.post("/add-model", { name: data });
+    if (response) {
+      successMessage(response.data?.message);
+      return true;
+    }
   } catch (error) {
     return false;
   }
-}
+};
 
-export const addFueltype = async (data)=>{
+export const addTransmission = async (data) => {
   try {
-    if(data.trim()==''){
+    if (data.trim() == "") {
       ErrorMessage(emptyErrorMessage);
-      return false
+      return false;
     }
-    const response = await carOwnerAxios.post('/add-fueltype', {name: data});
-    return true;
+    const response = await carOwnerAxios.post("/add-transmission", {
+      name: data,
+    });
+    if (response) {
+      successMessage(response.data?.message);
+      return true;
+    }
   } catch (error) {
     return false;
   }
-}
-export const addDistrict = async (data)=>{
+};
+
+export const addFueltype = async (data) => {
   try {
-    if(data.trim()==''){
+    if (data.trim() == "") {
       ErrorMessage(emptyErrorMessage);
-      return false
+      return false;
     }
-    const response = await carOwnerAxios.post('/add-district', {name: data});
-    return true;
+    const response = await carOwnerAxios.post("/add-fueltype", { name: data });
+    if (response) {
+      successMessage(response.data?.message);
+
+      return true;
+    }
   } catch (error) {
     return false;
   }
-}
+};
+export const addDistrict = async (data) => {
+  try {
+    if (data.trim() == "") {
+      ErrorMessage(emptyErrorMessage);
+      return false;
+    }
+    const response = await carOwnerAxios.post("/add-district", { name: data });
+    if (response) {
+      successMessage(response.data?.message);
+
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+};
 
 interface VerifiyOwnerSignupProps {
-  email: string,
-  phoneNumber: string,
+  email: string;
+  phoneNumber: string;
 }
-export const verifiyOwnerSignup = async ({email, phoneNumber}:VerifiyOwnerSignupProps): Promise<boolean| undefined>=>{
+export const verifiyOwnerSignup = async ({
+  email,
+  phoneNumber,
+}: VerifiyOwnerSignupProps): Promise<boolean | undefined> => {
   try {
-    const response = await carOwnerAxios.post('/signup-verify', { email, phoneNumber });
+    const response = await carOwnerAxios.post("/signup-verify", {
+      email,
+      phoneNumber,
+    });
 
     if (response.status === 200) {
-      if(response){
+      if (response) {
         return true;
       }
     } else {
@@ -97,13 +126,16 @@ export const verifiyOwnerSignup = async ({email, phoneNumber}:VerifiyOwnerSignup
   } catch (error) {
     return false;
   }
-}
+};
 
-export const ownerSignup = async ({ownerData, carDetails}: any)=>{
+export const ownerSignup = async ({ ownerData, carDetails }: any) => {
   try {
-    const response = await carOwnerAxios.post('/signup', {ownerData,carDetails })
+    const response = await carOwnerAxios.post("/signup", {
+      ownerData,
+      carDetails,
+    });
     if (response.status === 200) {
-      if(response){
+      if (response) {
         return true;
       }
     } else {
@@ -112,13 +144,13 @@ export const ownerSignup = async ({ownerData, carDetails}: any)=>{
   } catch (error) {
     return false;
   }
-}
+};
 
-export const otpVerification = async ({otp})=>{
+export const otpVerification = async ({ otp }) => {
   try {
-    const response = await carOwnerAxios.post('/otp-verification',otp)
-    if (response.status === 200 || response.data.message=='success') {
-      if(response){
+    const response = await carOwnerAxios.post("/otp-verification", otp);
+    if (response.status === 200 || response.data.message == "success") {
+      if (response) {
         return true;
       }
     } else {
@@ -127,13 +159,14 @@ export const otpVerification = async ({otp})=>{
   } catch (error) {
     return false;
   }
-}
+};
 
-export const handleAction = async (id: string, action: string, message: string) => {
+export const handleAction = async (
+  id: string,
+  action: string,
+  message: string
+) => {
   try {
     await adminAxios.patch(`/cars/${id}/${action}/${message}`);
-  } catch (error) {
-    console.error(error);
-    throw error; // You can handle errors as needed
-  }
+  } catch (error) {}
 };
