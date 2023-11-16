@@ -96,8 +96,8 @@ export const bookingCheckoutSession = async (req, res) => {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.FRONTEND_URL}payment-success/${data?.orderId}`,
-      cancel_url: `${process.env.FRONTEND_URL}payment-fail`,
+      success_url: `${process.env.CLIENT_URL}/payment-success/${data?.orderId}`,
+      cancel_url: `${process.env.CLIENT_URL}/payment-fail`,
     });
 
     const orderModel = new orderShema(data);
