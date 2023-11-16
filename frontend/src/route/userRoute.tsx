@@ -22,6 +22,7 @@ import OrderMoreDetails from "../component/user/orderMoreDetails";
 import ErrorPage from "../component/error";
 import Chat from "../component/chat/chat";
 import Footer from "../component/footer";
+import Forgot from "../page/user/forgotPassword";
 
 const UserAppLayout = () => {
   return (
@@ -30,17 +31,22 @@ const UserAppLayout = () => {
       <Outlet />
       <PhoneNav />
       <ToastContainer />
-      <Footer/>
+      <Footer />
     </>
   );
 };
 
 const UserAuthAppLayout = () => {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <ToastContainer />
+    </>
+  );
 };
 const UserRoute = {
   path: "/",
-  errorElement: <ErrorPage path={'/'}/>,
+  errorElement: <ErrorPage path={"/"} />,
   element: <UserAuthAppLayout />,
   children: [
     {
@@ -49,6 +55,15 @@ const UserRoute = {
         <>
           <IsLogout />
           <Login />
+        </>
+      ),
+    },
+    {
+      path: "forgot-password",
+      element: (
+        <>
+          <IsLogout />
+          <Forgot />
         </>
       ),
     },
@@ -163,7 +178,7 @@ const UserRoute = {
           element: (
             <>
               <IsLogged />
-              <Chat role={'user'} />
+              <Chat role={"user"} />
             </>
           ),
         },

@@ -1,7 +1,7 @@
 import userSchema from "../../models/user.js";
 import bcrypt from "bcrypt";
 
-export const forgotPasswordUpdate = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
     const { password, email } = req.body;
     const saltRounds = parseInt(process.env.SALTROUNDS);

@@ -83,7 +83,7 @@ export const filteredData = async (data) => {
       sortOrder: data?.sortOrder,
       startDate: data?.startDate,
       endDate: data?.endDate,
-      district: data?.district
+      district: data?.district,
     },
   });
   return { data: response?.data?.filteredData, size: response?.data?.size };
@@ -135,30 +135,54 @@ export const rentBookingAPI = async (formData) => {
   return await userAxios.post("/rent-booking", formData);
 };
 
-export const getSpesificOrderDetails = async (orderId)=>{
-  const response =  await userAxios.get(`/orders/${orderId}`);
+export const getSpesificOrderDetails = async (orderId) => {
+  const response = await userAxios.get(`/orders/${orderId}`);
   return response.data?.data;
-}
+};
 
-export const orderCancelAPI = async (orderId, userId, cancellationReason)=>{
-  await userAxios.post(`/orders/cancel`,{cancellationReason, orderId, userId});
-}
+export const orderCancelAPI = async (orderId, userId, cancellationReason) => {
+  await userAxios.post(`/orders/cancel`, {
+    cancellationReason,
+    orderId,
+    userId,
+  });
+};
 
-export const getDistrictAPI = async ()=>{
-  const response = await userAxios.get('/district');
+export const getDistrictAPI = async () => {
+  const response = await userAxios.get("/district");
   return response.data?.result;
-}
+};
 
-export const otpVerification = async (otp)=>{
+export const otpVerification = async (otp) => {
   try {
-      const response = await userAxios.post('/otp-verification',{otp});
-      if(response.data.message =='success'){
-        successMessage("Otp Verification success")
-        return true
-      } else {
-        return false
-      }
-  } catch (error) {
+    const response = await userAxios.post("/otp-verification", { otp });
+    if (response.data.message == "success") {
+      successMessage("Otp Verification success");
+      return true;
+    } else {
       return false;
+    }
+  } catch (error) {
+    return false;
   }
-}
+};
+
+export const forgotPassword = async (email) => {
+  const response = await userAxios.post("/forgot-password", { email });
+  return response.data?.message;
+};
+
+export const forgotPasswordOtpVerification = async (otp) => {
+  const response = await userAxios.post("/forgot-password/otp", { otp });
+  return response.data?.message;
+};
+
+export const resetPassword = async (email, password) => {
+  try {
+    const response = await userAxios.post("/forgot-password/reset-password", {
+      email,
+      password,
+    });
+    return response.data?.message;
+  } catch (error) {}
+};
