@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { getuserOrders } from "../../api/userApi";
 import { FcFilledFilter } from "react-icons/fc";
 import Pagination from "../pagination";
+import ZeroDataComponent from "../zeroData";
 
 const OrderHistory = () => {
   const { user } = useSelector((state: any) => state?.userAuth);
@@ -15,7 +16,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     getOrder();
-  }, [page,filterValue]);
+  }, [page, filterValue]);
 
   const getOrder = async () => {
     const { ordersData, size } = await getuserOrders(
@@ -96,7 +97,7 @@ const OrderHistory = () => {
           />
         </>
       ) : (
-        <p className="text-gray-600">No orders found in your history.</p>
+        <ZeroDataComponent />
       )}
     </div>
   );
