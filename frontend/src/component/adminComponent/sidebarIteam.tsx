@@ -200,12 +200,10 @@ const SidebarIteam = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {/* Insert your SVG icon here */}
               </svg>
               Logout
             </Link>
           </li>
-          {/* Add more sidebar items as needed */}
         </ul>
       </nav>
     </>
