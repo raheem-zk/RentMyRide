@@ -1,4 +1,5 @@
 import modelSchema from "../../models/carOwner/model.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getModel = async (req, res) => {
   try {
@@ -43,7 +44,8 @@ export const updateModelStatus = async (req, res) => {
         new: true,
       }
     );
-
+    await updateCarResourceStatus("model", id, !status)
+    
     if (result) {
       return res.json({ message: "success" });
     }

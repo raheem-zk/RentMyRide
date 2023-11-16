@@ -1,4 +1,5 @@
 import transmissionSchema from "../../models/carOwner/transmission.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getTransmission = async (req, res) => {
   try {
@@ -44,6 +45,7 @@ export const updateTransmissionStatus = async (req, res) => {
         new: true,
       }
     );
+    await updateCarResourceStatus("transmission", id, !status)
 
     if (result) {
       return res.json({ message: "success" });

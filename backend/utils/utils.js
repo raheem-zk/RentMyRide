@@ -170,3 +170,11 @@ export const filterSloatValidation = (start, end, orderData, car) => {
     return false;
   }
 };
+
+export const updateCarResourceStatus = async (role, id, status) => {
+  let resource = {};
+  resource[role] = id;
+  let updateResource = {};
+  updateResource[`resourceStatuses.${role}`] = status;
+  await carSchema.updateMany(resource, { $set: updateResource });
+}

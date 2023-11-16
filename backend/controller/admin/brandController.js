@@ -1,4 +1,5 @@
 import brandSchema from "../../models/carOwner/brand.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getBrand = async (req, res) => {
   try {
@@ -42,6 +43,7 @@ export const updateBrandStatus = async (req, res) => {
         new: true,
       }
     );
+    await updateCarResourceStatus("brand", id, !status)
 
     if (result) {
       return res.json({ message: "success" });

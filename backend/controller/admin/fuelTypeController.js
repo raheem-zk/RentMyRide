@@ -1,4 +1,5 @@
 import fuelTypeSchema from "../../models/carOwner/fueltype.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getFuelType = async (req, res) => {
   try {
@@ -43,6 +44,7 @@ export const updateFuelTypeStatus = async (req, res) => {
         new: true,
       }
     );
+    await updateCarResourceStatus("fuelType", id, !status)
 
     if (result) {
       return res.json({ message: "success" });

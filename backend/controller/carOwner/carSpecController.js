@@ -5,14 +5,16 @@ import transmissionSchema from "../../models/carOwner/transmission.js";
 import fuelSchema from "../../models/carOwner/fueltype.js";
 import districtShema from  '../../models/carOwner/district.js';
 
+const STATUS = { status: true};
+
 export const getCarModels = async (req, res) => {
   try {
-    const brand = (await brandSchema.find()) ?? [];
-    const category = (await categorySchema.find()) ?? [];
-    const model = (await modelSchema.find()) ?? [];
-    const transmission = (await transmissionSchema.find()) ?? [];
-    const fuelType = (await fuelSchema.find()) ?? [];
-    const district = (await districtShema.find()) ?? [];
+    const brand = (await brandSchema.find(STATUS)) ?? [];
+    const category = (await categorySchema.find(STATUS)) ?? [];
+    const model = (await modelSchema.find(STATUS)) ?? [];
+    const transmission = (await transmissionSchema.find(STATUS)) ?? [];
+    const fuelType = (await fuelSchema.find(STATUS)) ?? [];
+    const district = (await districtShema.find(STATUS)) ?? [];
     return res.json({
       message: "success",
       brand,

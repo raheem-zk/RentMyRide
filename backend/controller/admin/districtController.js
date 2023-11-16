@@ -1,4 +1,5 @@
 import districtSchema from "../../models/carOwner/district.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getDistrict = async (req, res) => {
   try {
@@ -43,6 +44,7 @@ export const updateDistrictStatus = async (req, res) => {
         new: true,
       }
     );
+    await updateCarResourceStatus("district", id, !status)
 
     if (result) {
       return res.json({ message: "success" });

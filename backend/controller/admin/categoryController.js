@@ -1,4 +1,5 @@
 import categorySchema from "../../models/carOwner/category.js";
+import { updateCarResourceStatus } from "../../utils/utils.js";
 
 export const getCategory = async (req, res) => {
   try {
@@ -43,6 +44,7 @@ export const updateCategoryStatus = async (req, res) => {
         new: true,
       }
     );
+    await updateCarResourceStatus("category", id, !status)
 
     if (result) {
       return res.json({ message: "success" });
