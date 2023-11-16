@@ -26,9 +26,9 @@ const ForgotPassword = () => {
 
   const handleSubmitOTP = async (e) => {
     e.preventDefault();
-    if(otp.length != 6){
-        ErrorMessage("Incorrect OTP entered")
-        return;
+    if (otp.length != 6) {
+      ErrorMessage("Incorrect OTP entered");
+      return;
     }
 
     const result = await forgotPasswordOtpVerification(otp);
@@ -128,10 +128,12 @@ const ForgotPassword = () => {
             </button>
           </form>
         )}
-        {!passwordSide && (
+        {otpPart && (
           <p className="mt-2 text-center text-sm text-gray-600">
             Didn't receive the email?{" "}
-            <button className="text-indigo-600" onClick={handleSubmitEmail}>Resend</button>
+            <button className="text-indigo-600" onClick={handleSubmitEmail}>
+              Resend
+            </button>
           </p>
         )}
       </div>
