@@ -149,7 +149,7 @@ export const updateModelAPI = async (id, value) => {
 
 export const updateModelStatusAPI = async (id, status) => {
   try {
-    const response = await adminAxios.patch("/updateModalStatus", {
+    const response = await adminAxios.patch("/updateModelStatus", {
       id,
       status,
     });

@@ -17,6 +17,11 @@ import Orders from "../page/admin/orders";
 import OrderMoreDetails from "../page/admin/orderMoreDetaisl";
 import ErrorPage from "../component/error";
 import CategoryManagement from "../page/admin/categoryManagement";
+import District from "../page/admin/districtManagement";
+import FuelType from "../page/admin/fueltypeManagement";
+import Transmission from "../page/admin/transmissionManagement";
+import ModelMangement from "../component/adminComponent/resources/modelMangement";
+import Brand from "../page/admin/brandManagement";
 
 const AdminAppLayout = () => {
   return (
@@ -131,11 +136,56 @@ const AdminRoute = {
           ),
         },
         {
+          path: "district-management",
+          element: (
+            <>
+              <IsLogged />
+              <District />
+            </>
+          ),
+        },
+        {
+          path: "fuel-management",
+          element: (
+            <>
+              <IsLogged />
+              <FuelType/>
+            </>
+          ),
+        },
+        {
+          path: "transmission-management",
+          element: (
+            <>
+              <IsLogged />
+              <Transmission/>
+            </>
+          ),
+        },
+        {
           path: "category-management",
           element: (
             <>
               <IsLogged />
               <CategoryManagement />
+            </>
+          ),
+        },
+        {
+          path: "model-management",
+          element: (
+            <>
+              <IsLogged />
+              <ModelMangement />
+            </>
+          ),
+        },
+        {
+          path: "brand-management",
+          element: (
+            <>
+              <IsLogged />
+              <Brand />
             </>
           ),
         },
