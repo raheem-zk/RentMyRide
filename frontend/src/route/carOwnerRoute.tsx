@@ -16,9 +16,15 @@ import CarDetails from "../page/carOwner/carDetails";
 import OrderMoreDetails from "../page/carOwner/orderMoreDetails";
 import Chat from "../component/chat/chat";
 import ErrorPage from "../component/error";
+import Forgot from "../page/carOwner/forgotPassword";
 
 const CarAppLayout = () => {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <ToastContainer />
+    </>
+  );
 };
 
 const CarOwnerLayout = () => {
@@ -32,7 +38,7 @@ const CarOwnerLayout = () => {
 
 const CarOwnerRoute = {
   path: "/car-owner",
-  errorElement: <ErrorPage path={'/car-owner'}/>,
+  errorElement: <ErrorPage path={"/car-owner"} />,
   element: <CarAppLayout />,
   children: [
     {
@@ -50,6 +56,15 @@ const CarOwnerRoute = {
         <>
           <IsLogout />
           <Login />
+        </>
+      ),
+    },
+    {
+      path: "forgot-password",
+      element: (
+        <>
+          <IsLogout />
+          <Forgot />
         </>
       ),
     },
@@ -89,7 +104,7 @@ const CarOwnerRoute = {
           element: (
             <>
               <IsLogged />
-              <Cars/>
+              <Cars />
             </>
           ),
         },
@@ -98,7 +113,7 @@ const CarOwnerRoute = {
           element: (
             <>
               <IsLogged />
-              <Orders/>
+              <Orders />
             </>
           ),
         },
@@ -107,7 +122,7 @@ const CarOwnerRoute = {
           element: (
             <>
               <IsLogged />
-              <OrderMoreDetails/>
+              <OrderMoreDetails />
             </>
           ),
         },
@@ -116,7 +131,7 @@ const CarOwnerRoute = {
           element: (
             <>
               <IsLogged />
-              <EditCar/>
+              <EditCar />
             </>
           ),
         },
@@ -125,7 +140,7 @@ const CarOwnerRoute = {
           element: (
             <>
               <IsLogged />
-              <CarDetails/>
+              <CarDetails />
             </>
           ),
         },
@@ -134,7 +149,7 @@ const CarOwnerRoute = {
           element: (
             <>
               <IsLogged />
-              <Chat role={'carOwner'}/>
+              <Chat role={"carOwner"} />
             </>
           ),
         },

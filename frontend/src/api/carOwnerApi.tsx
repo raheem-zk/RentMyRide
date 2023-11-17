@@ -83,3 +83,23 @@ export const dashboardAPI = async (ownerId)=>{
 export const updateAvailability = async (data)=>{
   await carOwnerAxios.patch('/updateAvailability',{ availability : data.newAvailability, carId: data.carId})
 }
+
+export const forgotPassword = async (email) => {
+  const response = await carOwnerAxios.post("/forgot-password", { email });
+  return response.data?.message;
+};
+
+export const forgotPasswordOtpVerification = async (otp) => {
+  const response = await carOwnerAxios.post("/forgot-password/otp", { otp });
+  return response.data?.message;
+};
+
+export const resetPassword = async (email, password) => {
+  try {
+    const response = await carOwnerAxios.post("/forgot-password/reset-password", {
+      email,
+      password,
+    });
+    return response.data?.message;
+  } catch (error) {}
+};

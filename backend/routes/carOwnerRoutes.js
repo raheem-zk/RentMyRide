@@ -1,5 +1,5 @@
 import express from 'express'
-import { signup, login, verifySignup, verifyOtp } from '../controller/carOwner/authController.js';
+import { signup, login, verifySignup, verifyOtp, verifyForgot, otpVerification, resetPassword } from '../controller/carOwner/authController.js';
 import VerifyToken from '../middleware/jwtCarOwnerVerification.js';
 import { addBrand, addCategory, addDistrict, addFuelType, addModel, addTransmission, getCarModels } from '../controller/carOwner/carSpecController.js';
 import { cars, editCar, updateAvailability, uploadCar } from '../controller/carOwner/carController.js';
@@ -20,6 +20,10 @@ router.post('/signup-verify', verifySignup);
 router.post('/otp-verification',verifyOtp)
 router.post('/signup',signup);
 router.post('/login',login)
+
+router.post("/forgot-password", verifyForgot);
+router.post("/forgot-password/otp", otpVerification);
+router.post("/forgot-password/reset-password", resetPassword);
 
 router.get('/dashboard/:ownerId',VerifyToken,dashboard);
 

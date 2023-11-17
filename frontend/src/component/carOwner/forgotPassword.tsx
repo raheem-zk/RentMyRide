@@ -4,7 +4,7 @@ import {
   forgotPassword,
   forgotPasswordOtpVerification,
   resetPassword,
-} from "../../api/userApi";
+} from "../../api/carOwnerApi";
 
 const ForgotPassword = () => {
   return (
@@ -12,7 +12,7 @@ const ForgotPassword = () => {
       forgotPassword={forgotPassword}
       forgotPasswordOtpVerification={forgotPasswordOtpVerification}
       resetPassword={resetPassword}
-      role={"user"}
+      role={"car-owner"}
     />
   );
 };
