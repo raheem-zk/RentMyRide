@@ -77,7 +77,7 @@ const LoginForm: React.FC = () => {
             </button>
             <div className="text-sm md:flex md:justify-between mt-2">
               <Link
-                to="/forgot-password"
+                to="/car-owner/forgot-password"
                 className="font-medium text-indigo-600 hover:text-indigo-500 flex justify-center"
               >
                 Forgot your password?
